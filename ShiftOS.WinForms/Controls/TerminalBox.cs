@@ -52,12 +52,18 @@ namespace ShiftOS.WinForms.Controls
 
         public void Write(string text)
         {
-            this.Text += Localization.Parse(text);
+            this.Invoke(new Action(() =>
+            {
+                this.Text += Localization.Parse(text);
+            }));
         }
 
         public void WriteLine(string text)
         {
-            this.Text += Localization.Parse(text) + Environment.NewLine;
+            this.Invoke(new Action(() =>
+            {
+                this.Text += Localization.Parse(text) + Environment.NewLine;
+            }));
         }
     }
 }

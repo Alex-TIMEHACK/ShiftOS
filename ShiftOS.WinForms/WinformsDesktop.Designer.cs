@@ -22,12 +22,15 @@
  * SOFTWARE.
  */
 
+using System;
 using System.Drawing;
 using Gwen;
 using Gwen.Control;
 using Gwen.Renderer;
+using OpenTK;
 using static Gwen.Control.Base;
 using static ShiftOS.Engine.SkinEngine;
+using OpenTK.Graphics.OpenGL;
 
 namespace ShiftOS.WinForms
 {
@@ -54,6 +57,34 @@ namespace ShiftOS.WinForms
         #region Windows Form Designer generated code
 
         /// <summary>
+        /// Respond to resize events here.
+        /// </summary>
+        /// <param name="e">Contains information on the new GameWindow size.</param>
+        /// <remarks>There is no need to call the base implementation.</remarks>
+        protected override void OnResize(EventArgs e)
+        {
+            GL.Viewport(0, 0, Width, Height);
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.LoadIdentity();
+            GL.Ortho(0, Width, Height, 0, -1, 1);
+
+            toplevel?.SetSize(Width, Height);
+        }
+
+        /// <summary>
+        /// Add your game rendering code here.
+        /// </summary>
+        /// <param name="e">Contains timing information.</param>
+        /// <remarks>There is no need to call the base implementation.</remarks>
+        protected override void OnRenderFrame(FrameEventArgs e)
+        {
+            GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
+            toplevel.RenderCanvas();
+
+            SwapBuffers();
+        }
+
+        /// <summary>
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
@@ -72,6 +103,8 @@ namespace ShiftOS.WinForms
             this.apps = new Gwen.Control.MenuItem(menuStrip1);
             this.pnlscreensaver = new Gwen.Control.Canvas(skn);
             this.pnlssicon = new Gwen.Control.Canvas(skn);
+            this.toplevel = new Gwen.Control.Canvas(skn);
+            input.Initialize(this.toplevel);
             // 
             // desktopCanvas
             // 

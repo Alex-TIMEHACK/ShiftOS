@@ -219,24 +219,27 @@ namespace ShiftOS.WinForms
         /// </summary>
         public void Setup()
         {
-            this.lbtitletext.Text = NameChangerBackend.GetName(ParentWindow);
-            
-            if (SaveSystem.CurrentSave != null)
+            this.Invoke(new Action(() =>
             {
-                this.pnltitle.Visible = Shiftorium.UpgradeInstalled("wm_titlebar");
-                this.pnlclose.Visible = Shiftorium.UpgradeInstalled("close_button");
-                this.pnlminimize.Visible = (IsDialog == false) && Shiftorium.UpgradeInstalled("minimize_button");
-                this.pnlmaximize.Visible = (IsDialog == false) && Shiftorium.UpgradeInstalled("maximize_button");
-                SetupSkin();
-            }
-            else
-            {
-                this.pnltitle.Visible = false;
-                this.pnlclose.Visible = false;
-                this.pnlminimize.Visible = false;
-                this.pnlmaximize.Visible = false;
+                this.lbtitletext.Text = NameChangerBackend.GetName(ParentWindow);
 
-            }
+                if (SaveSystem.CurrentSave != null)
+                {
+                    this.pnltitle.Visible = Shiftorium.UpgradeInstalled("wm_titlebar");
+                    this.pnlclose.Visible = Shiftorium.UpgradeInstalled("close_button");
+                    this.pnlminimize.Visible = (IsDialog == false) && Shiftorium.UpgradeInstalled("minimize_button");
+                    this.pnlmaximize.Visible = (IsDialog == false) && Shiftorium.UpgradeInstalled("maximize_button");
+                    SetupSkin();
+                }
+                else
+                {
+                    this.pnltitle.Visible = false;
+                    this.pnlclose.Visible = false;
+                    this.pnlminimize.Visible = false;
+                    this.pnlmaximize.Visible = false;
+
+                }
+            }));
         }
 
         /// <summary>

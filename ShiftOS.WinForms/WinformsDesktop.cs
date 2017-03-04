@@ -41,6 +41,8 @@ using OpenTK;
 using Gwen;
 using Gwen.Control;
 using static Gwen.Control.Base;
+using OpenTK.Graphics.OpenGL;
+using OpenTK.Input;
 
 /// <summary>
 /// Winforms desktop.
@@ -60,6 +62,7 @@ namespace ShiftOS.WinForms
         /// </summary>
         public WinformsDesktop() : base(2560,1440, OpenTK.Graphics.GraphicsMode.Default, "ShiftOS")
         {
+            InitializeComponent();
             NotificationDaemon.NotificationMade += (note) =>
             {
                 //Soon this will pop a balloon note.
@@ -255,6 +258,45 @@ namespace ShiftOS.WinForms
 
             LuaInterpreter.RaiseEvent("on_panelbutton_populate", this);
         }
+
+        protected override void OnUpdateFrame(FrameEventArgs e)
+        {
+            this.WindowState = WindowState.Fullscreen;
+            base.OnUpdateFrame(e);
+            GL.Viewport(ClientRectangle);
+            GL.Scale(1, 1, 1);
+        }
+
+        protected override void OnKeyDown(KeyboardKeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+
+            if (e.Key == OpenTK.Input.Key.Escape)
+                Exit();
+
+            input.ProcessKeyDown(e);
+        }
+
+        protected override void OnKeyUp(KeyboardKeyEventArgs e)
+        {
+            input.ProcessKeyUp(e);
+        }
+
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            input.ProcessMouseMessage(e);
+        }
+
+        protected override void OnMouseUp(MouseButtonEventArgs e)
+        {
+            input.ProcessMouseMessage(e);
+        }
+
+        protected override void OnMouseMove(MouseMoveEventArgs e)
+        {
+            input.ProcessMouseMessage(e);
+        }
+
 
         /// <summary>
         /// Setups the desktop.
