@@ -30,7 +30,6 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using ShiftOS.Engine;
 using static ShiftOS.Engine.SkinEngine;
 using ShiftOS.WinForms.Tools;
@@ -38,6 +37,10 @@ using ShiftOS.WinForms.Applications;
 using Newtonsoft.Json;
 using ShiftOS.Engine.Scripting;
 using System.Threading;
+using OpenTK;
+using Gwen;
+using Gwen.Control;
+using static Gwen.Control.Base;
 
 /// <summary>
 /// Winforms desktop.
@@ -47,7 +50,7 @@ namespace ShiftOS.WinForms
     /// <summary>
     /// Winforms desktop.
     /// </summary>
-    public partial class WinformsDesktop : Form, IDesktop
+    public partial class WinformsDesktop : GameWindow, IDesktop
     {
         private bool InScreensaver = false;
         private int millisecondsUntilScreensaver = 300000;
@@ -55,11 +58,8 @@ namespace ShiftOS.WinForms
         /// <summary>
         /// Initializes a new instance of the <see cref="ShiftOS.WinForms.WinformsDesktop"/> class.
         /// </summary>
-        public WinformsDesktop()
+        public WinformsDesktop() : base(2560,1440, OpenTK.Graphics.GraphicsMode.Default, "ShiftOS")
         {
-            InitializeComponent();
-            this.TopMost = false;
-
             NotificationDaemon.NotificationMade += (note) =>
             {
                 //Soon this will pop a balloon note.
@@ -74,41 +74,20 @@ namespace ShiftOS.WinForms
 
             };
 
-            this.LocationChanged += (o, a) =>
-            {
-                if (this.Left != 0)
-                    this.Left = 0;
-                if (this.Top != 0)
-                    this.Top = 0;
-            };
-
-            this.SizeChanged += (o, a) =>
-            {
-                if (this.ClientRectangle != Screen.PrimaryScreen.Bounds)
-                {
-                    this.WindowState = FormWindowState.Maximized;
-                }
-            };
-
             SaveSystem.GameReady += () =>
             {
-                if (this.Visible == true)
-                    this.Invoke(new Action(() => SetupDesktop()));
-                this.Invoke(new Action(() =>
-                {
-                    btnnotifications.Text = "Notifications (" + NotificationDaemon.GetUnreadCount().ToString() + ")";
-                }));
+                SetupDesktop();
+                btnnotifications.Text = "Notifications (" + NotificationDaemon.GetUnreadCount().ToString() + ")";
             };
             Shiftorium.Installed += () =>
             {
-                if (this.Visible == true)
-                    this.Invoke(new Action(() => SetupDesktop()));
+                SetupDesktop();
             };
             var time = new System.Windows.Forms.Timer();
             time.Interval = 100;
             this.KeyDown += (o, a) =>
             {
-                if (a.Control && a.KeyCode == Keys.T)
+                if (a.Control && a.Key == OpenTK.Input.Key.T)
                 {
                     Engine.AppearanceManager.SetupWindow(new Applications.Terminal());
                 }
@@ -133,55 +112,30 @@ namespace ShiftOS.WinForms
                     if (SaveSystem.CurrentSave != null && TutorialManager.IsInTutorial == false)
                     {
                         lbtime.Text = Applications.Terminal.GetTime();
-                        lbtime.Left = desktoppanel.Width - lbtime.Width - LoadedSkin.DesktopPanelClockFromRight.X;
-                        lbtime.Top = LoadedSkin.DesktopPanelClockFromRight.Y;
+                        lbtime.X = desktoppanel.Width - lbtime.Width - LoadedSkin.DesktopPanelClockFromRight.X;
+                        lbtime.Y = LoadedSkin.DesktopPanelClockFromRight.Y;
                     }
                 }
 
-                btnnotifications.Left = lbtime.Left - btnnotifications.Width - 2;
-                btnnotifications.Top = (desktoppanel.Height - btnnotifications.Height) / 2;
+                try
+                {
+                    btnnotifications.X = lbtime.X - btnnotifications.Width - 2;
+                    btnnotifications.X = (desktoppanel.Height - btnnotifications.Height) / 2;
+                }
+                catch { }
             };
             time.Start();
-
-            var ssThread = new Thread(() =>
-            {
-                while(this.Visible == true)
-                {
-                    var mousePos = Cursor.Position;
-                    while(Cursor.Position == mousePos)
-                    {
-                        if(millisecondsUntilScreensaver <= 0)
-                        {
-                            ShowScreensaver();
-                            InScreensaver = true;
-                        }
-                        millisecondsUntilScreensaver--;
-                        Thread.Sleep(1);
-                    }
-                    millisecondsUntilScreensaver = 300000;
-                    InScreensaver = false;
-                    HideScreensaver();
-                }
-            });
-            ssThread.IsBackground = true;
-            ssThread.Start();
-
-            this.DoubleBuffered = true;
         }
 
         public void HideScreensaver()
         {
             if (ResetDesktop == true)
             {
-                this.Invoke(new Action(() =>
-                {
-                    this.TopMost = false;
-                    pnlscreensaver.Hide();
-                    Cursor.Show();
-                    SetupDesktop();
-                    ResetDesktop = false;
+                pnlscreensaver.Hide();
+                Cursor = MouseCursor.Default;
+                SetupDesktop();
+                ResetDesktop = false;
 
-                }));
             }
         }
 
@@ -191,42 +145,37 @@ namespace ShiftOS.WinForms
         {
             if (Shiftorium.UpgradeInstalled("screensavers"))
             {
-                this.Invoke(new Action(() =>
+                pnlscreensaver.Show();
+                pnlssicon.Show();
+                pnlssicon.BackgroundColor = Color.Green;
+                pnlssicon.BackgroundImage = new Texture(renderer);
+                var icn = GetImage("screensaver");
+                pnlssicon.BackgroundImage.LoadRaw(icn.Width, icn.Height, ImageToBinary(icn));
+
+                if (pnlssicon.BackgroundImage != null)
                 {
-                    pnlscreensaver.Show();
-                    this.TopMost = true;
-                    pnlssicon.Show();
-                    pnlssicon.BackColor = Color.Green;
-                    pnlssicon.BackgroundImage = GetImage("screensaver");
-                    pnlssicon.BackgroundImageLayout = GetImageLayout("screensaver");
+                    pnlssicon.Size = new Size(pnlssicon.BackgroundImage.Width, pnlssicon.BackgroundImage.Height);
+                }
 
-                    if (pnlssicon.BackgroundImage != null)
+                Cursor = MouseCursor.Empty;
+
+                var t = new Thread(() =>
+                {
+                    var rnd = new Random();
+                    while (InScreensaver == true)
                     {
-                        pnlssicon.Size = pnlssicon.BackgroundImage.Size;
+                        int x = rnd.Next(0, this.Width);
+                        int y = rnd.Next(0, this.Height);
+
+                        pnlssicon.Location = new Point(x, y);
+
+                        Thread.Sleep(5000);
                     }
+                    ResetDesktop = true;
+                });
+                t.IsBackground = true;
+                t.Start();
 
-                    Cursor.Hide();
-
-                    var t = new Thread(() =>
-                    {
-                        var rnd = new Random();
-                        while (InScreensaver == true)
-                        {
-                            int x = rnd.Next(0, this.Width);
-                            int y = rnd.Next(0, this.Height);
-
-                            this.Invoke(new Action(() =>
-                            {
-                                pnlssicon.Location = new Point(x, y);
-                            }));
-
-                            Thread.Sleep(5000);
-                        }
-                        ResetDesktop = true;
-                    });
-                    t.IsBackground = true;
-                    t.Start();
-                }));
             }
         }
 
@@ -239,7 +188,7 @@ namespace ShiftOS.WinForms
         {
             if (DesktopFunctions.ShowDefaultElements == true)
             {
-                panelbuttonholder.Controls.Clear();
+                panelbuttonholder.DeleteAllChildren();
                 if (Shiftorium.IsInitiated == true)
                 {
                     if (Shiftorium.UpgradeInstalled("wm_panel_buttons"))
@@ -250,7 +199,7 @@ namespace ShiftOS.WinForms
                             {
                                 if (form.Visible == true)
                                 {
-                                    EventHandler onClick = (o, a) =>
+                                    GwenEventHandler<ClickedEventArgs> onClick = (o, a) =>
                                     {
                                         if (form == focused)
                                         {
@@ -270,38 +219,32 @@ namespace ShiftOS.WinForms
                                         }
                                     };
 
-                                    var pnlbtn = new Panel();
-                                    pnlbtn.Margin = new Padding(2, LoadedSkin.PanelButtonFromTop, 0, 0);
-                                    pnlbtn.BackColor = LoadedSkin.PanelButtonColor;
-                                    pnlbtn.BackgroundImage = GetImage("panelbutton");
-                                    pnlbtn.BackgroundImageLayout = GetImageLayout("panelbutton");
+                                    var pnlbtn = new Canvas(toplevel.Skin);
+                                    pnlbtn.Margin = new Margin(2, LoadedSkin.PanelButtonFromTop, 0, 0);
+                                    pnlbtn.BackgroundColor = LoadedSkin.PanelButtonColor;
+                                    pnlbtn.BackgroundImage = new Texture(renderer);
+                                    var img = GetImage("panelbutton");
+                                    pnlbtn.BackgroundImage.LoadRaw(img.Width, img.Height, ImageToBinary(img));
+                                    pnlbtn.BackgroundImageLayout = (int)GetImageLayout("panelbutton");
 
-                                    var pnlbtntext = new Label();
+                                    var pnlbtntext = new Label(pnlbtn);
                                     pnlbtntext.Text = NameChangerBackend.GetName(form.ParentWindow);
-                                    pnlbtntext.AutoSize = true;
                                     pnlbtntext.Location = LoadedSkin.PanelButtonFromLeft;
-                                    pnlbtntext.ForeColor = LoadedSkin.PanelButtonTextColor;
-                                    pnlbtntext.BackColor = Color.Transparent;
-
-                                    pnlbtn.BackColor = LoadedSkin.PanelButtonColor;
-                                    if (pnlbtn.BackgroundImage != null)
-                                    {
-                                        pnlbtntext.BackColor = Color.Transparent;
-                                    }
+                                    pnlbtntext.TextColor = LoadedSkin.PanelButtonTextColor;
+                                    
+                                    pnlbtn.BackgroundColor = LoadedSkin.PanelButtonColor;
                                     pnlbtn.Size = LoadedSkin.PanelButtonSize;
-                                    pnlbtn.Tag = "keepbg";
-                                    pnlbtntext.Tag = "keepbg";
-                                    pnlbtn.Controls.Add(pnlbtntext);
-                                    this.panelbuttonholder.Controls.Add(pnlbtn);
+                                    pnlbtn.AddChild(pnlbtntext);
+                                    this.panelbuttonholder.AddChild(pnlbtn);
                                     pnlbtn.Show();
                                     pnlbtntext.Show();
 
                                     if (Shiftorium.UpgradeInstalled("useful_panel_buttons"))
                                     {
-                                        pnlbtn.Click += onClick;
-                                        pnlbtntext.Click += onClick;
+                                        pnlbtn.Clicked += onClick;
+                                        pnlbtntext.Clicked += onClick;
                                     }
-                                    pnlbtntext.Font = LoadedSkin.PanelButtonFont;
+                                    pnlbtntext.Font = ControlManager.CreateGwenFont(renderer, LoadedSkin.PanelButtonFont);
 
                                 }
                             }
@@ -319,46 +262,47 @@ namespace ShiftOS.WinForms
         /// <returns>The desktop.</returns>
         public void SetupDesktop()
         {
+            this.WindowState = WindowState.Fullscreen;
+
             if (DesktopFunctions.ShowDefaultElements == true)
             {
-                ToolStripManager.Renderer = new ShiftOSMenuRenderer();
-
-                this.DoubleBuffered = true;
-                this.FormBorderStyle = FormBorderStyle.None;
-                this.WindowState = FormWindowState.Maximized;
-                desktoppanel.BackColor = Color.Green;
+                this.WindowState = WindowState.Fullscreen;
+                desktoppanel.BackgroundColor = Color.Green;
 
                 //upgrades
 
                 if (Shiftorium.IsInitiated == true)
                 {
-                    desktoppanel.Visible = Shiftorium.UpgradeInstalled("desktop");
-                    lbtime.Visible = Shiftorium.UpgradeInstalled("desktop_clock_widget");
+                    desktoppanel.IsVisible = Shiftorium.UpgradeInstalled("desktop");
+                    lbtime.IsVisible = Shiftorium.UpgradeInstalled("desktop_clock_widget");
 
-                    btnnotifications.Visible = Shiftorium.UpgradeInstalled("panel_notifications");
+                    if (Shiftorium.UpgradeInstalled("panel_notifications"))
+                        btnnotifications.Show();
+                    else
+                        btnnotifications.Hide();
 
                     //skinning
-                    lbtime.ForeColor = LoadedSkin.DesktopPanelClockColor;
+                    lbtime.TextColor = LoadedSkin.DesktopPanelClockColor;
 
-                    panelbuttonholder.Top = 0;
-                    panelbuttonholder.Left = LoadedSkin.PanelButtonHolderFromLeft;
+                    panelbuttonholder.Y = 0;
+                    panelbuttonholder.X = LoadedSkin.PanelButtonHolderFromLeft;
                     panelbuttonholder.Height = desktoppanel.Height;
-                    panelbuttonholder.BackColor = Color.Transparent;
-                    panelbuttonholder.Margin = new Padding(0, 0, 0, 0);
+                    panelbuttonholder.BackgroundColor = Color.Transparent;
+                    panelbuttonholder.Margin = new Margin(0, 0, 0, 0);
 
-                    sysmenuholder.Visible = Shiftorium.UpgradeInstalled("app_launcher");
+                    sysmenuholder.IsVisible = Shiftorium.UpgradeInstalled("app_launcher");
 
                     //The Color Picker can give us transparent colors - which Windows Forms fucking despises when dealing with form backgrounds.
                     //To compensate, we must recreate the desktop color and make the alpha channel '255'.
-                    this.BackColor = Color.FromArgb(LoadedSkin.DesktopColor.R, LoadedSkin.DesktopColor.G, LoadedSkin.DesktopColor.B);
+                    toplevel.BackgroundColor = Color.FromArgb(LoadedSkin.DesktopColor.R, LoadedSkin.DesktopColor.G, LoadedSkin.DesktopColor.B);
                     //Not doing this will cause an ArgumentException.
 
                     DitheringEngine.DitherImage(SkinEngine.GetImage("desktopbackground"), new Action<Image>((img) =>
                     {
-                        this.BackgroundImage = img;
+                        toplevel.BackgroundImage = new Texture(renderer);
+                        toplevel.BackgroundImage.LoadRaw(img.Width, img.Height, ImageToBinary(img));
                     }));
-                    this.BackgroundImageLayout = GetImageLayout("desktopbackground");
-                    desktoppanel.BackColor = LoadedSkin.DesktopPanelColor;
+                    desktoppanel.BackgroundColor = LoadedSkin.DesktopPanelColor;
 
                     var pnlimg = GetImage("desktoppanel");
                     if (pnlimg != null)
@@ -368,10 +312,11 @@ namespace ShiftOS.WinForms
                         pnlimg = bmp;
                     }
 
-                    desktoppanel.BackgroundImage = pnlimg;
+                    desktoppanel.BackgroundImage = new Texture(renderer);
+                    desktoppanel.BackgroundImage.LoadRaw(pnlimg.Width, pnlimg.Height, ImageToBinary(pnlimg));
                     if (desktoppanel.BackgroundImage != null)
                     {
-                        desktoppanel.BackColor = Color.Transparent;
+                        desktoppanel.BackgroundColor = Color.Transparent;
                     }
                     var appimg = GetImage("applauncher");
                     if (appimg != null)
@@ -380,31 +325,23 @@ namespace ShiftOS.WinForms
                         bmp.MakeTransparent(Color.FromArgb(1, 0, 1));
                         appimg = bmp;
                     }
-                    menuStrip1.BackgroundImage = appimg;
-                    lbtime.ForeColor = LoadedSkin.DesktopPanelClockColor;
-                    lbtime.Font = LoadedSkin.DesktopPanelClockFont;
-                    if (desktoppanel.BackgroundImage == null)
-                    {
-                        lbtime.BackColor = LoadedSkin.DesktopPanelClockBackgroundColor;
-                    }
-                    else
-                    {
-                        lbtime.BackColor = Color.Transparent;
-                    }
+                    menuStrip1.BackgroundImage = new Texture(renderer);
+                    menuStrip1.BackgroundImage.LoadRaw(appimg.Width, appimg.Height, SkinEngine.ImageToBinary(appimg));
+                    lbtime.TextColor = LoadedSkin.DesktopPanelClockColor;
+                    lbtime.Font = ControlManager.CreateGwenFont(renderer, LoadedSkin.DesktopPanelClockFont);
                     apps.Text = LoadedSkin.AppLauncherText;
                     sysmenuholder.Location = LoadedSkin.AppLauncherFromLeft;
                     sysmenuholder.Size = LoadedSkin.AppLauncherHolderSize;
                     apps.Size = sysmenuholder.Size;
-                    menuStrip1.Renderer = new ShiftOSMenuRenderer(new AppLauncherColorTable());
-                    desktoppanel.BackgroundImageLayout = GetImageLayout("desktoppanel");
+                    desktoppanel.BackgroundImageLayout = (int)GetImageLayout("desktoppanel");
                     desktoppanel.Height = LoadedSkin.DesktopPanelHeight;
                     if (LoadedSkin.DesktopPanelPosition == 1)
                     {
-                        desktoppanel.Dock = DockStyle.Bottom;
+                        desktoppanel.Dock = Pos.Bottom;
                     }
                     else
                     {
-                        desktoppanel.Dock = DockStyle.Top;
+                        desktoppanel.Dock = Pos.Top;
                     }
                 }
             }
@@ -418,17 +355,10 @@ namespace ShiftOS.WinForms
             PopulatePanelButtons();
         }
 
-        public ToolStripMenuItem GetALCategoryWithName(string text)
+        public MenuItem GetALCategoryWithName(string text)
         {
-            foreach (ToolStripMenuItem menuitem in apps.DropDownItems)
-            {
-                if (menuitem.Text == text)
-                    return menuitem;
-            }
-
-            var itm = new ToolStripMenuItem();
+            var itm = new MenuItem(apps);
             itm.Text = text;
-            apps.DropDownItems.Add(itm);
             return itm;
         }
 
@@ -439,83 +369,6 @@ namespace ShiftOS.WinForms
         /// <param name="items">Items.</param>
         public void PopulateAppLauncher(LauncherItem[] items)
         {
-            if (DesktopFunctions.ShowDefaultElements == true)
-            {
-                apps.DropDownItems.Clear();
-
-                Dictionary<string, List<ToolStripMenuItem>> sortedItems = new Dictionary<string, List<ToolStripMenuItem>>();
-
-
-
-                foreach (var kv in items)
-                {
-                    var item = new ToolStripMenuItem();
-                    item.Text = (kv.LaunchType == null) ? kv.DisplayData.Name : Applications.NameChangerBackend.GetNameRaw(kv.LaunchType);
-                    item.Image = (kv.LaunchType == null) ? null : SkinEngine.GetIcon(kv.LaunchType.Name);
-                    item.Click += (o, a) =>
-                    {
-                        if (kv is LuaLauncherItem)
-                        {
-                            var interpreter = new Engine.Scripting.LuaInterpreter();
-                            interpreter.ExecuteFile((kv as LuaLauncherItem).LaunchPath);
-                        }
-                        else
-                        {
-                            Engine.AppearanceManager.SetupWindow(Activator.CreateInstance(kv.LaunchType) as IShiftOSWindow);
-                        }
-
-                    };
-                    if (sortedItems.ContainsKey(kv.DisplayData.Category))
-                    {
-                        sortedItems[kv.DisplayData.Category].Add(item);
-                    }
-                    else
-                    {
-                        sortedItems.Add(kv.DisplayData.Category, new List<ToolStripMenuItem>());
-                        sortedItems[kv.DisplayData.Category].Add(item);
-                    }
-                }
-
-                foreach (var kv in sortedItems)
-                {
-                    if (Shiftorium.IsInitiated == true)
-                    {
-                        if (Shiftorium.UpgradeInstalled("app_launcher_categories"))
-                        {
-                            var cat = GetALCategoryWithName(kv.Key);
-                            foreach (var subItem in kv.Value)
-                            {
-                                cat.DropDownItems.Add(subItem);
-                            }
-                        }
-
-                        else
-                        {
-                            foreach (var subItem in kv.Value)
-                            {
-                                apps.DropDownItems.Add(subItem);
-                            }
-                        }
-                    }
-                }
-
-                if (Shiftorium.IsInitiated == true)
-                {
-                    if (Shiftorium.UpgradeInstalled("al_shutdown"))
-                    {
-                        apps.DropDownItems.Add(new ToolStripSeparator());
-                        var item = new ToolStripMenuItem();
-                        item.Text = Localization.Parse("{SHUTDOWN}");
-                        item.Click += (o, a) =>
-                        {
-                            TerminalBackend.InvokeCommand("sos.shutdown");
-                        };
-                        apps.DropDownItems.Add(item);
-
-                    }
-                }
-            }
-            LuaInterpreter.RaiseEvent("on_al_populate", items);
         }
 
 
@@ -534,10 +387,7 @@ namespace ShiftOS.WinForms
 
             SaveSystem.GameReady += () =>
             {
-                this.Invoke(new Action(() =>
-                {
-                    LuaInterpreter.RaiseEvent("on_desktop_load", this);
-                }));
+                LuaInterpreter.RaiseEvent("on_desktop_load", this);
             };
         }
 
@@ -548,13 +398,13 @@ namespace ShiftOS.WinForms
         /// <param name="border">Border.</param>
         public void ShowWindow(IWindowBorder border)
         {
-            var brdr = border as Form;
+            var brdr = border as System.Windows.Forms.Form;
             focused = border;
             brdr.GotFocus += (o, a) =>
             {
                 focused = border;
             };
-            brdr.FormBorderStyle = FormBorderStyle.None;
+            brdr.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             brdr.Show();
             brdr.TopMost = true;
         }
@@ -637,14 +487,12 @@ namespace ShiftOS.WinForms
         /// <param name="act">Act.</param>
         public void InvokeOnWorkerThread(Action act)
         {
-            this.Invoke(act);
+            act.Invoke();
         }
 
         public void OpenAppLauncher(Point loc)
         {
-            apps.DropDown.Left = loc.X;
-            apps.DropDown.Top = loc.Y;
-            apps.ShowDropDown();
+            apps.OpenMenu();
         }
 
         /// <summary>
@@ -661,9 +509,9 @@ namespace ShiftOS.WinForms
             AppearanceManager.SetupWindow(new Applications.Notifications());
         }
 
-        private void desktoppanel_Paint(object sender, PaintEventArgs e)
+        public void Show()
         {
-            e.Graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+            throw new NotImplementedException();
         }
     }
 

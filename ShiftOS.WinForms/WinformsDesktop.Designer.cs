@@ -22,6 +22,13 @@
  * SOFTWARE.
  */
 
+using System.Drawing;
+using Gwen;
+using Gwen.Control;
+using Gwen.Renderer;
+using static Gwen.Control.Base;
+using static ShiftOS.Engine.SkinEngine;
+
 namespace ShiftOS.WinForms
 {
     partial class WinformsDesktop
@@ -52,155 +59,183 @@ namespace ShiftOS.WinForms
         /// </summary>
         private void InitializeComponent()
         {
-            this.desktoppanel = new System.Windows.Forms.Panel();
-            this.btnnotifications = new System.Windows.Forms.Button();
-            this.lbtime = new System.Windows.Forms.Label();
-            this.panelbuttonholder = new System.Windows.Forms.FlowLayoutPanel();
-            this.sysmenuholder = new System.Windows.Forms.Panel();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.apps = new System.Windows.Forms.ToolStripMenuItem();
-            this.pnlscreensaver = new System.Windows.Forms.Panel();
-            this.pnlssicon = new System.Windows.Forms.Panel();
-            this.desktoppanel.SuspendLayout();
-            this.sysmenuholder.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
-            this.pnlscreensaver.SuspendLayout();
-            this.SuspendLayout();
+            renderer = new Gwen.Renderer.OpenTK();
+            input = new Gwen.Input.OpenTK(this);
+
+            var skn = new ShiftOSSkin(this.renderer);
+            this.desktoppanel = new Gwen.Control.Canvas(skn);
+            this.btnnotifications = new Gwen.Control.Button(desktoppanel);
+            this.lbtime = new Gwen.Control.Label(desktoppanel);
+            this.panelbuttonholder = new Gwen.Control.Canvas(skn);
+            this.sysmenuholder = new Gwen.Control.Canvas(skn);
+            this.menuStrip1 = new Gwen.Control.MenuStrip(sysmenuholder);
+            this.apps = new Gwen.Control.MenuItem(menuStrip1);
+            this.pnlscreensaver = new Gwen.Control.Canvas(skn);
+            this.pnlssicon = new Gwen.Control.Canvas(skn);
             // 
-            // desktoppanel
+            // desktopCanvas
             // 
-            this.desktoppanel.BackColor = System.Drawing.Color.Green;
-            this.desktoppanel.Controls.Add(this.btnnotifications);
-            this.desktoppanel.Controls.Add(this.lbtime);
-            this.desktoppanel.Controls.Add(this.panelbuttonholder);
-            this.desktoppanel.Controls.Add(this.sysmenuholder);
-            this.desktoppanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.desktoppanel.Location = new System.Drawing.Point(0, 0);
-            this.desktoppanel.Name = "desktoppanel";
-            this.desktoppanel.Size = new System.Drawing.Size(1296, 24);
-            this.desktoppanel.TabIndex = 0;
-            this.desktoppanel.Paint += new System.Windows.Forms.PaintEventHandler(this.desktoppanel_Paint);
+            this.desktoppanel.Dock = Pos.Top;
+            this.desktoppanel.Name = "desktopCanvas";
             // 
             // btnnotifications
             // 
-            this.btnnotifications.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnnotifications.AutoSize = true;
-            this.btnnotifications.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnnotifications.BackColor = System.Drawing.Color.Transparent;
-            this.btnnotifications.FlatAppearance.BorderSize = 0;
-            this.btnnotifications.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnnotifications.Location = new System.Drawing.Point(1066, -2);
             this.btnnotifications.Name = "btnnotifications";
-            this.btnnotifications.Size = new System.Drawing.Size(136, 24);
-            this.btnnotifications.TabIndex = 3;
             this.btnnotifications.Text = "Notifications (0)";
-            this.btnnotifications.UseVisualStyleBackColor = false;
-            this.btnnotifications.Click += new System.EventHandler(this.btnnotifications_Click);
+            this.btnnotifications.Clicked += new GwenEventHandler<ClickedEventArgs>(this.btnnotifications_Click);
             // 
             // lbtime
             // 
-            this.lbtime.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbtime.AutoSize = true;
-            this.lbtime.Location = new System.Drawing.Point(3, 0);
             this.lbtime.Name = "lbtime";
-            this.lbtime.Size = new System.Drawing.Size(49, 14);
-            this.lbtime.TabIndex = 0;
             this.lbtime.Text = "label1";
-            this.lbtime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // panelbuttonholder
+            // Canvasbuttonholder
             // 
-            this.panelbuttonholder.AutoSize = true;
-            this.panelbuttonholder.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.panelbuttonholder.Location = new System.Drawing.Point(107, -77);
-            this.panelbuttonholder.Name = "panelbuttonholder";
-            this.panelbuttonholder.Size = new System.Drawing.Size(0, 0);
-            this.panelbuttonholder.TabIndex = 2;
+            this.panelbuttonholder.Name = "Canvasbuttonholder";
             // 
             // sysmenuholder
             // 
-            this.sysmenuholder.Controls.Add(this.menuStrip1);
-            this.sysmenuholder.Location = new System.Drawing.Point(12, 5);
             this.sysmenuholder.Name = "sysmenuholder";
-            this.sysmenuholder.Size = new System.Drawing.Size(68, 24);
-            this.sysmenuholder.TabIndex = 1;
             // 
             // menuStrip1
             // 
-            this.menuStrip1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.apps});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Dock = Pos.Top;
+            
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(0);
-            this.menuStrip1.Size = new System.Drawing.Size(68, 24);
-            this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "menuStrip1";
+            this.menuStrip1.Padding = new Padding(0,0,0,0);
             // 
             // apps
             // 
-            this.apps.AutoSize = false;
             this.apps.Name = "apps";
-            this.apps.Padding = new System.Windows.Forms.Padding(0);
-            this.apps.Size = new System.Drawing.Size(58, 20);
-            this.apps.Tag = "applauncherbutton";
+            this.apps.Padding = new Padding(0,0,0,0);
+            this.apps.Width = 58;
+            this.apps.Height = 20;
             this.apps.Text = "ShiftOS";
-            // 
-            // pnlscreensaver
-            // 
-            this.pnlscreensaver.Controls.Add(this.pnlssicon);
-            this.pnlscreensaver.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlscreensaver.Location = new System.Drawing.Point(0, 24);
-            this.pnlscreensaver.Name = "pnlscreensaver";
-            this.pnlscreensaver.Size = new System.Drawing.Size(1296, 714);
-            this.pnlscreensaver.TabIndex = 1;
-            this.pnlscreensaver.Visible = false;
-            // 
-            // pnlssicon
-            // 
-            this.pnlssicon.Location = new System.Drawing.Point(303, 495);
-            this.pnlssicon.Name = "pnlssicon";
-            this.pnlssicon.Size = new System.Drawing.Size(200, 100);
-            this.pnlssicon.TabIndex = 0;
             // 
             // WinformsDesktop
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(1296, 738);
-            this.Controls.Add(this.pnlscreensaver);
-            this.Controls.Add(this.desktoppanel);
-            this.Font = new System.Drawing.Font("Consolas", 9F);
-            this.ForeColor = System.Drawing.Color.LightGreen;
-            this.MainMenuStrip = this.menuStrip1;
-            this.Name = "WinformsDesktop";
-            this.Text = "Desktop";
-            this.Load += new System.EventHandler(this.Desktop_Load);
-            this.desktoppanel.ResumeLayout(false);
-            this.desktoppanel.PerformLayout();
-            this.sysmenuholder.ResumeLayout(false);
-            this.sysmenuholder.PerformLayout();
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
-            this.pnlscreensaver.ResumeLayout(false);
-            this.ResumeLayout(false);
+            this.Title = "ShiftOS 1.2 Alpha 1.0";
+            this.Load += new System.EventHandler<System.EventArgs>(this.Desktop_Load);
+            
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Panel desktoppanel;
-        private System.Windows.Forms.Label lbtime;
-        private System.Windows.Forms.Panel sysmenuholder;
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem apps;
-        private System.Windows.Forms.FlowLayoutPanel panelbuttonholder;
-        private System.Windows.Forms.Button btnnotifications;
-        private System.Windows.Forms.Panel pnlscreensaver;
-        private System.Windows.Forms.Panel pnlssicon;
+        private Gwen.Input.OpenTK input;
+        private Gwen.Renderer.Base renderer;
+        private Gwen.Control.Canvas toplevel;
+        private Gwen.Control.Canvas desktoppanel;
+        private Gwen.Control.Label lbtime;
+        private Gwen.Control.Canvas sysmenuholder;
+        private Gwen.Control.MenuStrip menuStrip1;
+        private Gwen.Control.MenuItem apps;
+        private Gwen.Control.Canvas panelbuttonholder;
+        private Gwen.Control.Button btnnotifications;
+        private Gwen.Control.Canvas pnlscreensaver;
+        private Gwen.Control.Canvas pnlssicon;
     }
 
+    public class ShiftOSSkin : Gwen.Skin.Base
+    {
+        public ShiftOSSkin(Gwen.Renderer.Base renderer) : base(renderer)
+        {
+        }
+
+        public override void DrawArrowDown(Rectangle rect)
+        {
+            Renderer.DrawColor = LoadedSkin.Menu_TextColor;
+            Renderer.Begin();
+            int pad = 0;
+            for (int y = rect.Y; y <= rect.Y + rect.Height; y++)
+            {
+                for (int x = rect.X + pad; x <= (rect.X + rect.Width) - pad; x++)
+                {
+                    Renderer.DrawPixel(x, y);
+                }
+                pad++;
+            }
+            Renderer.End();
+        }
+
+        public override void DrawArrowUp(Rectangle rect)
+        {
+            Renderer.DrawColor = LoadedSkin.Menu_TextColor;
+            Renderer.Begin();
+            int pad = 0;
+            for (int y = rect.Y + rect.Height; y >= rect.Y; y--)
+            {
+                for (int x = rect.X + pad; x <= (rect.X + rect.Width) - pad; x++)
+                {
+                    Renderer.DrawPixel(x, y);
+                }
+                pad++;
+            }
+            Renderer.End();
+        }
+
+        public override void DrawArrowLeft(Rectangle rect)
+        {
+            Renderer.DrawColor = LoadedSkin.Menu_TextColor;
+            Renderer.Begin();
+            int pad = 0;
+            for (int x = rect.X + rect.Width; x >= rect.X; x--)
+            {
+                for (int y = rect.Y + pad; y <= (rect.Y + rect.Height) - pad; y++)
+                {
+                    Renderer.DrawPixel(x, y);
+                }
+                pad++;
+            }
+            Renderer.End();
+        }
+
+        public override void DrawArrowRight(Rectangle rect)
+        {
+            Renderer.DrawColor = LoadedSkin.Menu_TextColor;
+            Renderer.Begin();
+            int pad = 0;
+            for (int x = rect.X; x <= rect.X + rect.Width; x++)
+            {
+                for (int y = rect.Y + pad; y <= (rect.Y + rect.Height) - pad; y++)
+                {
+                    Renderer.DrawPixel(x, y);
+                }
+                pad++;
+            }
+            Renderer.End();
+        }
+
+        public override void DrawButton(Gwen.Control.Base control, bool depressed, bool hovered, bool disabled)
+        {
+            Renderer.Begin();
+            Renderer.DrawColor = LoadedSkin.ControlTextColor;
+            Renderer.DrawFilledRect(new Rectangle(control.X, control.Y, control.Width, control.Height));
+
+            Renderer.DrawColor = LoadedSkin.ControlColor;
+            if (hovered)
+                Renderer.DrawColor = LoadedSkin.Menu_ButtonSelectedHighlight;
+            if (depressed)
+                Renderer.DrawColor = LoadedSkin.Menu_ButtonPressedHighlight;
+            if (disabled)
+                Renderer.DrawColor = LoadedSkin.ControlColor;
+
+            Renderer.DrawFilledRect(new Rectangle(control.X + 2, control.Y + 2, control.Width - 2, control.Height - 2));
+
+            //draw background texture
+            if (control.BackgroundImage != null)
+                Renderer.DrawTexturedRect(control.BackgroundImage, new Rectangle(control.X, control.Y, control.Width, control.Height));
+            
+            Renderer.DrawColor = LoadedSkin.ControlTextColor;
+            var font = new Gwen.Font(Renderer, LoadedSkin.MainFont.Name, (int)LoadedSkin.MainFont.Size);
+            var textSize = Renderer.MeasureText(font, (control as Button).Text);
+            var centerPoint = new Point(
+                    (control.Width - textSize.X) / 2,
+                    (control.Height - textSize.Y) / 2
+                );
+            Renderer.RenderText(font, centerPoint, (control as Button).Text);
+             
+        }
+    }
 }
 

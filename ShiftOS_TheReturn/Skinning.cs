@@ -200,6 +200,15 @@ namespace ShiftOS.Engine {
             }
              
         }
+
+        public static byte[] ImageToBinary(Image img)
+        {
+            using(var ms = new MemoryStream())
+            {
+                img.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                return ms.ToArray();
+            }
+        }
     }
 
     public interface IIconProber

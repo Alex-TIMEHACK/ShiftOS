@@ -70,7 +70,7 @@ namespace ShiftOS.WinForms
             FileSkimmerBackend.Init(new WinformsFSFrontend());
             var desk = new WinformsDesktop();
             Desktop.Init(desk);
-            Application.Run(desk);
+            desk.Run();
         }
     }
 
