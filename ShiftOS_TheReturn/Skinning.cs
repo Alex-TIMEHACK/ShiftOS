@@ -203,9 +203,12 @@ namespace ShiftOS.Engine {
 
         public static byte[] ImageToBinary(Image img)
         {
+            if (img == null)
+                return new byte[1];
+
             using(var ms = new MemoryStream())
             {
-                img.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                img.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
                 return ms.ToArray();
             }
         }

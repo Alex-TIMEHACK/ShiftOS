@@ -94,16 +94,14 @@ namespace ShiftOS.WinForms
             input = new Gwen.Input.OpenTK(this);
 
             var skn = new ShiftOSSkin(this.renderer);
-            this.desktoppanel = new Gwen.Control.Canvas(skn);
-            this.btnnotifications = new Gwen.Control.Button(desktoppanel);
+            this.toplevel = new Gwen.Control.Canvas(skn); this.desktoppanel = new Gwen.Control.Layout.Positioner(desktoppanel);
             this.lbtime = new Gwen.Control.Label(desktoppanel);
-            this.panelbuttonholder = new Gwen.Control.Canvas(skn);
-            this.sysmenuholder = new Gwen.Control.Canvas(skn);
+            this.panelbuttonholder = new Gwen.Control.Layout.Positioner(desktoppanel);
+            this.sysmenuholder = new Gwen.Control.Layout.Positioner(desktoppanel);
             this.menuStrip1 = new Gwen.Control.MenuStrip(sysmenuholder);
             this.apps = new Gwen.Control.MenuItem(menuStrip1);
-            this.pnlscreensaver = new Gwen.Control.Canvas(skn);
-            this.pnlssicon = new Gwen.Control.Canvas(skn);
-            this.toplevel = new Gwen.Control.Canvas(skn);
+            this.pnlscreensaver = new Gwen.Control.Layout.Positioner(toplevel);
+            this.pnlssicon = new Gwen.Control.ImagePanel(toplevel);
             input.Initialize(this.toplevel);
             // 
             // desktopCanvas
@@ -157,16 +155,17 @@ namespace ShiftOS.WinForms
 
         private Gwen.Input.OpenTK input;
         private Gwen.Renderer.Base renderer;
+        private Gwen.Control.ImagePanel desktopbg;
         private Gwen.Control.Canvas toplevel;
-        private Gwen.Control.Canvas desktoppanel;
+        private Gwen.Control.Layout.Positioner desktoppanel;
         private Gwen.Control.Label lbtime;
-        private Gwen.Control.Canvas sysmenuholder;
+        private Gwen.Control.Layout.Positioner sysmenuholder;
         private Gwen.Control.MenuStrip menuStrip1;
         private Gwen.Control.MenuItem apps;
-        private Gwen.Control.Canvas panelbuttonholder;
+        private Gwen.Control.Layout.Positioner panelbuttonholder;
         private Gwen.Control.Button btnnotifications;
-        private Gwen.Control.Canvas pnlscreensaver;
-        private Gwen.Control.Canvas pnlssicon;
+        private Gwen.Control.Layout.Positioner pnlscreensaver;
+        private Gwen.Control.ImagePanel pnlssicon;
     }
 
     public class ShiftOSSkin : Gwen.Skin.Base
