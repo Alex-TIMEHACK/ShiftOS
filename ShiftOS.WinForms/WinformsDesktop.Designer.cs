@@ -94,7 +94,7 @@ namespace ShiftOS.WinForms
             input = new Gwen.Input.OpenTK(this);
 
             var skn = new ShiftOSSkin(this.renderer);
-            this.toplevel = new Gwen.Control.Canvas(skn); this.desktoppanel = new Gwen.Control.Layout.Positioner(desktoppanel);
+            this.toplevel = new Gwen.Control.Canvas(skn); this.desktoppanel = new Gwen.Control.Layout.Positioner(toplevel);
             this.lbtime = new Gwen.Control.Label(desktoppanel);
             this.panelbuttonholder = new Gwen.Control.Layout.Positioner(desktoppanel);
             this.sysmenuholder = new Gwen.Control.Layout.Positioner(desktoppanel);
@@ -102,6 +102,8 @@ namespace ShiftOS.WinForms
             this.apps = new Gwen.Control.MenuItem(menuStrip1);
             this.pnlscreensaver = new Gwen.Control.Layout.Positioner(toplevel);
             this.pnlssicon = new Gwen.Control.ImagePanel(toplevel);
+            this.desktopbg = new Gwen.Control.ImagePanel(toplevel);
+            this.btnnotifications = new Gwen.Control.Button(desktoppanel);
             input.Initialize(this.toplevel);
             // 
             // desktopCanvas

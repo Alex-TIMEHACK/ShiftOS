@@ -354,8 +354,11 @@ namespace ShiftOS.WinForms
                         pnlimg = bmp;
                     }
 
-                    desktoppanel.BackgroundImage = new Texture(renderer);
-                    desktoppanel.BackgroundImage.LoadRaw(pnlimg.Width, pnlimg.Height, ImageToBinary(pnlimg));
+                    if (pnlimg != null)
+                    {
+                        desktoppanel.BackgroundImage = new Texture(renderer);
+                        desktoppanel.BackgroundImage.LoadRaw(pnlimg.Width, pnlimg.Height, ImageToBinary(pnlimg));
+                    }
                     if (desktoppanel.BackgroundImage != null)
                     {
                         desktoppanel.BackgroundColor = Color.Transparent;
