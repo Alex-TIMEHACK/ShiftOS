@@ -110,6 +110,10 @@ namespace ShiftOS.WinForms
             // 
             this.desktoppanel.Dock = Pos.Top;
             this.desktoppanel.Name = "desktopCanvas";
+
+            this.desktopbg.Dock = Pos.Fill;
+            this.desktopbg.BringToFront();
+
             // 
             // btnnotifications
             // 
@@ -270,6 +274,10 @@ namespace ShiftOS.WinForms
             Renderer.RenderText(font, centerPoint, (control as Button).Text);
              
         }
+
+        
     }
+
+    
 }
 

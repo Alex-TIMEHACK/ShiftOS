@@ -341,8 +341,8 @@ namespace ShiftOS.WinForms
 
                     DitheringEngine.DitherImage(SkinEngine.GetImage("desktopbackground"), new Action<Image>((img) =>
                     {
-                        toplevel.BackgroundImage = new Texture(renderer);
-                        toplevel.BackgroundImage.LoadRaw(img.Width, img.Height, ImageToBinary(img));
+                        desktopbg.Image = new Texture(renderer);
+                        desktopbg.Image.LoadRaw(img.Width, img.Height, ImageToBinary(img));
                     }));
                     desktoppanel.BackgroundColor = LoadedSkin.DesktopPanelColor;
 

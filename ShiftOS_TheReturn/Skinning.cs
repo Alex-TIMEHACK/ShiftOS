@@ -208,7 +208,7 @@ namespace ShiftOS.Engine {
 
             using(var ms = new MemoryStream())
             {
-                img.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+                img.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
                 return ms.ToArray();
             }
         }
