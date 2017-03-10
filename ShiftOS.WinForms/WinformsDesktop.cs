@@ -57,6 +57,11 @@ namespace ShiftOS.WinForms
         private bool InScreensaver = false;
         private int millisecondsUntilScreensaver = 300000;
 
+        public void Invoke(Action act)
+        {
+            act?.Invoke();
+        }
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="ShiftOS.WinForms.WinformsDesktop"/> class.
         /// </summary>
@@ -66,15 +71,19 @@ namespace ShiftOS.WinForms
             NotificationDaemon.NotificationMade += (note) =>
             {
                 //Soon this will pop a balloon note.
-                btnnotifications.Text = "Notifications (" + NotificationDaemon.GetUnreadCount().ToString() + ")";
-
+                this.Invoke(new Action(() =>
+                {
+                    btnnotifications.Text = "Notifications (" + NotificationDaemon.GetUnreadCount().ToString() + ")";
+                }));
             };
 
             NotificationDaemon.NotificationRead += () =>
             {
                 //Soon this will pop a balloon note.
-                btnnotifications.Text = "Notifications (" + NotificationDaemon.GetUnreadCount().ToString() + ")";
-
+                this.Invoke(new Action(() =>
+                {
+                    btnnotifications.Text = "Notifications (" + NotificationDaemon.GetUnreadCount().ToString() + ")";
+                }));
             };
 
             SaveSystem.GameReady += () =>
