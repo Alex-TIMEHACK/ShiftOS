@@ -99,6 +99,7 @@
     <Compile Include="AudioManager.cs" />
     <Compile Include="Commands.cs" />
     <Compile Include="Command.cs" />
+    <Compile Include="ConsoleEx.cs" />
     <Compile Include="CrashHandler.cs" />
     <Compile Include="CrashHandler.Designer.cs">
       <DependentUpon>CrashHandler.cs</DependentUpon>
@@ -107,6 +108,7 @@
     <Compile Include="FileSkimmerBackend.cs" />
     <Compile Include="Infobox.cs" />
     <Compile Include="IShiftOSWindow.cs" />
+    <Compile Include="KernelWatchdog.cs" />
     <Compile Include="Localization.cs" />
     <Compile Include="NotificationDaemon.cs" />
     <Compile Include="OutOfBoxExperience.cs" />

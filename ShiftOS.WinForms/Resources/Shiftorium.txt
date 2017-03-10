@@ -125,6 +125,20 @@
 		Description: "Want to adjust the volume of ShiftOS's audio? This upgrade will let you."
 	},
 
+	//SHIFTLOTTO UPGRADES
+	{
+		Name: "ShiftLotto",
+		Cost: 200,
+		Dependencies: null,
+		Description: "Are you feeling lucky? Spend some money on this upgrade! If you have any left, go ahead and bet your money in ShiftLotto!"
+	},
+	{
+		Name: "AL ShiftLotto",
+		Cost: 150,
+		Dependencies: "app_launcher;shiftlotto",
+		Description: "This upgrade allows you to find ShiftLotto in your App Launcher."
+	},
+
 	// COLOR DEPTH AND DITHERING
 
 	{
@@ -250,6 +264,36 @@
 		Cost: 150,
 		Description: "Add a launcher item for the MUD cracker.",
 		Dependencies: "mud_cracker;app_launcher"
+	},
+	{
+		Name: "Format Editor",
+		Cost: 6000,
+		Description: "Allows you to change the format of commands.",
+		Dependencies: "shifter;name_changer"
+	},
+	{
+		Name: "Format Editor Optional Text",
+		Cost: 150,
+		Description: "Allows you to add an optional text to commands",
+		Dependencies: "format_editor"
+	},
+	{
+		Name: "Format Editor Regex",
+		Cost: 150,
+		Description: "Allows you to customize your commands with regexes.",
+		Dependencies: "format_editor_optional_text"
+	},
+	{
+		Name: "Format Editor Syntax Highligting",
+		Cost: 150,
+		Description: "Allows you to give color to commands as the user types them.",
+		Dependencies: "format_editor_regex"
+	},
+	{
+		Name: "AL Format Editor",
+		Cost: 150,
+		Description: "Add a launcher item for the Format Editor.",
+		Dependencies: "format_editor;app_launcher"
 	},
 	{
 		Name: "Textpad",

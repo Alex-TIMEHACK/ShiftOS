@@ -36,6 +36,7 @@ using ShiftOS.Engine;
 
 namespace ShiftOS.WinForms.Applications
 {
+    [MultiplayerOnly]
     public partial class Chat : UserControl, IShiftOSWindow
     {
         public Chat(string chatId)
@@ -55,7 +56,7 @@ namespace ShiftOS.WinForms.Applications
                                 var args = JsonConvert.DeserializeObject<Dictionary<string, string>>(msg.Contents);
                                 var cmsg = new ShiftOS.Objects.ChatMessage(args["Username"] as string, args["SystemName"] as string, args["Message"] as string, args["Channel"] as string);
                                 if (id == cmsg.Channel)
-                                    rtbchat.AppendText($"[{cmsg.Username}@{cmsg.SystemName}] {cmsg.Message}{Environment.NewLine}");
+                                    rtbchat.AppendText($"[{cmsg.Username}@{cmsg.SystemName}]: {cmsg.Message}{Environment.NewLine}");
                             }
                             catch (Exception ex)
                             {

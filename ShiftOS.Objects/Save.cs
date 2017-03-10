@@ -45,6 +45,8 @@ namespace ShiftOS.Objects
         public int MinorVersion { get; set; }
         public int Revision { get; set; }
 
+        public bool IsPatreon { get; set; }
+
         public string Password { get; set; }
         public bool PasswordHashed { get; set; }
         public string SystemName { get; set; }
@@ -64,6 +66,9 @@ namespace ShiftOS.Objects
                 return _settings;
             }
         }
+
+        public int LastMonthPaid { get; set; }
+        public List<string> StoriesExperienced { get; set; }
 
         public int CountUpgrades()
         {
