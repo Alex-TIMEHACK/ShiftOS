@@ -250,23 +250,16 @@ namespace Gwen.Control
         /// <param name="skin">Skin to use.</param>
         protected override void Render(Skin.Base skin)
         {
+            var r = skin.Renderer;
+            r.Begin();
+            r.RenderText(this.Font, new Point(this.RenderBounds.X, this.RenderBounds.Y), this.Text);
         }
 
 		/// <summary>
 		/// Updates control colors.
 		/// </summary>
 		public override void UpdateColors() {
-			if (IsDisabled) {
-				TextColor = Skin.Colors.Button.Disabled;
-				return;
-			}
-
-			if (IsHovered && ClickEventAssigned) {
-				TextColor = Skin.Colors.Button.Hover;
-				return;
-			}
-
-			TextColor = Skin.Colors.Button.Normal;
+            return;
 		}
     }
 }

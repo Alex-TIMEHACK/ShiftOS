@@ -247,6 +247,7 @@ namespace ShiftOS.WinForms
                                     pnlbtn.BackgroundImageLayout = (int)GetImageLayout("panelbutton");
 
                                     var pnlbtntext = new Label(pnlbtn);
+                                    pnlbtntext.AutoSizeToContents = true;
                                     pnlbtntext.Text = NameChangerBackend.GetName(form.ParentWindow);
                                     pnlbtntext.Location = LoadedSkin.PanelButtonFromLeft;
                                     pnlbtntext.TextColor = LoadedSkin.PanelButtonTextColor;

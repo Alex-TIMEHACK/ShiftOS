@@ -174,11 +174,14 @@ namespace ShiftOS.WinForms
         private Gwen.Control.ImagePanel pnlssicon;
     }
 
+
     public class ShiftOSSkin : Gwen.Skin.Base
     {
         public ShiftOSSkin(Gwen.Renderer.Base renderer) : base(renderer)
         {
-            
+            Colors.Button.Disabled = Color.Gray;
+            Colors.Button.Normal = LoadedSkin.ControlTextColor;
+            Colors.ModalBackground = LoadedSkin.ControlColor;
         }
 
         public override void DrawArrowDown(Rectangle rect)
