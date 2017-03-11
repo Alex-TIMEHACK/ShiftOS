@@ -57,24 +57,22 @@ namespace Gwen.Control
 
         private Color m_background_color = Color.Transparent;
 
-        public Color BackgroundColor
-        {
-            get { return m_background_color; }
-            set
-            {
-                m_background_color = value; Redraw();
-                Redraw();
-            }
-        }
-
         public Texture Image
         {
             get { return m_Texture; }
             set
             {
+                if(value == null)
+                {
+                    renderColor = true;
+                    return;
+                }
                 m_Texture = value;
+                renderColor = false;
             }
         }
+
+        private bool renderColor = true;
 
         /// <summary>
         /// Renders the control using specified skin.
@@ -83,8 +81,16 @@ namespace Gwen.Control
         protected override void Render(Skin.Base skin)
         {
             base.Render(skin);
-            skin.Renderer.DrawColor = m_DrawColor;
-            skin.Renderer.DrawTexturedRect(m_Texture, RenderBounds, m_uv[0], m_uv[1], m_uv[2], m_uv[3]);
+
+            skin.Renderer.DrawColor = BackgroundColor;
+            if (renderColor == true)
+            {
+                skin.Renderer.DrawFilledRect(RenderBounds);
+            }
+            else
+            {
+                skin.Renderer.DrawTexturedRect(m_Texture, RenderBounds, m_uv[0], m_uv[1], m_uv[2], m_uv[3]);
+            }
         }
 
         /// <summary>

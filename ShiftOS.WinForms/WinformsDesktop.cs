@@ -56,10 +56,12 @@ namespace ShiftOS.WinForms
     {
         private bool InScreensaver = false;
         private int millisecondsUntilScreensaver = 300000;
+        private Queue<Action> actionsToRun = new Queue<Action>();
 
         public void Invoke(Action act)
         {
-            act?.Invoke();
+            actionsToRun.Enqueue(act);
+
         }
         
         /// <summary>
@@ -275,6 +277,12 @@ namespace ShiftOS.WinForms
 
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
+            //We'll run all the queued methods.
+            while(actionsToRun.Count > 0)
+            {
+                actionsToRun.Dequeue()?.Invoke();
+            }
+
             this.WindowState = WindowState.Fullscreen;
             base.OnUpdateFrame(e);
             GL.Viewport(ClientRectangle);

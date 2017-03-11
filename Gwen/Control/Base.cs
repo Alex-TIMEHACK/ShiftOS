@@ -22,8 +22,6 @@ namespace Gwen.Control
         /// <param name="args" >Additional arguments. May be empty (EventArgs.Empty).</param>
 		public delegate void GwenEventHandler<in T>(Base sender, T arguments) where T : System.EventArgs;
 
-        private bool m_Disposed;
-
         private Base m_Parent;
 
         /// <summary>
@@ -548,7 +546,6 @@ namespace Gwen.Control
 
             m_Children.Clear();
 
-            m_Disposed = true;
             GC.SuppressFinalize(this);
         }
 
@@ -1058,6 +1055,21 @@ namespace Gwen.Control
 
         }
 
+        private Color m_BackgroundColor = Color.LightGray;
+        public Color BackgroundColor
+        {
+            get
+            {
+                return m_BackgroundColor;
+            }
+            set
+            {
+                m_BackgroundColor = value;
+
+                Redraw();
+            }
+        }
+
         /// <summary>
         /// Renders the control using specified skin.
         /// </summary>
@@ -1069,6 +1081,14 @@ namespace Gwen.Control
                 var r = skin.Renderer;
                 r.Begin();
                 r.DrawTexturedRect(this.BackgroundImage, this.Bounds);
+                r.End();
+            }
+            else
+            {
+                var r = skin.Renderer;
+                r.Begin();
+                r.DrawColor = this.BackgroundColor;
+                r.DrawFilledRect(this.Bounds);
                 r.End();
             }
         }

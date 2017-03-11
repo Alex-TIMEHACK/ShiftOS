@@ -266,7 +266,7 @@ namespace ShiftOS.WinForms.Applications {
     }
 
     class CommandFormatMarker : CommandFormat {
-        protected string str;
+        protected string str = "";
         Button button;
 
         public CommandFormatMarker() {

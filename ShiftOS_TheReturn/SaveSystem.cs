@@ -82,81 +82,68 @@ namespace ShiftOS.Engine
             TerminalBackend.OpenTerminal();
 
             TerminalBackend.InStory = true;
-            var thread = new Thread(new ThreadStart(() =>
+            var defaultConf = new EngineConfig();
+            if (System.IO.File.Exists("engineconfig.json"))
+                defaultConf = JsonConvert.DeserializeObject<EngineConfig>(System.IO.File.ReadAllText("engineconfig.json"));
+            else
             {
-                //Do not uncomment until I sort out the copyright stuff... - Michael
-                //AudioManager.Init();
+                System.IO.File.WriteAllText("engineconfig.json", JsonConvert.SerializeObject(defaultConf, Formatting.Indented));
+            }
 
-                var defaultConf = new EngineConfig();
-                if (System.IO.File.Exists("engineconfig.json"))
-                    defaultConf = JsonConvert.DeserializeObject<EngineConfig>(System.IO.File.ReadAllText("engineconfig.json"));
-                else
+            Console.WriteLine("Initiating kernel...");
+            Console.WriteLine("Reading filesystem...");
+            Console.WriteLine("Reading configuration...");
+
+            Console.WriteLine("{CONNECTING_TO_MUD}");
+
+            if (defaultConf.ConnectToMud == true)
+            {
+                bool guidReceived = false;
+                ServerManager.GUIDReceived += (str) =>
                 {
-                    System.IO.File.WriteAllText("engineconfig.json", JsonConvert.SerializeObject(defaultConf, Formatting.Indented));
-                }
-
-                Thread.Sleep(350);
-                Console.WriteLine("Initiating kernel...");
-                Thread.Sleep(250);
-                Console.WriteLine("Reading filesystem...");
-                Thread.Sleep(100);
-                Console.WriteLine("Reading configuration...");
-
-                Console.WriteLine("{CONNECTING_TO_MUD}");
-
-                if (defaultConf.ConnectToMud == true)
-                {
-                    bool guidReceived = false;
-                    ServerManager.GUIDReceived += (str) =>
-                    {
                         //Connection successful! Stop waiting!
                         guidReceived = true;
-                        Console.WriteLine("Connection successful.");
-                    };
+                    Console.WriteLine("Connection successful.");
+                };
 
-                    try
-                    {
-                        
-                        ServerManager.Initiate("secondary4162.cloudapp.net", 13370);
-                        //This haults the client until the connection is successful.
-                        while (ServerManager.thisGuid == new Guid())
-                        {
-
-                        }
-                        Console.WriteLine("GUID received - bootstrapping complete.");
-                    }
-                    catch (Exception ex)
-                    {
-                        //No errors, this never gets called.
-                        Console.WriteLine("{ERROR}: " + ex.Message);
-                        Thread.Sleep(3000);
-                        ServerManager.StartLANServer();
-                        while (ServerManager.thisGuid == new Guid())
-                        {
-
-                        }
-                        Console.WriteLine("GUID received - bootstrapping complete.");
-                        FinishBootstrap();
-                    }
-                    finally
-                    {
-                        FinishBootstrap();
-                    }
-                }
-                else
+                try
                 {
-                    ServerManager.StartLANServer();
+
+                    ServerManager.Initiate("secondary4162.cloudapp.net", 13370);
+                    //This haults the client until the connection is successful.
+                    while (ServerManager.thisGuid == new Guid())
+                    {
+
+                    }
+                    Console.WriteLine("GUID received - bootstrapping complete.");
                 }
+                catch (Exception ex)
+                {
+                    //No errors, this never gets called.
+                    Console.WriteLine("{ERROR}: " + ex.Message);
+                    ServerManager.StartLANServer();
+                    while (ServerManager.thisGuid == new Guid())
+                    {
 
-                //Nothing happens past this point - but the client IS connected! It shouldn't be stuck in that while loop above.
+                    }
+                    Console.WriteLine("GUID received - bootstrapping complete.");
+                }
+                finally
+                {
+                    Desktop.InvokeOnWorkerThread(MiddleBootstrap);
+                }
+            }
+            else
+            {
+                ServerManager.StartLANServer();
+            }
 
-                
-            }));
-            thread.IsBackground = true;
-            thread.Start();
+            //Nothing happens past this point - but the client IS connected! It shouldn't be stuck in that while loop above.
+
+
         }
 
-        public static void FinishBootstrap()
+        public static void MiddleBootstrap()
         {
             KernelWatchdog.Log("mud_handshake", "handshake successful: kernel watchdog access code is \"" + ServerManager.thisGuid.ToString() + "\"");
 
@@ -165,6 +152,8 @@ namespace ShiftOS.Engine
                 if (msg.Name == "mud_savefile")
                 {
                     CurrentSave = JsonConvert.DeserializeObject<Save>(msg.Contents);
+                    Desktop.InvokeOnWorkerThread(
+                    FinishBootstrap);
                 }
                 else if (msg.Name == "mud_login_denied")
                 {
@@ -173,18 +162,11 @@ namespace ShiftOS.Engine
             };
 
             ReadSave();
+        }
 
-            while (CurrentSave == null)
-            {
-
-            }
-
+        public static void FinishBootstrap()
+        {
             Shiftorium.Init();
-
-            while (CurrentSave.StoryPosition < 1)
-            {
-
-            }
 
             Thread.Sleep(75);
 
@@ -207,11 +189,17 @@ namespace ShiftOS.Engine
 
                 }));
                 while (TutorialManager.IsInTutorial == true) { }
-                GameReady?.Invoke();
+                Desktop.InvokeOnWorkerThread(()=>
+                {
+                    GameReady?.Invoke();
+                });
             }
             else
             {
-                GameReady?.Invoke();
+                Desktop.InvokeOnWorkerThread(() =>
+                {
+                    GameReady?.Invoke();
+                });
             }
         }
 

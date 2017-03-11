@@ -16,8 +16,6 @@ namespace Gwen.Control.Layout
         /// </summary>
         public Pos Pos { get { return m_Pos; } set { m_Pos = value; } }
 
-        public Color BackgroundColor { get; set; }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Positioner"/> class.
         /// </summary>

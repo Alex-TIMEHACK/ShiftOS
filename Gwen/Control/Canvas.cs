@@ -45,11 +45,6 @@ namespace Gwen.Control
         }
 
         /// <summary>
-        /// Background color.
-        /// </summary>
-        public Color BackgroundColor { get { return m_BackgroundColor; } set { m_BackgroundColor = value; } }
-
-        /// <summary>
         /// In most situations you will be rendering the canvas every frame. 
         /// But in some situations you will only want to render when there have been changes. 
         /// You can do this by checking NeedsRedraw.
