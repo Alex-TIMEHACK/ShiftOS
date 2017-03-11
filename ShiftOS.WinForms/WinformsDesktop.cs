@@ -97,7 +97,7 @@ namespace ShiftOS.WinForms
             {
                 SetupDesktop();
             };
-            var time = new System.Windows.Forms.Timer();
+            var time = new System.Timers.Timer();
             time.Interval = 100;
             this.KeyDown += (o, a) =>
             {
@@ -119,7 +119,7 @@ namespace ShiftOS.WinForms
             {
                 SetupDesktop();
             };
-            time.Tick += (o, a) =>
+            time.Elapsed += (o, a) =>
             {
                 if (Shiftorium.IsInitiated == true)
                 {

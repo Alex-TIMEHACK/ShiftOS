@@ -49,7 +49,7 @@ namespace Gwen.Renderer
             // 
             //          Until 1st problem is fixed we should use TextRenderingHint.AntiAlias...  :-(
 
-            gfx.TextRenderingHint = TextRenderingHint.AntiAlias;
+            gfx.TextRenderingHint = TextRenderingHint.SystemDefault;
             gfx.Clear(Color.Transparent);
             texture = new Texture(renderer) {Width = width, Height = height};
         }
@@ -64,7 +64,8 @@ namespace Gwen.Renderer
         /// The origin (0, 0) lies at the top-left corner of the backing store.</param>
         public void DrawString(string text, System.Drawing.Font font, Brush brush, Point point, StringFormat format)
         {
-            gfx.DrawString(text, font, brush, point, StringFormat.GenericTypographic); // render text on the bitmap
+            var temp = new System.Drawing.Font(font.Name, font.Size, font.Style);
+            gfx.DrawString(text, temp, brush, point, StringFormat.GenericTypographic); // render text on the bitmap
             OpenTK.LoadTextureInternal(texture, bmp); // copy bitmap to gl texture
         }
 

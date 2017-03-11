@@ -94,16 +94,16 @@ namespace ShiftOS.WinForms
             input = new Gwen.Input.OpenTK(this);
 
             var skn = new ShiftOSSkin(this.renderer);
-            this.toplevel = new Gwen.Control.Canvas(skn); this.desktoppanel = new Gwen.Control.ImagePanel(toplevel);
+            this.toplevel = new Gwen.Control.Canvas(skn); this.desktoppanel = new Gwen.Control.Base(toplevel);
             this.lbtime = new Gwen.Control.Label(desktoppanel);
-            this.panelbuttonholder = new Gwen.Control.ImagePanel(desktoppanel);
-            this.sysmenuholder = new Gwen.Control.ImagePanel(desktoppanel);
+            this.panelbuttonholder = new Gwen.Control.Base(desktoppanel);
+            this.sysmenuholder = new Gwen.Control.Base(desktoppanel);
             this.menuStrip1 = new Gwen.Control.MenuStrip(sysmenuholder);
             this.apps = new Gwen.Control.MenuItem(menuStrip1);
             this.pnlscreensaver = new Gwen.Control.Layout.Positioner(toplevel);
             this.pnlssicon = new Gwen.Control.ImagePanel(toplevel);
             this.desktopbg = new Gwen.Control.ImagePanel(toplevel);
-            this.btnnotifications = new Gwen.Control.Button(desktoppanel);
+            this.btnnotifications = new Gwen.Control.Button(toplevel);
             input.Initialize(this.toplevel);
             // 
             // desktopCanvas
@@ -124,7 +124,9 @@ namespace ShiftOS.WinForms
             // lbtime
             // 
             this.lbtime.Name = "lbtime";
+            lbtime.AutoSizeToContents = true;
             this.lbtime.Text = "label1";
+            lbtime.Show();
             // 
             // Canvasbuttonholder
             // 
@@ -163,12 +165,12 @@ namespace ShiftOS.WinForms
         private Gwen.Renderer.Base renderer;
         private Gwen.Control.ImagePanel desktopbg;
         private Gwen.Control.Canvas toplevel;
-        private Gwen.Control.ImagePanel desktoppanel;
+        private Gwen.Control.Base desktoppanel;
         private Gwen.Control.Label lbtime;
-        private Gwen.Control.ImagePanel sysmenuholder;
+        private Gwen.Control.Base sysmenuholder;
         private Gwen.Control.MenuStrip menuStrip1;
         private Gwen.Control.MenuItem apps;
-        private Gwen.Control.ImagePanel panelbuttonholder;
+        private Gwen.Control.Base panelbuttonholder;
         private Gwen.Control.Button btnnotifications;
         private Gwen.Control.Layout.Positioner pnlscreensaver;
         private Gwen.Control.ImagePanel pnlssicon;
