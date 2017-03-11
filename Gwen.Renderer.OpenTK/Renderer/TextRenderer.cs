@@ -26,15 +26,18 @@ namespace Gwen.Renderer
         /// <param name="renderer">GWEN renderer.</param>
         public TextRenderer(int width, int height, Renderer.OpenTK renderer)
         {
-            if (width <= 0)
-                throw new ArgumentOutOfRangeException("width");
-            if (height <= 0)
-                throw new ArgumentOutOfRangeException("height");
             if (GraphicsContext.CurrentContext == null)
                 throw new InvalidOperationException("No GraphicsContext is current on the calling thread.");
-
-            bmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            gfx = Graphics.FromImage(bmp);
+            try
+            {
+                bmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                gfx = Graphics.FromImage(bmp);
+            }
+            catch
+            {
+                bmp = new Bitmap(1, 1, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                gfx = Graphics.FromImage(bmp);
+            }
 
             // NOTE:    TextRenderingHint.AntiAliasGridFit looks sharper and in most cases better
             //          but it comes with a some problems.
