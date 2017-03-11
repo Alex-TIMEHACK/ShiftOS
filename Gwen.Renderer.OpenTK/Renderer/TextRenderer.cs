@@ -36,7 +36,7 @@ namespace Gwen.Renderer
             catch
             {
                 bmp = new Bitmap(1, 1, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                gfx = Graphics.FromImage(bmp);
+                gfx = Graphics.FromImage(bmp); //michael you can't have a fucking 0x0 bitmap dumbass
             }
 
             // NOTE:    TextRenderingHint.AntiAliasGridFit looks sharper and in most cases better
