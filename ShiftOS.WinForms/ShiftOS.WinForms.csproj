@@ -415,11 +415,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\GitHub\Patreon.NET\Source\OpenGLTest\GwenCS\Gwen.Renderer.OpenTK\Gwen.Renderer.OpenTK.csproj">
+    <ProjectReference Include="..\Gwen.Renderer.OpenTK\Gwen.Renderer.OpenTK.csproj">
       <Project>{41650c82-d630-4e5c-845a-f1513c8fdc99}</Project>
       <Name>Gwen.Renderer.OpenTK</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\GitHub\Patreon.NET\Source\OpenGLTest\GwenCS\Gwen\Gwen.csproj">
+    <ProjectReference Include="..\Gwen\Gwen.csproj">
       <Project>{adda2f43-96c0-497f-8216-29c67abc9806}</Project>
       <Name>Gwen</Name>
     </ProjectReference>
