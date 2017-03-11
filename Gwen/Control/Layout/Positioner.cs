@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using Gwen.Skin;
 
 namespace Gwen.Control.Layout
 {
@@ -35,6 +36,17 @@ namespace Gwen.Control.Layout
             foreach (Base child in Children) // ok?
             {
                 child.Position(m_Pos);
+            }
+        }
+    }
+
+    public class FreePanel : Base
+    {
+        protected override void PostLayout(Skin.Base skin)
+        {
+            foreach(var child in Children)
+            {
+                
             }
         }
     }

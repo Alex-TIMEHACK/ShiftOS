@@ -35,6 +35,8 @@ using static ShiftOS.Engine.SaveSystem;
 using ShiftOS.Objects.ShiftFS;
 using System.Reflection;
 using ShiftOS.Engine.Scripting;
+using System.Runtime.InteropServices;
+
 namespace ShiftOS.Engine {
 
     [Exposed("skinning")]
@@ -206,12 +208,20 @@ namespace ShiftOS.Engine {
             if (img == null)
                 return new byte[1];
 
-            using(var ms = new MemoryStream())
-            {
-                img.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                return ms.ToArray();
-            }
+            var bmp = new Bitmap(img);
+            var destLck = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
+            int destBytes = Math.Abs(destLck.Stride) * destLck.Height;
+
+            IntPtr destPtr = destLck.Scan0;
+
+            byte[] sourceArr = new byte[destBytes];
+
+            Marshal.Copy(destPtr, sourceArr, 0, destBytes);
+            bmp.UnlockBits(destLck);
+            return sourceArr;
         }
+
     }
 
     public interface IIconProber

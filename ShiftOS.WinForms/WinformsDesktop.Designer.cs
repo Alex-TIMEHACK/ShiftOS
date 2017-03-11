@@ -94,10 +94,10 @@ namespace ShiftOS.WinForms
             input = new Gwen.Input.OpenTK(this);
 
             var skn = new ShiftOSSkin(this.renderer);
-            this.toplevel = new Gwen.Control.Canvas(skn); this.desktoppanel = new Gwen.Control.Layout.Positioner(toplevel);
+            this.toplevel = new Gwen.Control.Canvas(skn); this.desktoppanel = new Gwen.Control.ImagePanel(toplevel);
             this.lbtime = new Gwen.Control.Label(desktoppanel);
-            this.panelbuttonholder = new Gwen.Control.Layout.Positioner(desktoppanel);
-            this.sysmenuholder = new Gwen.Control.Layout.Positioner(desktoppanel);
+            this.panelbuttonholder = new Gwen.Control.ImagePanel(desktoppanel);
+            this.sysmenuholder = new Gwen.Control.ImagePanel(desktoppanel);
             this.menuStrip1 = new Gwen.Control.MenuStrip(sysmenuholder);
             this.apps = new Gwen.Control.MenuItem(menuStrip1);
             this.pnlscreensaver = new Gwen.Control.Layout.Positioner(toplevel);
@@ -163,12 +163,12 @@ namespace ShiftOS.WinForms
         private Gwen.Renderer.Base renderer;
         private Gwen.Control.ImagePanel desktopbg;
         private Gwen.Control.Canvas toplevel;
-        private Gwen.Control.Layout.Positioner desktoppanel;
+        private Gwen.Control.ImagePanel desktoppanel;
         private Gwen.Control.Label lbtime;
-        private Gwen.Control.Layout.Positioner sysmenuholder;
+        private Gwen.Control.ImagePanel sysmenuholder;
         private Gwen.Control.MenuStrip menuStrip1;
         private Gwen.Control.MenuItem apps;
-        private Gwen.Control.Layout.Positioner panelbuttonholder;
+        private Gwen.Control.ImagePanel panelbuttonholder;
         private Gwen.Control.Button btnnotifications;
         private Gwen.Control.Layout.Positioner pnlscreensaver;
         private Gwen.Control.ImagePanel pnlssicon;
@@ -178,6 +178,7 @@ namespace ShiftOS.WinForms
     {
         public ShiftOSSkin(Gwen.Renderer.Base renderer) : base(renderer)
         {
+            
         }
 
         public override void DrawArrowDown(Rectangle rect)
@@ -228,6 +229,11 @@ namespace ShiftOS.WinForms
             Renderer.End();
         }
 
+        public override void SetDefaultFont(string faceName, int size = 10)
+        {
+            this.DefaultFont = new Gwen.Font(this.Renderer, LoadedSkin.MainFont.Name, (int)LoadedSkin.MainFont.SizeInPoints);
+        }
+
         public override void DrawArrowRight(Rectangle rect)
         {
             Renderer.DrawColor = LoadedSkin.Menu_TextColor;
@@ -258,7 +264,7 @@ namespace ShiftOS.WinForms
             if (disabled)
                 Renderer.DrawColor = LoadedSkin.ControlColor;
 
-            Renderer.DrawFilledRect(new Rectangle(control.X + 2, control.Y + 2, control.Width - 2, control.Height - 2));
+            Renderer.DrawFilledRect(new Rectangle(control.X + 2, control.Y + 2, control.Width - 4, control.Height - 4));
 
             //draw background texture
             if (control.BackgroundImage != null)

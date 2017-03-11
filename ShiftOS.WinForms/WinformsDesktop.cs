@@ -236,7 +236,12 @@ namespace ShiftOS.WinForms
                                     pnlbtn.BackgroundColor = LoadedSkin.PanelButtonColor;
                                     pnlbtn.BackgroundImage = new Texture(renderer);
                                     var img = GetImage("panelbutton");
-                                    pnlbtn.BackgroundImage.LoadRaw(img.Width, img.Height, ImageToBinary(img));
+                                    if (img != null)
+                                    {
+                                        var tex = new Texture(renderer);
+                                        tex.LoadRaw(img.Width, img.Height, ImageToBinary(img));
+                                        pnlbtn.BackgroundImage = tex;
+                                    }
                                     pnlbtn.BackgroundImageLayout = (int)GetImageLayout("panelbutton");
 
                                     var pnlbtntext = new Label(pnlbtn);
@@ -350,8 +355,10 @@ namespace ShiftOS.WinForms
 
                     DitheringEngine.DitherImage(SkinEngine.GetImage("desktopbackground"), new Action<Image>((img) =>
                     {
-                        desktopbg.Image = new Texture(renderer);
-                        desktopbg.Image.LoadRaw(img.Width, img.Height, ImageToBinary(img));
+                            var tex = new Texture(renderer);
+                        if(img != null)
+                            tex.LoadRaw(img.Width, img.Height, ImageToBinary(img));
+                        desktopbg.Image = tex;
                     }));
                     desktoppanel.BackgroundColor = LoadedSkin.DesktopPanelColor;
 
@@ -365,8 +372,9 @@ namespace ShiftOS.WinForms
 
                     if (pnlimg != null)
                     {
-                        desktoppanel.BackgroundImage = new Texture(renderer);
-                        desktoppanel.BackgroundImage.LoadRaw(pnlimg.Width, pnlimg.Height, ImageToBinary(pnlimg));
+                        var tex = new Texture(renderer);
+                        tex.LoadRaw(pnlimg.Width, pnlimg.Height, ImageToBinary(pnlimg));
+                        desktoppanel.BackgroundImage = tex;
                     }
                     if (desktoppanel.BackgroundImage != null)
                     {
@@ -379,8 +387,12 @@ namespace ShiftOS.WinForms
                         bmp.MakeTransparent(Color.FromArgb(1, 0, 1));
                         appimg = bmp;
                     }
-                    menuStrip1.BackgroundImage = new Texture(renderer);
-                    menuStrip1.BackgroundImage.LoadRaw(appimg.Width, appimg.Height, SkinEngine.ImageToBinary(appimg));
+                    if (appimg != null)
+                    {
+                        var tex = new Texture(renderer);
+                        tex.LoadRaw(appimg.Width, appimg.Height, SkinEngine.ImageToBinary(appimg));
+                        menuStrip1.BackgroundImage = tex;
+                    }
                     lbtime.TextColor = LoadedSkin.DesktopPanelClockColor;
                     lbtime.Font = ControlManager.CreateGwenFont(renderer, LoadedSkin.DesktopPanelClockFont);
                     apps.Text = LoadedSkin.AppLauncherText;
@@ -405,7 +417,7 @@ namespace ShiftOS.WinForms
             }
 
             LuaInterpreter.RaiseEvent("on_desktop_skin", this);
-
+            
             PopulatePanelButtons();
         }
 

@@ -124,7 +124,6 @@ namespace ShiftOS.Engine
 
                         }
                         Console.WriteLine("GUID received - bootstrapping complete.");
-                        FinishBootstrap();
                     }
                     catch (Exception ex)
                     {
@@ -137,6 +136,10 @@ namespace ShiftOS.Engine
 
                         }
                         Console.WriteLine("GUID received - bootstrapping complete.");
+                        FinishBootstrap();
+                    }
+                    finally
+                    {
                         FinishBootstrap();
                     }
                 }
