@@ -59,10 +59,25 @@ namespace ShiftOS.WinForms
     {
         private static void writeSlow(string text)
         {
-            Console.Write("[hacker101@undisclosed]: ");
-            Thread.Sleep(200);
+            ConsoleEx.ForegroundColor = ConsoleColor.DarkYellow;
+            ConsoleEx.Bold = false;
+            ConsoleEx.Italic = false;
+            Console.Write("[");
+            ConsoleEx.ForegroundColor = ConsoleColor.Magenta;
+            ConsoleEx.Bold = true;
+            Console.Write("hacker101");
+            ConsoleEx.ForegroundColor = ConsoleColor.DarkYellow;
+            ConsoleEx.Italic = true;
+            Console.Write("@");
+            ConsoleEx.ForegroundColor = ConsoleColor.White;
+            Console.Write("undisclosed");
+            ConsoleEx.ForegroundColor = ConsoleColor.DarkYellow;
+            ConsoleEx.Bold = false;
+            ConsoleEx.Italic = false;
+            Console.Write("]: ");
+            Thread.Sleep(850);
             Console.WriteLine(text);
-            Thread.Sleep(1000);
+            Thread.Sleep(4000);
         }
 
         [Story("hacker101_deadaccts")]
@@ -121,9 +136,12 @@ namespace ShiftOS.WinForms
                 TerminalBackend.PrefixEnabled = true;
                 Console.Write($"{SaveSystem.CurrentSave.Username}@{SaveSystem.CurrentSave.SystemName}:~$ ");
                 StartHackerTutorial();
+                TerminalBackend.PrefixEnabled = true;
+                TerminalBackend.PrintPrompt();
             });
             t.IsBackground = true;
             t.Start();
+            TerminalBackend.PrefixEnabled = false;
         }
 
         internal static void StartHackerTutorial()
@@ -140,8 +158,7 @@ namespace ShiftOS.WinForms
                     int tutPos = 0;
                     Action ondec = () =>
                     {
-                        if (tutPos == 2)
-                            tutPos++;
+                        tutPos++;
                     };
                     TerminalBackend.CommandProcessed += (o, a) =>
                     {
@@ -351,6 +368,7 @@ namespace ShiftOS.WinForms
 
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-_";
 
+        [MultiplayerOnly]
         [Command("breach_user_password")]
         [KernelMode]
         [RequiresArgument("user")]
@@ -378,6 +396,8 @@ namespace ShiftOS.WinForms
                     {
                         Console.WriteLine("--operation took too long - failed.");
                         ServerManager.SendMessage("mud_save_allow_dead", JsonConvert.SerializeObject(sve));
+                        ServerManager.MessageReceived -= msgReceived;
+                        TerminalBackend.PrefixEnabled = true;
                         return;
                     }
                     sw.Stop();
@@ -395,6 +415,7 @@ namespace ShiftOS.WinForms
                     ServerManager.MessageReceived -= msgReceived;
                     TerminalBackend.PrintPrompt();
                 }
+                TerminalBackend.PrefixEnabled = true;
             };
 
             Console.WriteLine("--beginning brute-force attack on " + usr + "@" + sys + "...");
@@ -405,10 +426,13 @@ namespace ShiftOS.WinForms
                 user = usr,
                 sysname = sys
             }));
+            TerminalBackend.PrefixEnabled = false;
             Thread.Sleep(500);
             return true;
         }
 
+
+        [MultiplayerOnly]
         [Command("print_user_info")]
         [KernelMode]
         [RequiresArgument("pass")]
@@ -446,7 +470,7 @@ namespace ShiftOS.WinForms
                     received = true;
                     ServerManager.MessageReceived -= msgReceived;
                     TerminalBackend.PrintPrompt();
-
+                    
                 }
                 else if (msg.Name == "user_data_not_found")
                 {
@@ -455,6 +479,7 @@ namespace ShiftOS.WinForms
                     ServerManager.MessageReceived -= msgReceived;
                     TerminalBackend.PrintPrompt();
                 }
+                TerminalBackend.PrefixEnabled = true;
             };
 
             Console.WriteLine("--contacting multi-user domain...");
@@ -466,9 +491,11 @@ namespace ShiftOS.WinForms
                 sysname = sys
             }));
             Thread.Sleep(500);
+            TerminalBackend.PrefixEnabled = false;
             return true;
         }
 
+        [MultiplayerOnly]
         [Command("steal_codepoints")]
         [KernelMode]
         [RequiresArgument("amount")]
@@ -504,6 +531,7 @@ namespace ShiftOS.WinForms
                         {
                             Console.WriteLine("--can't steal this many codepoints from user.");
                             ServerManager.SendMessage("mud_save_allow_dead", JsonConvert.SerializeObject(sve));
+                            TerminalBackend.PrefixEnabled = true;
                             return;
                         }
 
@@ -527,6 +555,7 @@ namespace ShiftOS.WinForms
                     ServerManager.MessageReceived -= msgReceived;
                     TerminalBackend.PrintPrompt();
                 }
+                TerminalBackend.PrefixEnabled = true;
             };
 
             Console.WriteLine("--contacting multi-user domain...");
@@ -539,10 +568,11 @@ namespace ShiftOS.WinForms
                 sysname = sys
             }));
             Thread.Sleep(500);
-            
+            TerminalBackend.PrefixEnabled = false;
             return true;
         }
 
+        [MultiplayerOnly]
         [Command("purge_user")]
         [KernelMode]
         [RequiresArgument("pass")]
@@ -580,6 +610,7 @@ namespace ShiftOS.WinForms
                     ServerManager.MessageReceived -= msgReceived;
                 }
                 TerminalBackend.PrintPrompt();
+                TerminalBackend.PrefixEnabled = true;
             };
 
             Console.WriteLine("--contacting multi-user domain...");
@@ -592,7 +623,7 @@ namespace ShiftOS.WinForms
                 sysname = sys
             }));
             Thread.Sleep(500);
-
+            TerminalBackend.PrefixEnabled = false;
             return true;
         }
 
@@ -637,6 +668,7 @@ namespace ShiftOS.WinForms
         }
     }
 
+    [MultiplayerOnly]
     [Namespace("storydev")]
     public static class StoryDevCommands
     {
