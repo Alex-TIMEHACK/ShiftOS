@@ -47,6 +47,7 @@ namespace ShiftOS.WinForms.Applications {
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormatEditor));
             this.panelEditor = new System.Windows.Forms.Panel();
             this.btnAddText = new System.Windows.Forms.Button();
             this.btnAddOptionalText = new System.Windows.Forms.Button();
@@ -59,11 +60,12 @@ namespace ShiftOS.WinForms.Applications {
             this.btnSave = new System.Windows.Forms.Button();
             this.btnLoad = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
+            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // panelEditor
             // 
-            this.panelEditor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.panelEditor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelEditor.AutoScroll = true;
             this.panelEditor.Location = new System.Drawing.Point(4, 4);
@@ -180,10 +182,22 @@ namespace ShiftOS.WinForms.Applications {
             this.btnApply.UseVisualStyleBackColor = true;
             this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
             // 
+            // richTextBox2
+            // 
+            this.richTextBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.richTextBox2.Location = new System.Drawing.Point(7, 191);
+            this.richTextBox2.Name = "richTextBox2";
+            this.richTextBox2.Size = new System.Drawing.Size(586, 232);
+            this.richTextBox2.TabIndex = 16;
+            this.richTextBox2.Text = resources.GetString("richTextBox2.Text");
+            // 
             // FormatEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.richTextBox2);
             this.Controls.Add(this.btnApply);
             this.Controls.Add(this.btnLoad);
             this.Controls.Add(this.btnSave);
@@ -216,5 +230,6 @@ namespace ShiftOS.WinForms.Applications {
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnLoad;
         private System.Windows.Forms.Button btnApply;
+        private System.Windows.Forms.RichTextBox richTextBox2;
     }
 }

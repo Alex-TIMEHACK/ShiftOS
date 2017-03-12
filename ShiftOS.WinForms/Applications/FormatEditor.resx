@@ -117,4 +117,71 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="richTextBox2.Text" xml:space="preserve">
+    <value>#FormatEditor
+##Allows you to edit how your commands are formatted
+
+### UI
+There are things that you can add:
+[Text] [Optional Text] [Regex Text]
+[+ Namespace]
+
+There is also a textbox where you can type to test out your command
+[  Type Here   ] [Test]
+
+
+To test your command, just type in the textbox and what it will be will appear above
+For example, if you made unixlike commands, you could type `trm echo --text testing`
+and above that would appear `[trm, echo]{text: "testing", }`
+that would mean trm.echo{text: "Testing"} in normal command speak
+This shows you how the command will parse once you've applied it
+
+## Using the program
+In formateditor there are texts and markers
+when you click on [+ Namespace] it will add a "namespace marker"
+A namespace marker shows where the namespace in your command starts
+In the default command format, it's [namespace].[command]{[argument]: [value], [argument]: [value]}
+A text shows text that must be typed for the command to work
+For example, in the default command inbetween [namespace] and [command] you must type a `.`
+
+Let's try this out:
+Add a [+ Namespace] and then a [Text], then add a [Command]
+If you're styling it like the default commands, for the text you would put a `.`
+Otherwise, put some text there to seperate the namespace from the command like `:`
+You can type spaces and although they're invisible, they will still work
+For example "` : `" would mean you have to type `namespace : command`
+
+Try the command out, in the [   Type Here   ] box, type `test.command` or however you formatted it
+Above should appear `[test, command]{}` if you typed it right, otherwise there will be a syntax error
+
+Now let's allow arguments in our command
+Following the default command style, the user can type a space if they want to before the `{`
+To do this, add an [Optional Text] and put a space in it to let the user type the space if they want to
+Then add a [Text] and put the `{` in it to require a `{`
+
+If you did it right, after your command you should be able to type `{` and "` {`" and neither should
+ give a syntax error. However, if you type something other than ` ` or `{` it should syntax error.
+If you type just a space after the command, it won't syntax error yet, however in the future there may
+ be more strict command checking.
+
+Now we can get to adding our arguments
+Following the standard syntax again, it goes like
+`{[argument]:{optinal space} [value],{optional space}[argument]:{optional space}[value]...}`
+In FormatEditor, you show how it will look for the first two arguments.
+If you add that, it will allow you to type commands just like normal ones.
+
+When you test this, you may notice that you can put "quotes" arround your values like normal.
+This is to allow things like spaces in your values if it's not just solid text.
+
+You can press `save` to save this format to a `.cf` file, and then `apply` to use this in your terminal
+
+If it ever turns out there is a bug with your cf after you've applied it, just type
+ `stop theme` (lowercase, space required) into your terminal and the standard command parser will be used.
+ 
+ ## Examples
+ 
+ I would put `.cf` files I've made here like `unixlike.cf` but I can't be bothered right now
+ So instead, there are no examples yet.
+</value>
+  </data>
 </root>
