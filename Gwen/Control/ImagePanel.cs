@@ -81,16 +81,14 @@ namespace Gwen.Control
         protected override void Render(Skin.Base skin)
         {
             base.Render(skin);
-
-            skin.Renderer.DrawColor = BackgroundColor;
-            if (renderColor == true)
+            var r = skin.Renderer;
+            r.Begin();
+            if (m_Texture.RendererData != null)
             {
-                skin.Renderer.DrawFilledRect(RenderBounds);
+                
+                r.DrawTexturedRect(m_Texture, this.RenderBounds);
             }
-            else
-            {
-                skin.Renderer.DrawTexturedRect(m_Texture, RenderBounds, m_uv[0], m_uv[1], m_uv[2], m_uv[3]);
-            }
+            r.End();
         }
 
         /// <summary>

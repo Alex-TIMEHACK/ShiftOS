@@ -174,6 +174,8 @@ namespace ShiftOS.WinForms
         }
 
 
+        
+
         /// <summary>
         /// Populates the panel buttons.
         /// </summary>
@@ -187,6 +189,7 @@ namespace ShiftOS.WinForms
                 {
                     if (Shiftorium.UpgradeInstalled("wm_panel_buttons"))
                     {
+                        int pnlbtnLeft = 0;
                         foreach (WindowBorder form in Engine.AppearanceManager.OpenForms)
                         {
                             if (form != null)
@@ -213,29 +216,28 @@ namespace ShiftOS.WinForms
                                         }
                                     };
 
-                                    var pnlbtn = new Canvas(toplevel.Skin);
-                                    pnlbtn.Margin = new Margin(2, LoadedSkin.PanelButtonFromTop, 0, 0);
+                                    var pnlbtn = new ImagePanel(toplevel);
+                                    pnlbtn.Y = (LoadedSkin.DesktopPanelPosition == 1) ? (this.Height - desktoppanel.Height) : 0 + LoadedSkin.PanelButtonFromTop;
+                                    pnlbtn.X = LoadedSkin.PanelButtonHolderFromLeft + pnlbtnLeft;
                                     pnlbtn.BackgroundColor = LoadedSkin.PanelButtonColor;
-                                    pnlbtn.BackgroundImage = new Texture(renderer);
                                     var img = GetImage("panelbutton");
                                     if (img != null)
                                     {
                                         var tex = new Texture(renderer);
                                         tex.LoadRaw(img.Width, img.Height, ImageToBinary(img));
-                                        pnlbtn.BackgroundImage = tex;
+                                        pnlbtn.Image = tex;
                                     }
                                     pnlbtn.BackgroundImageLayout = (int)GetImageLayout("panelbutton");
 
-                                    var pnlbtntext = new Label(pnlbtn);
+                                    var pnlbtntext = new Label(toplevel);
                                     pnlbtntext.AutoSizeToContents = true;
                                     pnlbtntext.Text = NameChangerBackend.GetName(form.ParentWindow);
-                                    pnlbtntext.Location = LoadedSkin.PanelButtonFromLeft;
+                                    pnlbtntext.X = pnlbtn.X + LoadedSkin.PanelButtonFromLeft.X;
+                                    pnlbtntext.Y = pnlbtn.Y + LoadedSkin.PanelButtonFromLeft.Y;
                                     pnlbtntext.TextColor = LoadedSkin.PanelButtonTextColor;
                                     
                                     pnlbtn.BackgroundColor = LoadedSkin.PanelButtonColor;
                                     pnlbtn.Size = LoadedSkin.PanelButtonSize;
-                                    pnlbtn.AddChild(pnlbtntext);
-                                    this.panelbuttonholder.AddChild(pnlbtn);
                                     pnlbtn.Show();
                                     pnlbtntext.Show();
 
@@ -245,7 +247,7 @@ namespace ShiftOS.WinForms
                                         pnlbtntext.Clicked += onClick;
                                     }
                                     pnlbtntext.Font = ControlManager.CreateGwenFont(renderer, LoadedSkin.PanelButtonFont);
-
+                                    pnlbtnLeft += pnlbtn.Width + 7;
                                 }
                             }
                         }
@@ -265,7 +267,6 @@ namespace ShiftOS.WinForms
             }
 
             this.WindowState = WindowState.Fullscreen;
-            base.OnUpdateFrame(e);
             desktoppanel.Width = this.ClientRectangle.Width;
             if (Shiftorium.IsInitiated == true)
             {
@@ -285,6 +286,8 @@ namespace ShiftOS.WinForms
             catch { }
             GL.Viewport(ClientRectangle);
             GL.Scale(1, 1, 1);
+            base.OnUpdateFrame(e);
+
         }
 
         protected override void OnKeyDown(KeyboardKeyEventArgs e)
@@ -315,8 +318,9 @@ namespace ShiftOS.WinForms
         protected override void OnMouseMove(MouseMoveEventArgs e)
         {
             input.ProcessMouseMessage(e);
+            
         }
-
+        
 
         /// <summary>
         /// Setups the desktop.
@@ -354,17 +358,16 @@ namespace ShiftOS.WinForms
 
                     sysmenuholder.IsVisible = Shiftorium.UpgradeInstalled("app_launcher");
 
-                    //The Color Picker can give us transparent colors - which Windows Forms fucking despises when dealing with form backgrounds.
-                    //To compensate, we must recreate the desktop color and make the alpha channel '255'.
-                    toplevel.BackgroundColor = Color.FromArgb(LoadedSkin.DesktopColor.R, LoadedSkin.DesktopColor.G, LoadedSkin.DesktopColor.B);
-                    //Not doing this will cause an ArgumentException.
+                    desktopbg.BackgroundColor = LoadedSkin.DesktopColor;
 
                     DitheringEngine.DitherImage(SkinEngine.GetImage("desktopbackground"), new Action<Image>((img) =>
                     {
+                        if (img != null)
+                        {
                             var tex = new Texture(renderer);
-                        if(img != null)
                             tex.LoadRaw(img.Width, img.Height, ImageToBinary(img));
-                        desktopbg.Image = tex;
+                            desktopbg.Image = tex;
+                        }
                     }));
                     desktoppanel.BackgroundColor = LoadedSkin.DesktopPanelColor;
 
@@ -380,11 +383,7 @@ namespace ShiftOS.WinForms
                     {
                         var tex = new Texture(renderer);
                         tex.LoadRaw(pnlimg.Width, pnlimg.Height, ImageToBinary(pnlimg));
-                        desktoppanel.BackgroundImage = tex;
-                    }
-                    if (desktoppanel.BackgroundImage != null)
-                    {
-                        desktoppanel.BackgroundColor = Color.Transparent;
+                        desktoppanel.Image = tex;
                     }
                     var appimg = GetImage("applauncher");
                     if (appimg != null)
@@ -425,6 +424,7 @@ namespace ShiftOS.WinForms
             LuaInterpreter.RaiseEvent("on_desktop_skin", this);
             
             PopulatePanelButtons();
+            toplevel.RenderCanvas();
         }
 
         public MenuItem GetALCategoryWithName(string text)
@@ -559,7 +559,7 @@ namespace ShiftOS.WinForms
         /// <param name="act">Act.</param>
         public void InvokeOnWorkerThread(Action act)
         {
-            act.Invoke();
+            this.Invoke(act);
         }
 
         public void OpenAppLauncher(Point loc)

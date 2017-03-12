@@ -1076,10 +1076,11 @@ namespace Gwen.Control
         /// <param name="skin">Skin to use.</param>
         protected virtual void Render(Skin.Base skin)
         {
-            if(BackgroundImage != null)
+            if(BackgroundImage?.RendererData != null)
             {
                 var r = skin.Renderer;
                 r.Begin();
+                r.DrawColor = Color.White;
                 r.DrawTexturedRect(this.BackgroundImage, this.Bounds);
                 r.End();
             }

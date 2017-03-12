@@ -208,8 +208,16 @@ namespace ShiftOS.Engine {
             if (img == null)
                 return new byte[1];
 
-            var bmp = new Bitmap(img);
-            var destLck = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Bitmap dest = new Bitmap(img.Width, img.Height,
+                System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            using (Graphics gr = Graphics.FromImage(dest))
+            {
+                gr.DrawImage(img, new Rectangle(0, 0, img.Width, img.Height));
+            }
+
+
+            var destLck = dest.LockBits(new Rectangle(0, 0, dest.Width, dest.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
             int destBytes = Math.Abs(destLck.Stride) * destLck.Height;
 
@@ -218,7 +226,15 @@ namespace ShiftOS.Engine {
             byte[] sourceArr = new byte[destBytes];
 
             Marshal.Copy(destPtr, sourceArr, 0, destBytes);
-            bmp.UnlockBits(destLck);
+
+            for (int i = 0; i < sourceArr.Length; i += 4)
+            {
+                byte dummy = sourceArr[i];
+                sourceArr[i] = sourceArr[i + 2];
+                sourceArr[i + 2] = dummy;
+            }
+            dest.UnlockBits(destLck);
+            dest.Dispose();
             return sourceArr;
         }
 

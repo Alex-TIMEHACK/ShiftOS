@@ -922,6 +922,16 @@ namespace ShiftOS.WinForms.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap rylan_cursor_default {
+            get {
+                object obj = ResourceManager.GetObject("rylan_cursor_default", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [
         ///	{
         ///		Name: &quot;Freebie Solutions&quot;,

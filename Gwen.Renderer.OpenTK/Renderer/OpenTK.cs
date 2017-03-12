@@ -401,9 +401,15 @@ namespace Gwen.Renderer
 
 			SizeF TabSize = m_Graphics.MeasureString("....", sysFont); //Spaces are not being picked up, let's just use .'s.
 			m_StringFormat.SetTabStops(0f, new float[] { TabSize.Width });
+            SizeF size = new SizeF(1, 1);
 
-            SizeF size = m_Graphics.MeasureString(text, sysFont, Point.Empty, m_StringFormat);
-
+            try
+            {
+                size = m_Graphics.MeasureString(text, sysFont, Point.Empty, m_StringFormat);
+            }
+            catch
+            {
+            }
             return new Point((int)Math.Round(size.Width), (int)Math.Round(size.Height));
         }
 

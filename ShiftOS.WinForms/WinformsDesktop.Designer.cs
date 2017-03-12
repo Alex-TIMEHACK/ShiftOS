@@ -32,6 +32,7 @@ using static Gwen.Control.Base;
 using static ShiftOS.Engine.SkinEngine;
 using OpenTK.Graphics.OpenGL;
 using ShiftOS.WinForms.Tools;
+using ShiftOS.Engine;
 
 namespace ShiftOS.WinForms
 {
@@ -81,7 +82,18 @@ namespace ShiftOS.WinForms
         {
             GL.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
             toplevel.RenderCanvas();
-
+            //Render the mouse.
+            int x = Mouse.X;
+            int y = Mouse.Y;
+            int w = Properties.Resources.rylan_cursor_default.Width;
+            int h = Properties.Resources.rylan_cursor_default.Height;
+            renderer.Begin();
+            
+            var tex = new Texture(renderer);
+            tex.LoadRaw(w, h, SkinEngine.ImageToBinary(Properties.Resources.rylan_cursor_default));
+            renderer.DrawColor = Color.White;
+            renderer.DrawTexturedRect(tex, new Rectangle(x, y, w, h));
+            renderer.End();
             SwapBuffers();
         }
 
@@ -95,7 +107,7 @@ namespace ShiftOS.WinForms
             input = new Gwen.Input.OpenTK(this);
 
             var skn = new ShiftOSSkin(this.renderer);
-            this.toplevel = new Gwen.Control.Canvas(skn); this.desktoppanel = new Gwen.Control.Base(toplevel);
+            this.toplevel = new Gwen.Control.Canvas(skn); this.desktoppanel = new Gwen.Control.ImagePanel(toplevel);
             this.lbtime = new Gwen.Control.Label(toplevel);
             this.panelbuttonholder = new Gwen.Control.Base(desktoppanel);
             this.sysmenuholder = new Gwen.Control.Base(desktoppanel);
@@ -132,6 +144,7 @@ namespace ShiftOS.WinForms
             // Canvasbuttonholder
             // 
             this.panelbuttonholder.Name = "Canvasbuttonholder";
+            this.panelbuttonholder.IsVisible = false;
             // 
             // sysmenuholder
             // 
@@ -166,7 +179,7 @@ namespace ShiftOS.WinForms
         private Gwen.Renderer.Base renderer;
         private Gwen.Control.ImagePanel desktopbg;
         private Gwen.Control.Canvas toplevel;
-        private Gwen.Control.Base desktoppanel;
+        private Gwen.Control.ImagePanel desktoppanel;
         private Gwen.Control.Label lbtime;
         private Gwen.Control.Base sysmenuholder;
         private Gwen.Control.MenuStrip menuStrip1;

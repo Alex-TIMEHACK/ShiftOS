@@ -605,6 +605,7 @@
     <None Include="Resources\SnakeyHeadR.png" />
     <None Include="Resources\SnakeyFruit.png" />
     <None Include="Resources\ShiftnetServices.txt" />
+    <None Include="Resources\rylan-cursor_default.png" />
     <Content Include="SystemIcons\iconArtpad.png" />
     <Content Include="SystemIcons\iconAudioPlayer.png" />
     <Content Include="SystemIcons\iconBitnoteDigger.png" />
