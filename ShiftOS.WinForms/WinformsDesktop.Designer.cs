@@ -31,6 +31,7 @@ using OpenTK;
 using static Gwen.Control.Base;
 using static ShiftOS.Engine.SkinEngine;
 using OpenTK.Graphics.OpenGL;
+using ShiftOS.WinForms.Tools;
 
 namespace ShiftOS.WinForms
 {
@@ -95,7 +96,7 @@ namespace ShiftOS.WinForms
 
             var skn = new ShiftOSSkin(this.renderer);
             this.toplevel = new Gwen.Control.Canvas(skn); this.desktoppanel = new Gwen.Control.Base(toplevel);
-            this.lbtime = new Gwen.Control.Label(desktoppanel);
+            this.lbtime = new Gwen.Control.Label(toplevel);
             this.panelbuttonholder = new Gwen.Control.Base(desktoppanel);
             this.sysmenuholder = new Gwen.Control.Base(desktoppanel);
             this.menuStrip1 = new Gwen.Control.MenuStrip(sysmenuholder);
@@ -259,7 +260,7 @@ namespace ShiftOS.WinForms
         {
             Renderer.Begin();
             Renderer.DrawColor = LoadedSkin.ControlTextColor;
-            Renderer.DrawFilledRect(new Rectangle(control.X, control.Y, control.Width, control.Height));
+            Renderer.DrawFilledRect(control.RenderBounds);
 
             Renderer.DrawColor = LoadedSkin.ControlColor;
             if (hovered)
@@ -269,18 +270,18 @@ namespace ShiftOS.WinForms
             if (disabled)
                 Renderer.DrawColor = LoadedSkin.ControlColor;
 
-            Renderer.DrawFilledRect(new Rectangle(control.X + 2, control.Y + 2, control.Width - 4, control.Height - 4));
+            Renderer.DrawFilledRect(new Rectangle(control.RenderBounds.X + 2, control.RenderBounds.Y + 2, control.RenderBounds.Width - 4, control.RenderBounds.Height - 4));
 
             //draw background texture
             if (control.BackgroundImage != null)
-                Renderer.DrawTexturedRect(control.BackgroundImage, new Rectangle(control.X, control.Y, control.Width, control.Height));
+                Renderer.DrawTexturedRect(control.BackgroundImage, control.RenderBounds);
             
             Renderer.DrawColor = LoadedSkin.ControlTextColor;
-            var font = new Gwen.Font(Renderer, LoadedSkin.MainFont.Name, (int)LoadedSkin.MainFont.Size);
+            var font = ControlManager.CreateGwenFont(Renderer, LoadedSkin.MainFont);
             var textSize = Renderer.MeasureText(font, (control as Button).Text);
             var centerPoint = new Point(
-                    (control.Width - textSize.X) / 2,
-                    (control.Height - textSize.Y) / 2
+                    (control.RenderBounds.Width - textSize.X) / 2,
+                    (control.RenderBounds.Height - textSize.Y) / 2
                 );
             Renderer.RenderText(font, centerPoint, (control as Button).Text);
              

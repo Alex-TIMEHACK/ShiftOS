@@ -119,26 +119,6 @@ namespace ShiftOS.WinForms
             {
                 SetupDesktop();
             };
-            time.Elapsed += (o, a) =>
-            {
-                if (Shiftorium.IsInitiated == true)
-                {
-                    if (SaveSystem.CurrentSave != null && TutorialManager.IsInTutorial == false)
-                    {
-                        lbtime.Text = Applications.Terminal.GetTime();
-                        lbtime.X = desktoppanel.Width - lbtime.Width - LoadedSkin.DesktopPanelClockFromRight.X;
-                        lbtime.Y = LoadedSkin.DesktopPanelClockFromRight.Y;
-                    }
-                }
-
-                try
-                {
-                    btnnotifications.X = lbtime.X - btnnotifications.Width - 2;
-                    btnnotifications.X = (desktoppanel.Height - btnnotifications.Height) / 2;
-                }
-                catch { }
-            };
-            time.Start();
         }
 
         public void HideScreensaver()
@@ -286,6 +266,23 @@ namespace ShiftOS.WinForms
 
             this.WindowState = WindowState.Fullscreen;
             base.OnUpdateFrame(e);
+            desktoppanel.Width = this.ClientRectangle.Width;
+            if (Shiftorium.IsInitiated == true)
+            {
+                if (SaveSystem.CurrentSave != null && TutorialManager.IsInTutorial == false)
+                {
+                    lbtime.Text = Applications.Terminal.GetTime();
+                    lbtime.X = desktoppanel.Width - lbtime.Width - LoadedSkin.DesktopPanelClockFromRight.X;
+                    lbtime.Y = LoadedSkin.DesktopPanelClockFromRight.Y;
+                }
+            }
+
+            try
+            {
+                btnnotifications.X = lbtime.X - btnnotifications.Width - 2;
+                btnnotifications.Y = (desktoppanel.Height - btnnotifications.Height) / 2;
+            }
+            catch { }
             GL.Viewport(ClientRectangle);
             GL.Scale(1, 1, 1);
         }
