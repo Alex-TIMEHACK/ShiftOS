@@ -33,15 +33,43 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ShiftOS.Engine;
 
-namespace ShiftOS.WinForms.Applications {
+#if PFG_CAN_FIX_HER_DAMN_CODE_BECAUSE_IM_TOO_LAZY_TO_FUCK_WITH_IT_SAYS_MICHAEL
+namespace ShiftOS.WinForms.Applications
+{
     [MultiplayerOnly]
     [Launcher("FormatEditor", true, "al_format_editor", "Games")]
     [RequiresUpgrade("format_editor")]
     [WinOpen("formateditor")]
     [DefaultIcon("iconFormatEditor")]
 
-    public partial class FormatEditor : UserControl, IShiftOSWindow {
+    public partial class FormatEditor : UserControl, IShiftOSWindow
+    {
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            CurrentCommandParser.parser = parser;
 
+            FileSkimmerBackend.GetFile(new string[] { ".cf" }, FileOpenerStyle.Save, new Action<string>((result) =>
+            {
+                Objects.ShiftFS.Utils.WriteAllText(result, parser.Save());
+            }));
+        }
+
+        private void btnLoad_Click(object sender, EventArgs e)
+        {
+            FileSkimmerBackend.GetFile(new string[] { ".cf" }, FileOpenerStyle.Open, new Action<string>((result) =>
+            {
+                parser = CommandParser.Load(Objects.ShiftFS.Utils.ReadAllText(result));
+                foreach (CommandFormat part in parser.parts)
+                {
+                    addPart(part.Draw());
+                }
+            }));
+        }
+
+        private void btnApply_Click(object sender, EventArgs e)
+        {
+            CurrentCommandParser.parser = parser;
+        }
         IList<CommandFormat> parts = new List<CommandFormat>();
         CommandParser parser = new CommandParser();
         IList<Panel> editorBoxes = new List<Panel>();
@@ -49,11 +77,13 @@ namespace ShiftOS.WinForms.Applications {
         string commandMode = "namespace";
         int avcount = 0;
 
-        public FormatEditor() {
+        public FormatEditor()
+        {
             InitializeComponent();
         }
 
-        public void OnLoad() {
+        public void OnLoad()
+        {
             OnUpgrade();
         }
 
@@ -61,19 +91,22 @@ namespace ShiftOS.WinForms.Applications {
 
         public bool OnUnload() { return true; }
 
-        public void OnUpgrade() {
+        public void OnUpgrade()
+        {
             btnAddOptionalText.Visible = ShiftoriumFrontend.UpgradeInstalled("format_editor_optional_text");
             btnAddRegexText.Visible = ShiftoriumFrontend.UpgradeInstalled("format_editor_regex");
             btnAddColor.Visible = ShiftoriumFrontend.UpgradeInstalled("format_editor_syntax_highlighting");
         }
 
-        private void addPart(CommandFormat part) {
+        private void addPart(CommandFormat part)
+        {
             parser.AddPart(part);
 
             addPart(part.Draw());
         }
 
-        private void addPart(Control part) {
+        private void addPart(Control part)
+        {
             Panel container = new Panel();
 
             Control drawnPart = part;
@@ -81,9 +114,12 @@ namespace ShiftOS.WinForms.Applications {
             container.Controls.Add(drawnPart);
 
             int woffset = 0;
-            if (editorBoxes.Count > 0) {
+            if (editorBoxes.Count > 0)
+            {
                 woffset = editorBoxes.Last().Width + editorBoxes.Last().Location.X;
-            } else {
+            }
+            else
+            {
                 woffset = 0;
             }
 
@@ -92,24 +128,30 @@ namespace ShiftOS.WinForms.Applications {
             panelEditor.Controls.Add(container);
         }
 
-        private void btnAddText_Click(object sender, EventArgs e) {
+        private void btnAddText_Click(object sender, EventArgs e)
+        {
             addPart(new CommandFormatText());
         }
 
-        private void btnAddOptionalText_Click(object sender, EventArgs e) {
+        private void btnAddOptionalText_Click(object sender, EventArgs e)
+        {
             addPart(new CommandFormatOptionalText());
         }
 
-        private void btnAddRegexText_Click(object sender, EventArgs e) {
-            
-        }
-
-        private void btnAddColor_Click(object sender, EventArgs e) {
+        private void btnAddRegexText_Click(object sender, EventArgs e)
+        {
 
         }
 
-        private void btnAddCommand_Click(object sender, EventArgs e) {
-            switch (commandMode) {
+        private void btnAddColor_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnAddCommand_Click(object sender, EventArgs e)
+        {
+            switch (commandMode)
+            {
                 case "namespace":
                     addPart(new CommandFormatNamespace());
                     commandMode = "command";
@@ -128,11 +170,14 @@ namespace ShiftOS.WinForms.Applications {
                 case "value":
                     addPart(new CommandFormatValue());
                     avcount++;
-                    if (avcount >= 2) {
+                    if (avcount >= 2)
+                    {
                         commandMode = "";
                         btnAddCommand.Text = "";
                         btnAddCommand.Enabled = false;
-                    }else {
+                    }
+                    else
+                    {
                         commandMode = "argument";
                         btnAddCommand.Text = "+ Argument";
                     }
@@ -140,15 +185,20 @@ namespace ShiftOS.WinForms.Applications {
             }
         }
 
-        private void richTextBox1_TextChanged(object sender, EventArgs e) {
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
             var result = parser.ParseCommand(richTextBox1.Text);
 
-            if (result.Equals(default(KeyValuePair<KeyValuePair<string, string>, Dictionary<string, string>>))) {
+            if (result.Equals(default(KeyValuePair<KeyValuePair<string, string>, Dictionary<string, string>>)))
+            {
                 lblExampleCommand.Text = "Syntax Error";
-            } else {
+            }
+            else
+            {
                 string argvs = "{";
 
-                foreach (KeyValuePair<string, string> entry in result.Value) {
+                foreach (KeyValuePair<string, string> entry in result.Value)
+                {
                     argvs += entry.Key + "=\"" + entry.Value + "\", ";
                 }
 
@@ -158,60 +208,76 @@ namespace ShiftOS.WinForms.Applications {
             }
         }
 
-        private void btnTest_Click(object sender, EventArgs e) {
+        private void btnTest_Click(object sender, EventArgs e)
+        {
 
         }
     }
 
-    interface CommandFormat {
+    interface CommandFormat
+    {
         string CheckValidity(string check);
         Control Draw();
     }
-    class CommandFormatText : CommandFormat {
+    class CommandFormatText : CommandFormat
+    {
         protected string str;
         TextBox textBox;
 
-        public CommandFormatText() {
+        public CommandFormatText()
+        {
         }
 
-        public virtual string CheckValidity(string check) {
+        public virtual string CheckValidity(string check)
+        {
             return check.StartsWith(str) ? str : "+FALSE+";
         }
 
-        public Control Draw() {
+        public Control Draw()
+        {
             textBox = new TextBox();
             textBox.TextChanged += new EventHandler(TextChanged);
-            textBox.Location = new Point(0,0);
+            textBox.Location = new Point(0, 0);
 
             return textBox;
         }
 
-        void TextChanged(object sender, EventArgs e) {
+        void TextChanged(object sender, EventArgs e)
+        {
             str = textBox.Text;
         }
     }
 
-    class CommandFormatOptionalText : CommandFormatText {
-        public override string CheckValidity(string check) {
+    class CommandFormatOptionalText : CommandFormatText
+    {
+        public override string CheckValidity(string check)
+        {
             return check.StartsWith(str) ? str : "";
         }
     }
 
-    class CommandFormatMarker : CommandFormat {
+    class CommandFormatMarker : CommandFormat
+    {
         protected string str = "";
         Button button;
 
-        public CommandFormatMarker() {
+        public CommandFormatMarker()
+        {
         }
 
-        public virtual string CheckValidity(string check) {
+        public virtual string CheckValidity(string check)
+        {
             string res = string.Empty;
             string alphanumeric = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890"; // not using regex for performance reasons
 
-            foreach (char c in check) {
-                if (alphanumeric.IndexOf(c) > -1) {
+            foreach (char c in check)
+            {
+                if (alphanumeric.IndexOf(c) > -1)
+                {
                     res += c;
-                } else {
+                }
+                else
+                {
                     break;
                 }
             }
@@ -219,7 +285,8 @@ namespace ShiftOS.WinForms.Applications {
             return res;
         }
 
-        public virtual Control Draw() {
+        public virtual Control Draw()
+        {
             button = new Button();
             button.Location = new Point(0, 0);
             button.Text = "Marker";
@@ -228,25 +295,6 @@ namespace ShiftOS.WinForms.Applications {
         }
     }
 
-        private void btnSave_Click(object sender, EventArgs e) {
-            CurrentCommandParser.parser = parser;
-
-            FileSkimmerBackend.GetFile(new string[] { ".cf" }, FileOpenerStyle.Save, new Action<string>((result) => {
-                Objects.ShiftFS.Utils.WriteAllText(result, parser.Save());
-            }));
-        }
-
-        private void btnLoad_Click(object sender, EventArgs e) {
-            FileSkimmerBackend.GetFile(new string[] { ".cf" }, FileOpenerStyle.Open, new Action<string>((result) => {
-                parser = CommandParser.Load(Objects.ShiftFS.Utils.ReadAllText(result));
-                foreach(CommandFormat part in parser.parts) {
-                    addPart(part.Draw());
-                }
-            }));
-        }
-
-        private void btnApply_Click(object sender, EventArgs e) {
-            CurrentCommandParser.parser = parser;
-        }
-    }
+    
 }
+#endif

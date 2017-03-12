@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
+ #if FIXURSHIT
 namespace ShiftOS.WinForms.Applications
 {
     partial class FormatEditor
@@ -223,3 +223,4 @@ namespace ShiftOS.WinForms.Applications
         private System.Windows.Forms.Button btnApply;
     }
 }
+ #endif
