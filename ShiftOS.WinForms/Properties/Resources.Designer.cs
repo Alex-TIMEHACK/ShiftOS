@@ -463,6 +463,16 @@ namespace ShiftOS.WinForms.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap fileiconcf {
+            get {
+                object obj = ResourceManager.GetObject("fileiconcf", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap fileiconsaa {
             get {
                 object obj = ResourceManager.GetObject("fileiconsaa", resourceCulture);
@@ -615,6 +625,16 @@ namespace ShiftOS.WinForms.Properties {
         internal static System.Drawing.Bitmap iconfloodgate {
             get {
                 object obj = ResourceManager.GetObject("iconfloodgate", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap iconFormatEditor {
+            get {
+                object obj = ResourceManager.GetObject("iconFormatEditor", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -947,7 +967,7 @@ namespace ShiftOS.WinForms.Properties {
         ///		Name: &quot;NetXtreme Hyper Edition&quot;,
         ///		CostPerMonth: 1500,
         ///		DownloadSpeed: 524288, //512 kb/s
-        ///		Description: &quot;It&apos;s time to supercharge your Shif [rest of string was truncated]&quot;;.
+        ///		Description: &quot;It&apos;s time to supercharge your Shiftnet experience [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ShiftnetServices {
             get {
@@ -974,7 +994,8 @@ namespace ShiftOS.WinForms.Properties {
         ///
         ///// CALCULATOR UPGRADES
         ///	{
-        ///		Name: &quot;Calcul [rest of string was truncated]&quot;;.
+        ///		Name: &quot;Calculator&quot;,
+        ///		Cost: 100 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Shiftorium {
             get {
@@ -984,7 +1005,7 @@ namespace ShiftOS.WinForms.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to {\rtf1\adeflang1025\ansi\ansicpg1252\uc1\adeff0\deff0\stshfdbch31505\stshfloch31506\stshfhich31506\stshfbi0\deflang1033\deflangfe1033\themelang1033\themelangfe0\themelangcs0{\fonttbl{\f0\fbidi \froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New Roman;}{\f0\fbidi \froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New Roman;}
-        ///{\f37\fbidi \fswiss\fcharset0\fprq2{\*\panose 020f0502020204030204}Calibri;}{\f38\fbidi \fswiss\fcharset0\fprq2{\*\panose 020f0302020204030204}Calibri Light;}{\fl [rest of string was truncated]&quot;;.
+        ///{\f37\fbidi \fswiss\fcharset0\fprq2{\*\panose 020f0502020204030204}Calibri;}{\f38\fbidi \fswiss\fcharset0\fprq2{\*\panose 020f0302020204030204}Calibri Light;}{\flo [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ShiftOS {
             get {
@@ -1123,7 +1144,8 @@ namespace ShiftOS.WinForms.Properties {
         ///Eine kurze Erklärung wie du das Terminal benutzt lautet wiefolgt. Du kannst das command &apos;sos.help&apos; benutzen um eine Liste aller commands aufzurufen. Schreib es
         ///einfach in das Terminal und drücke &lt;enter&gt; um alle commands anzuzeigen.
         /// 
-        ///Commands können mit argumenten versehen werden, indem du ein key-value Paar in einem {} Block hinter dem command angibst. Zum Be [rest of string was truncated]&quot;;.
+        ///Commands können mit argumenten versehen werden, indem du ein key-value Paar in einem {} Block hinter dem command angibst. Zum Beispiel:
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string strings_de {
             get {
@@ -1142,7 +1164,8 @@ namespace ShiftOS.WinForms.Properties {
         ///Commands can be sent arguments by specifying a key-value pair inside a {} block at the end of the command. For example:
         ///	
         ///some.command{print:\&quot;hello\&quot;}
-        ///math.add{op1 [rest of string was truncated]&quot;;.
+        ///math.add{op1:1,op2:2}
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string strings_en {
             get {
@@ -1320,7 +1343,7 @@ namespace ShiftOS.WinForms.Properties {
         ///		&quot;Before you can begin with ShiftOS, you&apos;ll need to know a few things about it.&quot;,
         ///		&quot;One: Terminal command syntax.&quot;,
         ///		&quot;Inside ShiftOS, the bulk of your time is going to be spent within the Terminal.&quot;,
-        ///		&quot;The Terminal is an application that starts up when you turn on your computer. It allows you to execute system commands, ope [rest of string was truncated]&quot;;.
+        ///		&quot;The Terminal is an application that starts up when you turn on your computer. It allows you to execute system commands, open program [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string sys_shiftoriumstory {
             get {
