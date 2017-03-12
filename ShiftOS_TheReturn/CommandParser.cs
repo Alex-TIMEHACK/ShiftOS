@@ -286,7 +286,7 @@ namespace ShiftOS.Engine {
 
         public virtual string CheckValidity(string check) {
             string res = string.Empty;
-            string alphanumeric = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm"; // not using regex for performance reasons
+            string alphanumeric = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm_"; // not using regex for performance reasons
 
             foreach (char c in check) {
                 if (alphanumeric.IndexOf(c) > -1) {
