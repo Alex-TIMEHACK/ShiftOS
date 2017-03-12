@@ -1070,6 +1070,8 @@ namespace Gwen.Control
             }
         }
 
+        public string RenderHint { get; set; }
+
         /// <summary>
         /// Renders the control using specified skin.
         /// </summary>

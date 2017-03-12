@@ -213,6 +213,38 @@ namespace Gwen.Control
             TextPadding = new Padding(m_Image.Right + 2, TextPadding.Top, TextPadding.Right, TextPadding.Bottom);
         }
 
+        public void SetImage(Texture tex, bool center = false)
+        {
+            if(tex == null)
+            {
+                if (m_Image != null)
+                    m_Image.Dispose();
+                m_Image = null;
+                return;
+
+            }
+            if (tex.RendererData == null)
+            {
+                if (m_Image != null)
+                    m_Image.Dispose();
+                m_Image = null;
+                return;
+            }
+
+            if (m_Image == null)
+            {
+                m_Image = new ImagePanel(this);
+            }
+
+            m_Image.Image = tex;
+            m_Image.SizeToContents();
+            m_Image.SetPosition(Math.Max(Padding.Left, 2), 2);
+            m_CenterImage = center;
+
+            TextPadding = new Padding(m_Image.Right + 2, TextPadding.Top, TextPadding.Right, TextPadding.Bottom);
+
+        }
+
         /// <summary>
         /// Sizes to contents.
         /// </summary>

@@ -109,12 +109,7 @@ namespace ShiftOS.WinForms
             var skn = new ShiftOSSkin(this.renderer);
             this.toplevel = new Gwen.Control.Canvas(skn); this.desktoppanel = new Gwen.Control.ImagePanel(toplevel);
             this.lbtime = new Gwen.Control.Label(toplevel);
-            this.panelbuttonholder = new Gwen.Control.Base(desktoppanel);
-            this.sysmenuholder = new Gwen.Control.Base(desktoppanel);
-            this.menuStrip1 = new Gwen.Control.MenuStrip(sysmenuholder);
-            this.apps = new Gwen.Control.MenuItem(menuStrip1);
-            this.pnlscreensaver = new Gwen.Control.Layout.Positioner(toplevel);
-            this.pnlssicon = new Gwen.Control.ImagePanel(toplevel);
+            this.menuStrip1 = new Gwen.Control.MenuStrip(toplevel);
             this.desktopbg = new Gwen.Control.ImagePanel(toplevel);
             this.btnnotifications = new Gwen.Control.Button(toplevel);
             input.Initialize(this.toplevel);
@@ -141,29 +136,22 @@ namespace ShiftOS.WinForms
             this.lbtime.Text = "label1";
             lbtime.Show();
             // 
-            // Canvasbuttonholder
-            // 
-            this.panelbuttonholder.Name = "Canvasbuttonholder";
-            this.panelbuttonholder.IsVisible = false;
-            // 
-            // sysmenuholder
-            // 
-            this.sysmenuholder.Name = "sysmenuholder";
-            // 
             // menuStrip1
             // 
-            this.menuStrip1.Dock = Pos.Top;
-            
+            this.menuStrip1.Show();
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new Padding(0,0,0,0);
+            this.menuStrip1.RenderHint = RenderHintConstants.AL_STRIP;
             // 
             // apps
             // 
+            this.apps = menuStrip1.AddItem("ShiftOS");
             this.apps.Name = "apps";
             this.apps.Padding = new Padding(0,0,0,0);
             this.apps.Width = 58;
             this.apps.Height = 20;
             this.apps.Text = "ShiftOS";
+            apps.Show();
             // 
             // WinformsDesktop
             // 
@@ -181,15 +169,19 @@ namespace ShiftOS.WinForms
         private Gwen.Control.Canvas toplevel;
         private Gwen.Control.ImagePanel desktoppanel;
         private Gwen.Control.Label lbtime;
-        private Gwen.Control.Base sysmenuholder;
         private Gwen.Control.MenuStrip menuStrip1;
         private Gwen.Control.MenuItem apps;
-        private Gwen.Control.Base panelbuttonholder;
         private Gwen.Control.Button btnnotifications;
-        private Gwen.Control.Layout.Positioner pnlscreensaver;
-        private Gwen.Control.ImagePanel pnlssicon;
+        
     }
 
+
+    public static class RenderHintConstants
+    {
+        public const string AL_STRIP = "al_strip";
+        public const string AL_BUTTON = "al_button";
+
+    }
 
     public class ShiftOSSkin : Gwen.Skin.Base
     {
@@ -267,6 +259,45 @@ namespace ShiftOS.WinForms
                 pad++;
             }
             Renderer.End();
+        }
+
+        public override void DrawMenuStrip(Gwen.Control.Base control)
+        {
+            Renderer.Begin();
+            if (control.RenderHint == RenderHintConstants.AL_STRIP)
+            {
+                Renderer.DrawColor = Color.Transparent;
+                Renderer.DrawFilledRect(control.RenderBounds);
+            }
+            else
+            {
+                DrawGradient(control.RenderBounds, 0, LoadedSkin.Menu_MenuStripGradientBegin, LoadedSkin.Menu_MenuStripGradientEnd);
+            }
+            Renderer.End();
+        }
+
+        public void DrawGradient(Rectangle rect, int dir, Color a, Color b)
+        {
+            byte[] gradient = new byte[8];
+            gradient[0] = a.A;
+            gradient[1] = a.B;
+            gradient[3] = a.G;
+            gradient[4] = a.R;
+            gradient[5] = b.A;
+            gradient[6] = b.B;
+            gradient[7] = b.G;
+            gradient[8] = b.R;
+
+            var tex = new Texture(Renderer);
+            if (dir == 0)
+            {
+                tex.LoadRaw(1, 2, gradient);
+            }
+            else
+            {
+                tex.LoadRaw(2, 1, gradient);
+            }
+            Renderer.DrawTexturedRect(tex, rect);
         }
 
         public override void DrawButton(Gwen.Control.Base control, bool depressed, bool hovered, bool disabled)
