@@ -101,7 +101,7 @@ namespace ShiftOS.WinForms.Applications {
         }
 
         private void btnAddRegexText_Click(object sender, EventArgs e) {
-            
+
         }
 
         private void btnAddColor_Click(object sender, EventArgs e) {
@@ -132,7 +132,7 @@ namespace ShiftOS.WinForms.Applications {
                         commandMode = "";
                         btnAddCommand.Text = "";
                         btnAddCommand.Enabled = false;
-                    }else {
+                    } else {
                         commandMode = "argument";
                         btnAddCommand.Text = "+ Argument";
                     }
@@ -161,72 +161,6 @@ namespace ShiftOS.WinForms.Applications {
         private void btnTest_Click(object sender, EventArgs e) {
 
         }
-    }
-
-    interface CommandFormat {
-        string CheckValidity(string check);
-        Control Draw();
-    }
-    class CommandFormatText : CommandFormat {
-        protected string str;
-        TextBox textBox;
-
-        public CommandFormatText() {
-        }
-
-        public virtual string CheckValidity(string check) {
-            return check.StartsWith(str) ? str : "+FALSE+";
-        }
-
-        public Control Draw() {
-            textBox = new TextBox();
-            textBox.TextChanged += new EventHandler(TextChanged);
-            textBox.Location = new Point(0,0);
-
-            return textBox;
-        }
-
-        void TextChanged(object sender, EventArgs e) {
-            str = textBox.Text;
-        }
-    }
-
-    class CommandFormatOptionalText : CommandFormatText {
-        public override string CheckValidity(string check) {
-            return check.StartsWith(str) ? str : "";
-        }
-    }
-
-    class CommandFormatMarker : CommandFormat {
-        protected string str = "";
-        Button button;
-
-        public CommandFormatMarker() {
-        }
-
-        public virtual string CheckValidity(string check) {
-            string res = string.Empty;
-            string alphanumeric = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890"; // not using regex for performance reasons
-
-            foreach (char c in check) {
-                if (alphanumeric.IndexOf(c) > -1) {
-                    res += c;
-                } else {
-                    break;
-                }
-            }
-
-            return res;
-        }
-
-        public virtual Control Draw() {
-            button = new Button();
-            button.Location = new Point(0, 0);
-            button.Text = "Marker";
-
-            return button;
-        }
-    }
 
         private void btnSave_Click(object sender, EventArgs e) {
             CurrentCommandParser.parser = parser;
@@ -239,7 +173,7 @@ namespace ShiftOS.WinForms.Applications {
         private void btnLoad_Click(object sender, EventArgs e) {
             FileSkimmerBackend.GetFile(new string[] { ".cf" }, FileOpenerStyle.Open, new Action<string>((result) => {
                 parser = CommandParser.Load(Objects.ShiftFS.Utils.ReadAllText(result));
-                foreach(CommandFormat part in parser.parts) {
+                foreach (CommandFormat part in parser.parts) {
                     addPart(part.Draw());
                 }
             }));
