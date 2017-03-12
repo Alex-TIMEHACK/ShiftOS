@@ -398,6 +398,7 @@ namespace ShiftOS.WinForms
                     int dpStart = (LoadedSkin.DesktopPanelPosition == 0) ? 0 : this.Height - desktoppanel.Height;
                     appButton.Location = new Point(desktoppanel.X + LoadedSkin.AppLauncherFromLeft.X, dpStart + LoadedSkin.AppLauncherFromLeft.Y);
 
+                    appButton.Clicked += new GwenEventHandler<ClickedEventArgs>(al_clicked);
                 }
             }
             else
@@ -409,6 +410,41 @@ namespace ShiftOS.WinForms
             
             PopulatePanelButtons();
             toplevel.RenderCanvas();
+        }
+
+        public void al_clicked (object o, ClickedEventArgs e){
+            // called when the applauncher button is clicked
+
+            /*renderer.Begin();
+            renderer.DrawColor = Color.FromArgb(255, 255, 255, 255);
+
+            Menu menu = new Menu(appButton);
+            Point local = appButton.CanvasPosToLocal(new Point(e.X, e.Y));
+            menu.SetPosition(local.X, local.Y);
+            menu.BackgroundColor = Color.FromArgb(255, 0, 0, 0);
+            menu.AddItem("Test");
+            menu.AddItem("Clickable").Clicked += delegate (Base sender2, ClickedEventArgs args2) {
+                Infobox.Show("clicked", "yes");
+            };
+            menu.Show();
+            renderer.End();*/
+
+            ShiftMenu alPanel = new ShiftMenu(desktoppanel);
+            alPanel.BackgroundColor = LoadedSkin.ControlColor;
+
+            Point pos = desktoppanel.CanvasPosToLocal(new Point(e.X, e.Y));
+            alPanel.SetPosition(pos.X, pos.Y);
+
+            //desktoppanel.AddChild(alPanel);
+
+            for (int i = 0; i < 10; i++) {
+                Button alButton = new Button(alPanel);
+                //alButton.RenderHint = RenderHintConstants.AL_BUTTON;
+                alButton.BackgroundColor = Color.FromArgb(255, 0, 0, 0);
+                alButton.Text = "Demo Button "+i;
+
+                alPanel.AddMenuItem(alButton);
+            }
         }
 
         public MenuItem GetALCategoryWithName(string text)

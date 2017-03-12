@@ -262,6 +262,7 @@
     <Compile Include="GUIFunctions.cs" />
     <Compile Include="HackerCommands.cs" />
     <Compile Include="JobTasks.cs" />
+    <Compile Include="ShiftMenu.cs" />
     <Compile Include="Oobe.cs">
       <SubType>Form</SubType>
     </Compile>
