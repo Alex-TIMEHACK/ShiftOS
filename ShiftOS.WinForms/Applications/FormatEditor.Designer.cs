@@ -21,11 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
- #if FIXURSHIT
-namespace ShiftOS.WinForms.Applications
-{
-    partial class FormatEditor
-    {
+
+namespace ShiftOS.WinForms.Applications {
+    partial class FormatEditor {
         /// <summary> 
         /// Required designer variable.
         /// </summary>
@@ -35,10 +33,8 @@ namespace ShiftOS.WinForms.Applications
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
+        protected override void Dispose(bool disposing) {
+            if (disposing && (components != null)) {
                 components.Dispose();
             }
             base.Dispose(disposing);
@@ -50,8 +46,7 @@ namespace ShiftOS.WinForms.Applications
         /// Required method for Designer support - do not modify 
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent()
-        {
+        private void InitializeComponent() {
             this.panelEditor = new System.Windows.Forms.Panel();
             this.btnAddText = new System.Windows.Forms.Button();
             this.btnAddOptionalText = new System.Windows.Forms.Button();
@@ -68,7 +63,7 @@ namespace ShiftOS.WinForms.Applications
             // 
             // panelEditor
             // 
-            this.panelEditor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.panelEditor.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelEditor.AutoScroll = true;
             this.panelEditor.Location = new System.Drawing.Point(4, 4);
@@ -223,4 +218,3 @@ namespace ShiftOS.WinForms.Applications
         private System.Windows.Forms.Button btnApply;
     }
 }
- #endif
