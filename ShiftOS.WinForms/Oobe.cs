@@ -82,7 +82,7 @@ namespace ShiftOS.WinForms
                 slashcount++;
                 if (slashcount == 5)
                     slashcount = 1;
-                Thread.Sleep(50);
+                Thread.Sleep(10);
             }
             rtext += Environment.NewLine;
             typing = false;
