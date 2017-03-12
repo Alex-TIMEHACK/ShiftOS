@@ -350,7 +350,7 @@ namespace Gwen.Renderer
 
         public override bool LoadFont(Font font)
         {
-            //Debug.Print(String.Format("LoadFont {0}", font.FaceName));
+            Debug.Print(String.Format("LoadFont {0}", font.FaceName));
             font.RealSize = font.Size * Scale;
             System.Drawing.Font sysFont = font.RendererData as System.Drawing.Font;
 
@@ -366,11 +366,11 @@ namespace Gwen.Renderer
 
         public override void FreeFont(Font font)
         {
-            //Debug.Print(String.Format("FreeFont {0}", font.FaceName));
+            Debug.Print(String.Format("FreeFont {0}", font.FaceName));
             if (font.RendererData == null)
                 return;
 
-           // Debug.Print(String.Format("FreeFont {0} - actual free", font.FaceName));
+            Debug.Print(String.Format("FreeFont {0} - actual free", font.FaceName));
             System.Drawing.Font sysFont = font.RendererData as System.Drawing.Font;
             if (sysFont == null)
                 throw new InvalidOperationException("Freeing empty font");
@@ -435,7 +435,7 @@ namespace Gwen.Renderer
             if (!m_StringCache.ContainsKey(key))
             {
                 // not cached - create text renderer
-                //Debug.Print(String.Format("RenderText: caching \"{0}\", {1}", text, font.FaceName));
+                Debug.Print(String.Format("RenderText: caching \"{0}\", {1}", text, font.FaceName));
 
                 Point size = MeasureText(font, text);
                 TextRenderer tr = new TextRenderer(size.X, size.Y, this);
