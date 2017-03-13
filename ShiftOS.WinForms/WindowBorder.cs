@@ -278,10 +278,10 @@ namespace ShiftOS.WinForms
 
             //Now for the content panel. It has to take up ALL AVAILABLE SPACE not consumed by what's above.
 
-            pnlcontents.X = pnlleft.Width;
-            pnlcontents.Y = pnltitle.Height;
-            pnlcontents.Width = this.Width - pnlleft.Width - pnlright.Width;
-            pnlcontents.Height = this.Height - pnltitle.Height - pnlbottom.Height;
+            _parentWindow.X = pnlleft.Width;
+            _parentWindow.Y = pnltitle.Height;
+            _parentWindow.Width = this.Width - pnlleft.Width - pnlright.Width;
+            _parentWindow.Height = this.Height - pnltitle.Height - pnlbottom.Height;
 
             //That was easy...
 
@@ -305,8 +305,7 @@ namespace ShiftOS.WinForms
             pnlminimize.X -= pnlminimize.Width;
             pnlmaximize.X -= pnlmaximize.Width;
 
-            _parentWindow.Location = pnlcontents.Location;
-            _parentWindow.Size = pnlcontents.Size;
+            _parentWindow.BringToFront();
         }
 
         internal void SetupInternal()

@@ -171,7 +171,7 @@ namespace ShiftOS.WinForms
 
         private Gwen.Input.OpenTK input;
         private Gwen.Renderer.Base renderer;
-        private Gwen.Control.Canvas toplevel;
+        internal Gwen.Control.Canvas toplevel;
         private Gwen.Control.ImagePanel desktoppanel;
         private Gwen.Control.Label lbtime;
         private SimpleAppLauncher apps;

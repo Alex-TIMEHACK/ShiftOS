@@ -48,10 +48,8 @@ namespace ShiftOS.WinForms
         /// </summary>
         private void InitializeComponent()
         {
-            this.pnlcontents = new Positioner(this);
-
-            pnlcontents.AddChild(_parentWindow);
-            _parentWindow.Parent = pnlcontents;
+            this.AddChild(_parentWindow);
+            _parentWindow.Parent = this;
 
             this.pnltitle = new ImagePanel(this);
             this.pnlicon = new ImagePanel(this);
@@ -164,13 +162,6 @@ namespace ShiftOS.WinForms
             this.pnlright.Name = "pnlright";
             this.pnlright.Size = new System.Drawing.Size(2, 461);
             // 
-            // pnlcontents
-            // 
-            this.pnlcontents.BackgroundColor = System.Drawing.Color.Black;
-            this.pnlcontents.Location = new System.Drawing.Point(2, 30);
-            this.pnlcontents.Name = "pnlcontents";
-            this.pnlcontents.Size = new System.Drawing.Size(726, 461);
-            // 
             // WindowBorder
             // 
             this.Name = "WindowBorder";
@@ -188,7 +179,6 @@ namespace ShiftOS.WinForms
         private ImagePanel pnlbottoml;
         private ImagePanel pnlleft;
         private ImagePanel pnlright;
-        private Positioner pnlcontents;
         private ImagePanel pnltitleright;
         private ImagePanel pnltitleleft;
         private ImagePanel pnlicon;

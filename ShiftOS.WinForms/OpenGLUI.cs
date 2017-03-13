@@ -277,6 +277,7 @@ namespace ShiftOS.WinForms
 
         public override void DrawTextBox(Gwen.Control.Base control)
         {
+            m_Renderer.Begin();
             Rectangle rect = control.RenderBounds;
             bool bHasFocus = control.HasFocus;
             bool drawBorder = true;
@@ -296,7 +297,7 @@ namespace ShiftOS.WinForms
             rect = new Rectangle(rect.X + padding, rect.Y + padding, rect.Width - (padding * 2), rect.Height - (padding * 2));
             m_Renderer.DrawColor = control.BackgroundColor;
             m_Renderer.DrawFilledRect(rect);
-            
+            m_Renderer.End();
         }
 
         public override void DrawTabButton(Gwen.Control.Base control, bool active, Pos dir)

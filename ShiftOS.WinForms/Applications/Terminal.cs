@@ -50,7 +50,7 @@ namespace ShiftOS.WinForms.Applications {
     [Launcher("Terminal", false, null, "Utilities")]
     [WinOpen("terminal")]
     [DefaultIcon("iconTerminal")]
-    public partial class Terminal : Gwen.Control.Base, IShiftOSWindow {
+    public partial class Terminal : Gwen.Control.Canvas, IShiftOSWindow {
         public static Stack<string> ConsoleStack = new Stack<string>();
 
         public static System.Windows.Forms.Timer ti = new System.Windows.Forms.Timer();
@@ -389,5 +389,9 @@ namespace ShiftOS.WinForms.Applications {
 
         }
 
+        public Terminal() : base((Desktop.CurrentDesktop as WinformsDesktop).toplevel.Skin)
+        {
+
+        }
     }
 }
