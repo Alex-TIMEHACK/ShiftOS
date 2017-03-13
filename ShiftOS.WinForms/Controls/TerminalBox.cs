@@ -38,6 +38,11 @@ namespace ShiftOS.WinForms.Controls
 {
     public class TerminalBox : Gwen.Control.MultilineTextBox, ITerminalWidget
     {
+        public TerminalBox(Gwen.Control.Base parent) : base(parent)
+        {
+            RenderHint = RenderHintConstants.TERMINALBOX;
+        }
+
         public void SelectBottom()
         {
 
@@ -83,10 +88,7 @@ namespace ShiftOS.WinForms.Controls
             this.Text += Localization.Parse(text);
         }
 
-        public TerminalBox(Gwen.Control.Base parent) : base(parent)
-        {
-
-        }
+        
 
         public void WriteLine(string text)
         {
