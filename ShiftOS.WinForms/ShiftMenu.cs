@@ -13,6 +13,7 @@ namespace ShiftOS.WinForms
     {
         IList<Base> menuItems = new List<Base>();
         int currentY = 0;
+        int maxX = 0;
 
         public ShiftMenu(Base parent = null) : base(parent)
         {
@@ -23,10 +24,12 @@ namespace ShiftOS.WinForms
             item.SetPosition(0, currentY);
             currentY += item.Bounds.Height;
 
+            maxX = System.Math.Max(maxX, item.Width);
+
             AddChild(item);
             menuItems.Add(item);
             
-            SetSize(100, currentY);
+            SetSize(maxX, currentY);
         }
     }
 }

@@ -462,7 +462,6 @@ namespace ShiftOS.WinForms
                 };
 
                 alButton.TextColor = LoadedSkin.Menu_SelectedTextColor;
-                alPanel.AddMenuItem(alButton);
                 alButton.Redraw();
                 if (itm is LuaLauncherItem)
                 {
@@ -494,9 +493,8 @@ namespace ShiftOS.WinForms
                 }
                 alButton.Text = alButton.Text; //update the text so that it refreshes, and puts the text over the image
                 alButton.Width = alButton.TextWidth + 24;
-                maxX = System.Math.Max(maxX, alButton.Width);
-                alPanel.Width = maxX;
                 int dpStart = (LoadedSkin.DesktopPanelPosition == 0) ? appButton.Height : this.Height - desktoppanel.Height;
+                alPanel.AddMenuItem(alButton);
 
                 Point pos = new Point(0, dpStart);
                 alPanel.SetPosition(pos.X, pos.Y);
