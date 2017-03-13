@@ -49,7 +49,7 @@ namespace Gwen.Renderer
             // 
             //          Until 1st problem is fixed we should use TextRenderingHint.AntiAlias...  :-(
 
-            gfx.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+            gfx.TextRenderingHint = TextRenderingHint.AntiAlias;
             gfx.Clear(Color.Transparent);
             texture = new Texture(renderer) {Width = width, Height = height};
         }
