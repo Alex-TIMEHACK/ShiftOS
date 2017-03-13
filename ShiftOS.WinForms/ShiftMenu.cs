@@ -7,20 +7,25 @@ using Gwen.Control;
 using System.Drawing;
 using ShiftOS.WinForms.Tools;
 
-namespace ShiftOS.WinForms {
-    class ShiftMenu : Gwen.Control.Base {
+namespace ShiftOS.WinForms
+{
+    class ShiftMenu : Gwen.Control.Base
+    {
         IList<Base> menuItems = new List<Base>();
-        int currentY;
+        int currentY = 0;
 
-        public ShiftMenu(Base parent = null) : base(parent) {
+        public ShiftMenu(Base parent = null) : base(parent)
+        {
         }
 
-        public void AddMenuItem(Base item) {
+        public void AddMenuItem(Base item)
+        {
             item.SetPosition(0, currentY);
             currentY += item.Bounds.Height;
 
             AddChild(item);
             menuItems.Add(item);
+            (item as Button).TextColor = Color.White;
 
             SetSize(100, currentY);
         }

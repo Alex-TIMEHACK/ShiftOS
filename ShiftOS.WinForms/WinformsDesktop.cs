@@ -429,10 +429,12 @@ namespace ShiftOS.WinForms
             menu.Show();
             renderer.End();*/
 
-            ShiftMenu alPanel = new ShiftMenu(desktoppanel);
-            alPanel.BackgroundColor = LoadedSkin.ControlColor;
+            ShiftMenu alPanel = new ShiftMenu(toplevel);
+            alPanel.BackgroundColor = LoadedSkin.Menu_ToolStripDropDownBackground;
 
-            Point pos = desktoppanel.CanvasPosToLocal(new Point(e.X, e.Y));
+            int dpStart = (LoadedSkin.DesktopPanelPosition == 0) ? desktoppanel.Height : this.Height - desktoppanel.Height;
+
+            Point pos = new Point(0, dpStart);
             alPanel.SetPosition(pos.X, pos.Y);
 
             //desktoppanel.AddChild(alPanel);
@@ -442,7 +444,7 @@ namespace ShiftOS.WinForms
                 //alButton.RenderHint = RenderHintConstants.AL_BUTTON;
                 alButton.BackgroundColor = Color.FromArgb(255, 0, 0, 0);
                 alButton.Text = "Demo Button "+i;
-
+                alButton.TextColor = Color.White;
                 alPanel.AddMenuItem(alButton);
             }
         }
