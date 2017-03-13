@@ -51,7 +51,7 @@ namespace ShiftOS.WinForms
             this.pnlcontents = new Positioner(this);
 
             pnlcontents.AddChild(_parentWindow);
-            _parentWindow.Parent = this;
+            _parentWindow.Parent = pnlcontents;
 
             this.pnltitle = new ImagePanel(this);
             this.pnlicon = new ImagePanel(this);
@@ -70,7 +70,6 @@ namespace ShiftOS.WinForms
             // pnltitle
             // 
             this.pnltitle.BackgroundColor = System.Drawing.Color.Black;
-            this.pnltitle.Dock = Pos.Top;
             this.pnltitle.Location = new System.Drawing.Point(0, 0);
             this.pnltitle.Name = "pnltitle";
             this.pnltitle.Size = new System.Drawing.Size(730, 30);
@@ -134,7 +133,6 @@ namespace ShiftOS.WinForms
             // pnlbottom
             // 
             this.pnlbottom.BackgroundColor = System.Drawing.Color.Black;
-            this.pnlbottom.Dock = Pos.Bottom;
             this.pnlbottom.Location = new System.Drawing.Point(0, 491);
             this.pnlbottom.Name = "pnlbottom";
             this.pnlbottom.Size = new System.Drawing.Size(730, 2);
@@ -155,7 +153,6 @@ namespace ShiftOS.WinForms
             // pnlleft
             // 
             this.pnlleft.BackgroundColor = System.Drawing.Color.Black;
-            this.pnlleft.Dock = Pos.Left;
             this.pnlleft.Location = new System.Drawing.Point(0, 30);
             this.pnlleft.Name = "pnlleft";
             this.pnlleft.Size = new System.Drawing.Size(2, 461);
@@ -163,7 +160,6 @@ namespace ShiftOS.WinForms
             // pnlright
             // 
             this.pnlright.BackgroundColor = System.Drawing.Color.Black;
-            this.pnlright.Dock = Pos.Right;
             this.pnlright.Location = new System.Drawing.Point(728, 30);
             this.pnlright.Name = "pnlright";
             this.pnlright.Size = new System.Drawing.Size(2, 461);
@@ -171,7 +167,6 @@ namespace ShiftOS.WinForms
             // pnlcontents
             // 
             this.pnlcontents.BackgroundColor = System.Drawing.Color.Black;
-            this.pnlcontents.Dock = Pos.Fill;
             this.pnlcontents.Location = new System.Drawing.Point(2, 30);
             this.pnlcontents.Name = "pnlcontents";
             this.pnlcontents.Size = new System.Drawing.Size(726, 461);

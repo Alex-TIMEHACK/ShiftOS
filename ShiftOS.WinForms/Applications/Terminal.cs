@@ -310,6 +310,11 @@ namespace ShiftOS.WinForms.Applications {
 
         public void OnLoad() {
             InitializeComponent();
+            this.SizeChanged += (s) =>
+            {
+                rtbterm.Location = new Point(0, 0);
+                rtbterm.Size = s;
+            };
             SaveSystem.GameReady += () =>
             {
                 try
@@ -328,6 +333,7 @@ namespace ShiftOS.WinForms.Applications {
             };
 
             rtbterm.Show();
+            rtbterm.Parent = this;
             MakeWidget(rtbterm);
 
             if (SaveSystem.CurrentSave != null) {

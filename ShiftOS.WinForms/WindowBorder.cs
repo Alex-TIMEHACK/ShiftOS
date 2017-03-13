@@ -199,7 +199,114 @@ namespace ShiftOS.WinForms
         /// </summary>
         public void Setup()
         {
+            SetupLocationsAndSizes();
             SetupInternal();
+            SetupSkin();
+        }
+
+        internal void SetupLocationsAndSizes()
+        {
+            if (LoadedSkin.ShowTitleCorners == true)
+            {
+                //Set widths.
+                pnltitleleft.Width = LoadedSkin.TitleLeftCornerWidth;
+                pnltitleright.Width = LoadedSkin.TitleRightCornerWidth;
+                //Move title right corner
+                pnltitleright.X = this.Width - pnltitleright.Width;
+                //Move title left
+                pnltitleleft.X = 0;
+
+                //Move to the top of the screen.
+                pnltitleright.Y = 0;
+                pnltitleleft.Y = 0;
+
+                //Set the heights.
+                pnltitleright.Height = LoadedSkin.TitlebarHeight;
+                pnltitleleft.Height = LoadedSkin.TitlebarHeight;
+
+                //Set the titlebar X and Y
+                pnltitle.X = pnltitleleft.Width;
+                pnltitle.Y = 0;
+                pnltitle.Width = this.Width - pnltitleright.Width - pnltitleleft.Width;
+                pnltitle.Height = LoadedSkin.TitlebarHeight;
+            }
+            else
+            {
+                //Set the titlebar X and Y
+                pnltitle.X = 0;
+                pnltitle.Y = 0;
+                pnltitle.Width = this.Width;
+                pnltitle.Height = LoadedSkin.TitlebarHeight;
+            }
+
+            //Now for the bottom border.
+
+            //Set widths.
+            pnlbottomr.Width = LoadedSkin.BottomBorderWidth;
+            pnlbottoml.Width = LoadedSkin.BottomBorderWidth;
+
+            pnlbottomr.Height = LoadedSkin.BottomBorderWidth;
+            pnlbottoml.Height = LoadedSkin.BottomBorderWidth;
+
+            //Move right corner
+            pnlbottomr.X = this.Width - pnlbottomr.Width;
+            pnlbottomr.Y = this.Height - pnlbottomr.Height;
+            //Move title left
+            pnlbottoml.X = 0;
+            pnlbottoml.Y = pnlbottomr.Height;
+
+            //Bottom border.
+            pnlbottom.X = pnlbottoml.Width;
+            pnlbottom.Y = this.Height - pnlbottoml.Height;
+            pnlbottom.Width = this.Width - pnlbottomr.Width - pnlbottoml.Width;
+            pnlbottom.Height = LoadedSkin.BottomBorderWidth;
+
+
+            //Left border...
+
+            pnlleft.X = 0;
+            pnlleft.Y = pnltitle.Height;
+            pnlleft.Height = this.Height - pnlbottom.Height - pnltitle.Height;
+            pnlleft.Width = LoadedSkin.LeftBorderWidth;
+
+            //Now for the right border... This Daft Punk Tron Legacy OST is helping me out...
+
+            pnlright.Y = pnltitle.Height;
+            pnlright.Height = this.Height - pnlbottom.Height - pnltitle.Height;
+            pnlright.Width = LoadedSkin.RightBorderWidth;
+            pnlright.X = this.Width - pnlright.Width;
+
+            //Now for the content panel. It has to take up ALL AVAILABLE SPACE not consumed by what's above.
+
+            pnlcontents.X = pnlleft.Width;
+            pnlcontents.Y = pnltitle.Height;
+            pnlcontents.Width = this.Width - pnlleft.Width - pnlright.Width;
+            pnlcontents.Height = this.Height - pnltitle.Height - pnlbottom.Height;
+
+            //That was easy...
+
+            pnlicon.Location = LoadedSkin.TitlebarIconFromSide;
+            pnlicon.Size = new Size(16, 16);
+
+            if (LoadedSkin.TitleTextCentered == false)
+                lbtitletext.X = pnlicon.X + pnlicon.Width + LoadedSkin.TitleTextLeft.X;
+            else
+                lbtitletext.X = (this.Width - lbtitletext.Width) / 2;
+            lbtitletext.Y = LoadedSkin.TitleTextLeft.Y;
+
+            //close button
+            pnlclose.Location = FromRight(LoadedSkin.CloseButtonFromSide);
+            pnlmaximize.Location = FromRight(LoadedSkin.MaximizeButtonFromSide);
+            pnlminimize.Location = FromRight(LoadedSkin.MinimizeButtonFromSide);
+            pnlclose.Size = LoadedSkin.CloseButtonSize;
+            pnlmaximize.Size = LoadedSkin.MaximizeButtonSize;
+            pnlminimize.Size = LoadedSkin.MinimizeButtonSize;
+            pnlclose.X -= pnlclose.Width;
+            pnlminimize.X -= pnlminimize.Width;
+            pnlmaximize.X -= pnlmaximize.Width;
+
+            _parentWindow.Location = pnlcontents.Location;
+            _parentWindow.Size = pnlcontents.Size;
         }
 
         internal void SetupInternal()
@@ -233,16 +340,14 @@ namespace ShiftOS.WinForms
         {
             pnltitle.Height = LoadedSkin.TitlebarHeight;
             pnltitle.BackgroundColor = LoadedSkin.TitleBackgroundColor;
-            pnltitle.BackgroundImage = GetTexture("titlebar");
+            pnltitle.Image = GetTexture("titlebar");
             pnltitleleft.IsVisible = LoadedSkin.ShowTitleCorners;
             pnltitleright.IsVisible = LoadedSkin.ShowTitleCorners;
             pnltitleleft.BackgroundColor = LoadedSkin.TitleLeftCornerBackground;
             pnltitleright.BackgroundColor = LoadedSkin.TitleRightCornerBackground;
-            pnltitleleft.Width = LoadedSkin.TitleLeftCornerWidth;
-            pnltitleright.Width = LoadedSkin.TitleRightCornerWidth;
-            pnltitleleft.BackgroundImage = GetTexture("titleleft");
+            pnltitleleft.Image = GetTexture("titleleft");
             pnltitleleft.BackgroundImageLayout = (int)GetImageLayout("titleleft");
-            pnltitleright.BackgroundImage = GetTexture("titleright");
+            pnltitleright.Image = GetTexture("titleright");
             pnltitleright.BackgroundImageLayout = (int)GetImageLayout("titleright");
             pnltitle.BackgroundImageLayout = (int)GetImageLayout("titlebar"); //RETARD ALERT. WHY WASN'T THIS THERE WHEN IMAGELAYOUTS WERE FIRST IMPLEMENTED?
 
@@ -251,72 +356,50 @@ namespace ShiftOS.WinForms
             lbtitletext.Font = ControlManager.CreateGwenFont(Skin.Renderer, LoadedSkin.TitleFont);
 
             pnlleft.BackgroundColor = LoadedSkin.BorderLeftBackground;
-            pnlleft.BackgroundImage = GetTexture("leftborder");
+            pnlleft.Image = GetTexture("leftborder");
             pnlleft.BackgroundImageLayout = (int)GetImageLayout("leftborder");
-            pnlleft.Width = LoadedSkin.LeftBorderWidth;
             pnlright.BackgroundColor = LoadedSkin.BorderRightBackground;
-            pnlright.BackgroundImage = GetTexture("rightborder");
+            pnlright.Image = GetTexture("rightborder");
             pnlright.BackgroundImageLayout = (int)GetImageLayout("rightborder");
-            pnlright.Width = LoadedSkin.RightBorderWidth;
-
+            
             pnlbottom.BackgroundColor = LoadedSkin.BorderBottomBackground;
-            pnlbottom.BackgroundImage = GetTexture("bottomborder");
+            pnlbottom.Image = GetTexture("bottomborder");
             pnlbottom.BackgroundImageLayout = (int)GetImageLayout("bottomborder");
-            pnlbottom.Height = LoadedSkin.BottomBorderWidth;
-
+            
             pnlbottomr.BackgroundColor = LoadedSkin.BorderBottomRightBackground;
-            pnlbottomr.BackgroundImage = GetTexture("bottomrborder");
+            pnlbottomr.Image = GetTexture("bottomrborder");
             pnlbottomr.BackgroundImageLayout = (int)GetImageLayout("bottomrborder");
             pnlbottoml.BackgroundColor = LoadedSkin.BorderBottomLeftBackground;
-            pnlbottoml.BackgroundImage = GetTexture("bottomlborder");
+            pnlbottoml.Image = GetTexture("bottomlborder");
             pnlbottoml.BackgroundImageLayout = (int)GetImageLayout("bottomlborder");
 
             lbtitletext.TextColor = LoadedSkin.TitleTextColor;
             lbtitletext.Font = CreateGwenFont(Skin.Renderer, LoadedSkin.TitleFont);
             pnlclose.BackgroundColor = LoadedSkin.CloseButtonColor;
-            pnlclose.BackgroundImage = GetTexture("closebutton");
+            pnlclose.Image = GetTexture("closebutton");
             pnlclose.BackgroundImageLayout = (int)GetImageLayout("closebutton");
             pnlminimize.BackgroundColor = LoadedSkin.MinimizeButtonColor;
-            pnlminimize.BackgroundImage = GetTexture("minimizebutton");
+            pnlminimize.Image = GetTexture("minimizebutton");
             pnlminimize.BackgroundImageLayout = (int)GetImageLayout("minimizebutton");
             pnlmaximize.BackgroundColor = LoadedSkin.MaximizeButtonColor;
-            pnlmaximize.BackgroundImage = GetTexture("maximizebutton");
+            pnlmaximize.Image = GetTexture("maximizebutton");
             pnlmaximize.BackgroundImageLayout = (int)GetImageLayout("maximizebutton");
-
-            pnlclose.Size = LoadedSkin.CloseButtonSize;
-            pnlminimize.Size = LoadedSkin.MinimizeButtonSize;
-            pnlmaximize.Size = LoadedSkin.MaximizeButtonSize;
-            pnlclose.Location = FromRight(LoadedSkin.CloseButtonFromSide);
-            pnlminimize.Location = FromRight(LoadedSkin.MinimizeButtonFromSide);
-            pnlmaximize.Location = FromRight(LoadedSkin.MaximizeButtonFromSide);
-            pnlclose.X -= pnlclose.Width;
-            pnlmaximize.X -= pnlmaximize.Width;
-            pnlminimize.X -= pnlminimize.Width;
-
-            switch (LoadedSkin.TitleTextCentered)
-            {
-                case false:
-                    lbtitletext.Location = new Point(16 + LoadedSkin.TitlebarIconFromSide.X + LoadedSkin.TitleTextLeft.X,
-                            LoadedSkin.TitleTextLeft.Y);
-                    break;
-                default:
-                    lbtitletext.X = (pnltitle.Width - lbtitletext.Width) / 2;
-                    lbtitletext.Y = LoadedSkin.TitleTextLeft.Y;
-                    break;
-            }
 
             if (Shiftorium.UpgradeInstalled("app_icons"))
             {
                 pnlicon.Show();
-                pnlicon.Size = new Size(16, 16);
                 pnlicon.BackgroundColor = Color.Transparent;
-                pnlicon.BackgroundImage = GetIconTexture(this.ParentWindow.GetType().Name);
+                pnlicon.Image = GetIconTexture(this.ParentWindow.GetType().Name);
                 pnlicon.BackgroundImageLayout = (int)ImageLayout.Stretch;
-                pnlicon.Location = LoadedSkin.TitlebarIconFromSide;
             }
             else
             {
                 pnlicon.Hide();
+            }
+            this.Redraw();
+            foreach(var ctrl in this.Children)
+            {
+                ctrl.Redraw();
             }
         }
 

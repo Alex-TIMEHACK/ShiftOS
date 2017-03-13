@@ -279,31 +279,24 @@ namespace ShiftOS.WinForms
         {
             Rectangle rect = control.RenderBounds;
             bool bHasFocus = control.HasFocus;
-
+            bool drawBorder = true;
             if (control.RenderHint == RenderHintConstants.TERMINALBOX)
             {
-
+                drawBorder = false;
             }
-            else
+
+            int padding = 0;
+            if (drawBorder)
             {
-                // Box inside
-                m_Renderer.DrawColor = Color.FromArgb(255, 255, 255, 255);
-                m_Renderer.DrawFilledRect(new Rectangle(1, 1, rect.Width - 2, rect.Height - 2));
-
-                m_Renderer.DrawColor = m_colControlOutlineLight;
-                m_Renderer.DrawFilledRect(new Rectangle(rect.X + 1, rect.Y, rect.Width - 2, 1));
-                m_Renderer.DrawFilledRect(new Rectangle(rect.X, rect.Y + 1, 1, rect.Height - 2));
-
-                m_Renderer.DrawColor = m_colControlOutlineLighter;
-                m_Renderer.DrawFilledRect(new Rectangle(rect.X + 1, (rect.Y + rect.Height) - 1, rect.Width - 2, 1));
-                m_Renderer.DrawFilledRect(new Rectangle((rect.X + rect.Width) - 1, rect.Y + 1, 1, rect.Height - 2));
-
-                if (bHasFocus)
-                {
-                    m_Renderer.DrawColor = Color.FromArgb(150, 50, 200, 255);
-                    m_Renderer.DrawLinedRect(rect);
-                }
+                padding = 2;
+                m_Renderer.DrawColor = (control as TextBox).TextColor;
+                m_Renderer.DrawFilledRect(rect);
             }
+
+            rect = new Rectangle(rect.X + padding, rect.Y + padding, rect.Width - (padding * 2), rect.Height - (padding * 2));
+            m_Renderer.DrawColor = control.BackgroundColor;
+            m_Renderer.DrawFilledRect(rect);
+            
         }
 
         public override void DrawTabButton(Gwen.Control.Base control, bool active, Pos dir)
