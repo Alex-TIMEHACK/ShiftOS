@@ -496,6 +496,7 @@ namespace ShiftOS.WinForms
                     };
                     buttonClicked += c;
                 }
+                alButton.Text = alButton.Text; //update the text so that it refreshes, and puts the text over the image
             }
         }
 
