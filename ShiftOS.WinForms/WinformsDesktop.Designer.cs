@@ -158,9 +158,6 @@ namespace ShiftOS.WinForms
             // 
             this.apps = new SimpleAppLauncher(toplevel);
             this.apps.Name = "apps";
-            this.apps.Padding = new Padding(0,0,0,0);
-            this.apps.Width = 58;
-            this.apps.Height = 20;
             apps.MenuVisible = false;
             apps.Show();
             // 
