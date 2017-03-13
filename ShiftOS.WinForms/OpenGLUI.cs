@@ -59,7 +59,7 @@ namespace ShiftOS.WinForms
             int w = control.Width;
             int h = control.Height;
 
-            DrawButton(w, h, depressed, hovered, false, control.RenderHint);
+            DrawButton(w, h, depressed, hovered);
         }
 
         public void DrawButtonFuckBorder(Gwen.Control.Base control, bool depressed, bool hovered, bool disabled)
@@ -140,23 +140,13 @@ namespace ShiftOS.WinForms
             m_Renderer.DrawFilledRect(new Rectangle(x, y, w, h));
         }
 
-        public virtual void DrawButton(int w, int h, bool depressed, bool bHovered, bool bSquared = false, string rHint = "")
+        public virtual void DrawButton(int w, int h, bool depressed, bool bHovered, bool bSquared = false)
         {
-            if (rHint == RenderHintConstants.AL_ITEM)
-            {
-                //First we get the color for the bg.
-                m_Renderer.DrawColor = Color.Transparent;
-                if (depressed || bHovered) //I'm always depressed.
-                    m_Renderer.DrawColor = LoadedSkin.Menu_MenuItemSelected;
-                m_Renderer.DrawFilledRect(new Rectangle(0, 0, w, h));
-            }
-            else
-            {
-                m_Renderer.DrawColor = LoadedSkin.ControlTextColor;
-                m_Renderer.DrawFilledRect(new Rectangle(0, 0, w, h));
-                m_Renderer.DrawColor = LoadedSkin.ControlColor;
-                m_Renderer.DrawFilledRect(new Rectangle(2, 2, w - 4, h - 4));
-            }
+            m_Renderer.DrawColor = LoadedSkin.ControlTextColor;
+            m_Renderer.DrawFilledRect(new Rectangle(0, 0, w, h));
+            m_Renderer.DrawColor = LoadedSkin.ControlColor;
+            m_Renderer.DrawFilledRect(new Rectangle(2, 2, w - 4, h - 4));
+
         }
 
         public virtual void DrawButtonFuckBorder(int w, int h, bool depressed, bool bHovered, bool bSquared = false)

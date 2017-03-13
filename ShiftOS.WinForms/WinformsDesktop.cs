@@ -304,21 +304,14 @@ namespace ShiftOS.WinForms
             input.ProcessKeyUp(e);
         }
 
-        bool al_button_processed = false;
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
             input.ProcessMouseMessage(e);
-
-            }
+        }
 
         protected override void OnMouseUp(MouseButtonEventArgs e)
         {
             input.ProcessMouseMessage(e);
-            if (al_button_processed == false)
-            {
-                buttonClicked?.Invoke();
-            }
-            al_button_processed = false;
         }
 
         protected override void OnMouseMove(MouseMoveEventArgs e)
@@ -419,10 +412,7 @@ namespace ShiftOS.WinForms
             toplevel.RenderCanvas();
         }
 
-        private bool al_open = false;
-
-        public void al_clicked(object o, ClickedEventArgs e)
-        {
+        public void al_clicked (object o, ClickedEventArgs e){
             // called when the applauncher button is clicked
 
             /*renderer.Begin();
@@ -438,83 +428,77 @@ namespace ShiftOS.WinForms
             };
             menu.Show();
             renderer.End();*/
-            if (al_open == false)
-            {
-                ShiftMenu alPanel = new ShiftMenu(toplevel);
-                alPanel.BackgroundColor = LoadedSkin.Menu_ToolStripDropDownBackground;
-                desktoppanel.AddChild(alPanel);
 
-                Action c = null;
+            ShiftMenu alPanel = new ShiftMenu(toplevel);
+            alPanel.BackgroundColor = LoadedSkin.Menu_ToolStripDropDownBackground;
+            desktoppanel.AddChild(alPanel);
 
-                foreach (var itm in AppLauncherDaemon.Available())
+            Action c = null;
+
+            foreach (var itm in AppLauncherDaemon.Available()) {
+
+
+                ButtonFuckBorder alButton = new ButtonFuckBorder(alPanel);
+
+                
+
+                alButton.RenderHint = RenderHintConstants.AL_ITEM;
+
+                
+                alButton.Clicked += (obj, a) =>
                 {
-
-
-                    Button alButton = new Button(alPanel);
-                    //No need for a separate button class with no borders. That's what the RenderHint is for.
-
-
-                    alButton.RenderHint = RenderHintConstants.AL_ITEM;
-
-
-                    alButton.Clicked += (obj, a) =>
-                    {
-                        if (itm is LuaLauncherItem)
-                        {
-                            var i = new LuaInterpreter();
-                            i.ExecuteFile((itm as LuaLauncherItem).LaunchPath);
-                        }
-                        else
-                        {
-                            var win = (IShiftOSWindow)Activator.CreateInstance(itm.LaunchType, null);
-                            AppearanceManager.SetupWindow(win);
-                        }
-                        al_button_processed = true;
-                        buttonClicked?.Invoke();
-                    };
-
-                    alButton.TextColor = LoadedSkin.Menu_SelectedTextColor;
-                    alButton.Redraw();
                     if (itm is LuaLauncherItem)
                     {
-                        alButton.Text = itm.DisplayData.Name;
+                        var i = new LuaInterpreter();
+                        i.ExecuteFile((itm as LuaLauncherItem).LaunchPath);
                     }
                     else
                     {
-                        alButton.Text = NameChangerBackend.GetNameRaw(itm.LaunchType);
-
-                        var icn = GetIcon(itm.LaunchType.Name);
-                        if (icn != null)
-                        {
-                            var tex = new Texture(renderer);
-                            tex.LoadRaw(icn.Width, icn.Height, ImageToBinary(icn));
-                            alButton.SetImage(tex);
-                        }
+                        var win = (IShiftOSWindow)Activator.CreateInstance(itm.LaunchType, null);
+                        AppearanceManager.SetupWindow(win);
                     }
+                    buttonClicked?.Invoke();
+                };
 
-                    if (c == null)
-                    {
-                        c = () =>
-                        {
-                            alPanel.Hide();
-                            alPanel.Dispose();
-
-                            buttonClicked -= c;
-                        };
-                        buttonClicked += c;
-                    }
-                    alButton.Text = alButton.Text; //update the text so that it refreshes, and puts the text over the image
-                    alButton.Width = alButton.TextWidth + 74; //we'll add some padding to go with it.
-                    int dpStart = (LoadedSkin.DesktopPanelPosition == 0) ? desktoppanel.Height : this.Height - desktoppanel.Height;
-                    alPanel.AddMenuItem(alButton, dpStart);
-
-                    Point pos = new Point(0, dpStart);
-                    alPanel.SetPosition(pos.X, pos.Y);
-                    alPanel.Redraw();
-                    al_button_processed = true;
+                alButton.TextColor = LoadedSkin.Menu_SelectedTextColor;
+                alButton.Redraw();
+                if (itm is LuaLauncherItem)
+                {
+                    alButton.Text = itm.DisplayData.Name;
                 }
+                else
+                {
+                    alButton.Text = NameChangerBackend.GetNameRaw(itm.LaunchType);
+
+                    var icn = GetIcon(itm.LaunchType.Name);
+                    if (icn != null)
+                    {
+                        var tex = new Texture(renderer);
+                        tex.LoadRaw(icn.Width, icn.Height, ImageToBinary(icn));
+                        alButton.SetImage(tex);
+                    }
+                }
+
+                if (c == null)
+                {
+                    c = () =>
+                    {
+                        alPanel.Hide();
+                        alPanel.Dispose();
+                        
+                        buttonClicked -= c;
+                    };
+                    buttonClicked += c;
+                }
+                alButton.Text = alButton.Text; //update the text so that it refreshes, and puts the text over the image
+                alButton.Width = alButton.TextWidth + 24;
+                int dpStart = (LoadedSkin.DesktopPanelPosition == 0) ? desktoppanel.Height : this.Height - desktoppanel.Height;
+                alPanel.AddMenuItem(alButton, dpStart);
+                
+                Point pos = new Point(0, dpStart);
+                alPanel.SetPosition(pos.X, pos.Y);
+                alPanel.Redraw();
             }
-            al_open = !al_open;
         }
 
         private event Action buttonClicked;
