@@ -9,21 +9,22 @@ using static ShiftOS.Engine.SkinEngine;
 using Gwen.Control;
 using System.Drawing;
 using ShiftOS.WinForms.Tools;
+using Gwen.Skin;
 
 namespace ShiftOS.WinForms
 {
     class ShiftMenu : Gwen.Control.Base
     {
-        IList<Base> menuItems = new List<Base>();
+        IList<Gwen.Control.Base> menuItems = new List<Gwen.Control.Base>();
         int currentY = 0;
         int maxX = 0;
         int endposf = 0;
 
-        public ShiftMenu(Base parent = null) : base(parent)
+        public ShiftMenu(Gwen.Control.Base parent = null) : base(parent)
         {
         }
 
-        public void AddMenuItem(Base item, int endpos)
+        public void AddMenuItem(Gwen.Control.Base item, int endpos)
         {
             item.SetPosition(0, currentY);
             currentY += item.Bounds.Height;
@@ -35,6 +36,14 @@ namespace ShiftOS.WinForms
             //all you had to do was follow the damn train, CJ!
             SetSize(maxX, currentY);
             endposf = endpos;
+        }
+
+        protected override void PostLayout(Gwen.Skin.Base skin)
+        {
+            foreach(var ch in this.Children)
+            {
+                ch.Width = this.Width;
+            }
         }
 
         protected override void Render(Gwen.Skin.Base skin)
