@@ -125,7 +125,6 @@ namespace ShiftOS.WinForms
             var skn = new ShiftOSSkin(this.renderer);
             this.toplevel = new Gwen.Control.Canvas(skn); this.desktoppanel = new Gwen.Control.ImagePanel(toplevel);
             this.lbtime = new Gwen.Control.Label(toplevel);
-            this.menuStrip1 = new Gwen.Control.MenuStrip(toplevel);
             this.btnnotifications = new Gwen.Control.Button(toplevel);
             input.Initialize(this.toplevel);
             // 
@@ -148,20 +147,22 @@ namespace ShiftOS.WinForms
             // 
             // menuStrip1
             // 
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new Padding(0,0,0,0);
-            this.menuStrip1.RenderHint = RenderHintConstants.AL_STRIP;
-            this.menuStrip1.Hide();
+            appButton = new Gwen.Control.ImagePanel(toplevel);
+            appButton.Show();
+            appButton.Clicked += (o, a) =>
+            {
+                apps.MenuVisible = !apps.MenuVisible;
+            };
             // 
             // apps
             // 
-            this.apps = menuStrip1.AddItem("ShiftOS");
+            this.apps = new SimpleAppLauncher(toplevel);
             this.apps.Name = "apps";
             this.apps.Padding = new Padding(0,0,0,0);
             this.apps.Width = 58;
             this.apps.Height = 20;
-            this.apps.Text = "ShiftOS";
-            apps.Hide();
+            apps.MenuVisible = false;
+            apps.Show();
             // 
             // WinformsDesktop
             // 
@@ -178,8 +179,8 @@ namespace ShiftOS.WinForms
         private Gwen.Control.Canvas toplevel;
         private Gwen.Control.ImagePanel desktoppanel;
         private Gwen.Control.Label lbtime;
-        private Gwen.Control.MenuStrip menuStrip1;
-        private Gwen.Control.MenuItem apps;
+        private SimpleAppLauncher apps;
+        private Gwen.Control.ImagePanel appButton;
         private Gwen.Control.Button btnnotifications;
         
     }

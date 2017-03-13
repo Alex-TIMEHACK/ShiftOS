@@ -263,20 +263,23 @@ namespace ShiftOS.WinForms
 
             this.WindowState = WindowState.Fullscreen;
             desktoppanel.Width = this.ClientRectangle.Width;
+            int dpStart = (LoadedSkin.DesktopPanelPosition == 0) ? 0 : this.Height - desktoppanel.Height;
             if (Shiftorium.IsInitiated == true)
             {
                 if (SaveSystem.CurrentSave != null && TutorialManager.IsInTutorial == false)
                 {
                     lbtime.Text = Applications.Terminal.GetTime();
                     lbtime.X = desktoppanel.Width - lbtime.Width - LoadedSkin.DesktopPanelClockFromRight.X;
-                    lbtime.Y = LoadedSkin.DesktopPanelClockFromRight.Y;
+                    lbtime.Y = dpStart + LoadedSkin.DesktopPanelClockFromRight.Y;
                 }
             }
+
+
 
             try
             {
                 btnnotifications.X = lbtime.X - btnnotifications.Width - 2;
-                btnnotifications.Y = (desktoppanel.X) + ((desktoppanel.Height - btnnotifications.Height) / 2);
+                btnnotifications.Y = dpStart + ((desktoppanel.Height - btnnotifications.Height) / 2);
                 btnnotifications.TextColor = LoadedSkin.ControlTextColor;
             }
             catch { }
@@ -348,7 +351,7 @@ namespace ShiftOS.WinForms
                     //skinning
                     lbtime.TextColor = LoadedSkin.DesktopPanelClockColor;
 
-                    menuStrip1.IsVisible = Shiftorium.UpgradeInstalled("app_launcher");
+                    appButton.IsVisible = Shiftorium.UpgradeInstalled("app_launcher");
 
                     desktoppanel.BackgroundColor = LoadedSkin.DesktopPanelColor;
 
@@ -377,13 +380,11 @@ namespace ShiftOS.WinForms
                     {
                         var tex = new Texture(renderer);
                         tex.LoadRaw(appimg.Width, appimg.Height, SkinEngine.ImageToBinary(appimg));
-                        apps.BackgroundImage = tex;
+                        appButton.Image = tex;
                     }
                     lbtime.TextColor = LoadedSkin.DesktopPanelClockColor;
                     lbtime.Font = ControlManager.CreateGwenFont(renderer, LoadedSkin.DesktopPanelClockFont);
-                    apps.Text = LoadedSkin.AppLauncherText;
-                    menuStrip1.Size = LoadedSkin.AppLauncherHolderSize;
-                    apps.Size = menuStrip1.Size;
+                    appButton.Size = LoadedSkin.AppLauncherHolderSize;
                     desktoppanel.BackgroundImageLayout = (int)GetImageLayout("desktoppanel");
                     desktoppanel.Height = LoadedSkin.DesktopPanelHeight;
                     if (LoadedSkin.DesktopPanelPosition == 1)
@@ -394,7 +395,8 @@ namespace ShiftOS.WinForms
                     {
                         desktoppanel.Dock = Pos.Top;
                     }
-                    menuStrip1.Location = new Point(desktoppanel.X + LoadedSkin.AppLauncherFromLeft.X, desktoppanel.Y + LoadedSkin.AppLauncherFromLeft.Y);
+                    int dpStart = (LoadedSkin.DesktopPanelPosition == 0) ? 0 : this.Height - desktoppanel.Height;
+                    appButton.Location = new Point(desktoppanel.X + LoadedSkin.AppLauncherFromLeft.X, dpStart + LoadedSkin.AppLauncherFromLeft.Y);
 
                 }
             }
@@ -423,52 +425,8 @@ namespace ShiftOS.WinForms
         /// <param name="items">Items.</param>
         public void PopulateAppLauncher(LauncherItem[] items)
         {
-            if (SaveSystem.CurrentSave != null && SkinEngine.LoadedSkin != null)
-            {
-                try
-                {
-                    foreach (var itm in items)
-                    {
-                        string menuItemText = "";
-                        if (!(itm is LuaLauncherItem))
-                        {
-                            menuItemText = NameChangerBackend.GetNameRaw(itm.LaunchType);
-
-                        }
-                        else
-                        {
-                            menuItemText = itm.DisplayData.Name;
-                        }
-                        var menuItem = apps.Menu.AddItem(menuItemText);
-                        var icn = SkinEngine.GetIcon(itm.DisplayData.ID);
-                        if (icn != null)
-                        {
-                            var tex = new Texture(renderer);
-                            tex.LoadRaw(icn.Width, icn.Height, SkinEngine.ImageToBinary(icn));
-                            menuItem.SetImage(tex);
-                        }
-
-                        menuItem.Clicked += (o, a) =>
-                        {
-                            if (itm is LuaLauncherItem)
-                            {
-                                var lua = itm as LuaLauncherItem;
-                                var interp = new LuaInterpreter();
-                                interp.ExecuteFile(lua.LaunchPath);
-                            }
-                            else
-                            {
-                                IShiftOSWindow win = (IShiftOSWindow)Activator.CreateInstance(itm.LaunchType, null);
-                                AppearanceManager.SetupWindow(win);
-                            }
-                        };
-
-                        menuItem.Show();
-
-                    }
-                }
-                catch { }
-            }
+            if(SkinEngine.LoadedSkin != null)
+                apps.Repopulate(items);
         }
 
 
@@ -592,7 +550,7 @@ namespace ShiftOS.WinForms
 
         public void OpenAppLauncher(Point loc)
         {
-            apps.OpenMenu();
+            apps.MenuVisible = true;
         }
 
         /// <summary>
