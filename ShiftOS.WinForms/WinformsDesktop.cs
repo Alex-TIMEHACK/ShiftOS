@@ -439,15 +439,67 @@ namespace ShiftOS.WinForms
 
             //desktoppanel.AddChild(alPanel);
 
-            for (int i = 0; i < 10; i++) {
+            Action c = null;
+
+            foreach (var itm in AppLauncherDaemon.Available()) {
+
+
                 Button alButton = new Button(alPanel);
-                //alButton.RenderHint = RenderHintConstants.AL_BUTTON;
-                alButton.BackgroundColor = Color.FromArgb(255, 0, 0, 0);
-                alButton.Text = "Demo Button "+i;
+
+                
+
+                alButton.RenderHint = RenderHintConstants.AL_ITEM;
+
+                if (itm is LuaLauncherItem)
+                {
+                    alButton.Text = itm.DisplayData.Name;
+                }
+                else
+                {
+                    alButton.Text = NameChangerBackend.GetNameRaw(itm.LaunchType);
+
+                    var icn = GetIcon(itm.LaunchType.Name);
+                    if(icn != null)
+                    {
+                        var tex = new Texture(renderer);
+                        tex.LoadRaw(icn.Width, icn.Height, ImageToBinary(icn));
+                        alButton.SetImage(tex);
+                    }
+                }
+
+                alButton.Clicked += (obj, a) =>
+                {
+                    if (itm is LuaLauncherItem)
+                    {
+                        var i = new LuaInterpreter();
+                        i.ExecuteFile((itm as LuaLauncherItem).LaunchPath);
+                    }
+                    else
+                    {
+                        var win = (IShiftOSWindow)Activator.CreateInstance(itm.LaunchType, null);
+                        AppearanceManager.SetupWindow(win);
+                    }
+                    buttonClicked?.Invoke();
+                };
+
                 alButton.TextColor = Color.White;
                 alPanel.AddMenuItem(alButton);
+                alButton.Redraw();
+
+                if(c == null)
+                {
+                    c = () =>
+                    {
+                        alPanel.Dispose();
+                        toplevel.Redraw();
+                        buttonClicked -= c;
+                    };
+                    buttonClicked += c;
+                }
             }
         }
+
+        private event Action buttonClicked;
 
         public MenuItem GetALCategoryWithName(string text)
         {

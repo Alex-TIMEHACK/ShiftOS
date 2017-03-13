@@ -187,6 +187,7 @@ namespace ShiftOS.WinForms
     {
         public const string AL_STRIP = "al_strip";
         public const string AL_BUTTON = "al_button";
+        public const string AL_ITEM = "al_item";
 
     }
 
