@@ -491,7 +491,7 @@ namespace ShiftOS.WinForms
                     c = () =>
                     {
                         alPanel.Dispose();
-                        toplevel.Redraw();
+                        
                         buttonClicked -= c;
                     };
                     buttonClicked += c;

@@ -84,16 +84,14 @@ namespace ShiftOS.WinForms
 
             renderer.Begin();
             //Draw desktop background color.
-            renderer.DrawColor = LoadedSkin.DesktopColor;
-            renderer.DrawFilledRect(this.ClientRectangle);
+            toplevel.BackgroundColor = LoadedSkin.DesktopColor;
             //Draw the desktop background image.
             var img = GetImage("desktopbackground");
             if(img != null)
             {
                 var bgtex = new Texture(renderer);
                 bgtex.LoadRaw(img.Width, img.Height, ImageToBinary(img));
-                renderer.DrawColor = Color.White;
-                renderer.DrawTexturedRect(bgtex, this.ClientRectangle);
+                toplevel.BackgroundImage = bgtex;
             }
             renderer.End();
 
