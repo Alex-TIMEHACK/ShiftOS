@@ -568,9 +568,21 @@ namespace ShiftOS.WinForms
             brdr.Clicked += (o, a) =>
             {
                 focused = border;
+                brdr.BringToFront();
+                desktoppanel.BringToFront();
+                appButton.BringToFront();
+                lbtime.BringToFront();
+                btnnotifications.BringToFront();
+                PopulatePanelButtons();
             };
             toplevel.AddChild(brdr);
             brdr.Parent = toplevel;
+            brdr.BringToFront();
+            desktoppanel.BringToFront();
+            appButton.BringToFront();
+            lbtime.BringToFront();
+            btnnotifications.BringToFront();
+            PopulatePanelButtons();
         }
 
         /// <summary>
