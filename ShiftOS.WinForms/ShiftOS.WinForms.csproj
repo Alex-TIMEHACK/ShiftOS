@@ -231,6 +231,7 @@
       <DependentUpon>TutorialBox.cs</DependentUpon>
     </Compile>
     <Compile Include="AudioManager.cs" />
+    <Compile Include="ButtonFuckBorder.cs" />
     <Compile Include="Commands.cs" />
     <Compile Include="Controls\ColorControl.cs">
       <SubType>UserControl</SubType>

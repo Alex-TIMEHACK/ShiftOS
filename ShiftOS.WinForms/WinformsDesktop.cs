@@ -431,7 +431,6 @@ namespace ShiftOS.WinForms
 
             ShiftMenu alPanel = new ShiftMenu(toplevel);
             alPanel.BackgroundColor = LoadedSkin.Menu_ToolStripDropDownBackground;
-            int maxX = 0;
             desktoppanel.AddChild(alPanel);
 
             Action c = null;
@@ -439,7 +438,7 @@ namespace ShiftOS.WinForms
             foreach (var itm in AppLauncherDaemon.Available()) {
 
 
-                Button alButton = new Button(alPanel);
+                ButtonFuckBorder alButton = new ButtonFuckBorder(alPanel);
 
                 
 
@@ -493,11 +492,12 @@ namespace ShiftOS.WinForms
                 }
                 alButton.Text = alButton.Text; //update the text so that it refreshes, and puts the text over the image
                 alButton.Width = alButton.TextWidth + 24;
-                int dpStart = (LoadedSkin.DesktopPanelPosition == 0) ? appButton.Height : this.Height - desktoppanel.Height;
-                alPanel.AddMenuItem(alButton);
-
+                int dpStart = (LoadedSkin.DesktopPanelPosition == 0) ? desktoppanel.Height : this.Height - desktoppanel.Height;
+                alPanel.AddMenuItem(alButton, dpStart);
+                
                 Point pos = new Point(0, dpStart);
                 alPanel.SetPosition(pos.X, pos.Y);
+                alPanel.Redraw();
             }
         }
 

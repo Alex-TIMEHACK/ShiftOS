@@ -62,6 +62,14 @@ namespace ShiftOS.WinForms
             DrawButton(w, h, depressed, hovered);
         }
 
+        public void DrawButtonFuckBorder(Gwen.Control.Base control, bool depressed, bool hovered, bool disabled)
+        {
+            int w = control.Width;
+            int h = control.Height;
+
+            DrawButtonFuckBorder(w, h, depressed, hovered);
+        }
+
         public override void DrawMenuItem(Gwen.Control.Base control, bool submenuOpen, bool isChecked)
         {
             Rectangle rect = control.RenderBounds;
@@ -133,6 +141,15 @@ namespace ShiftOS.WinForms
         }
 
         public virtual void DrawButton(int w, int h, bool depressed, bool bHovered, bool bSquared = false)
+        {
+            m_Renderer.DrawColor = LoadedSkin.ControlTextColor;
+            m_Renderer.DrawFilledRect(new Rectangle(0, 0, w, h));
+            m_Renderer.DrawColor = LoadedSkin.ControlColor;
+            m_Renderer.DrawFilledRect(new Rectangle(2, 2, w - 4, h - 4));
+
+        }
+
+        public virtual void DrawButtonFuckBorder(int w, int h, bool depressed, bool bHovered, bool bSquared = false)
         {
             m_Renderer.DrawColor = LoadedSkin.ControlTextColor;
             m_Renderer.DrawFilledRect(new Rectangle(0, 0, w, h));
