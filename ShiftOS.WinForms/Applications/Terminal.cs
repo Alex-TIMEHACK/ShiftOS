@@ -107,29 +107,6 @@ namespace ShiftOS.WinForms.Applications {
             TerminalBackend.InvokeCommand(text);
         }
 
-        public Terminal() {
-
-            InitializeComponent();
-            SaveSystem.GameReady += () =>
-            {
-                try
-                {
-                    ResetAllKeywords();
-                    rtbterm.Text = "";
-                    TerminalBackend.PrefixEnabled = true;
-                    TerminalBackend.InStory = false;
-                    TerminalBackend.PrintPrompt();
-                    if (Shiftorium.UpgradeInstalled("wm_free_placement"))
-                    {
-
-                    }
-                }
-                catch { }
-            };
-
-
-        }
-
         public void FocusOnTerminal() {
             rtbterm.Focus();
         }
@@ -332,6 +309,25 @@ namespace ShiftOS.WinForms.Applications {
         }
 
         public void OnLoad() {
+            InitializeComponent();
+            SaveSystem.GameReady += () =>
+            {
+                try
+                {
+                    ResetAllKeywords();
+                    rtbterm.Text = "";
+                    TerminalBackend.PrefixEnabled = true;
+                    TerminalBackend.InStory = false;
+                    TerminalBackend.PrintPrompt();
+                    if (Shiftorium.UpgradeInstalled("wm_free_placement"))
+                    {
+
+                    }
+                }
+                catch { }
+            };
+
+            rtbterm.Show();
             MakeWidget(rtbterm);
 
             if (SaveSystem.CurrentSave != null) {

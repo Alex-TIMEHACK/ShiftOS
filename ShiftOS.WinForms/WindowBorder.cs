@@ -93,11 +93,7 @@ namespace ShiftOS.WinForms
         /// <param name="win">Window.</param>
         public WindowBorder(IShiftOSWindow win)
         {
-            InitializeComponent();
             _parentWindow = win as Gwen.Control.Base;
-            Desktop.ShowWindow(this);
-            this.pnlcontents.AddChild(_parentWindow);
-            _parentWindow.Show();
         }
 
         
@@ -125,6 +121,15 @@ namespace ShiftOS.WinForms
             }
 
             ShiftOS.Engine.Scripting.LuaInterpreter.RaiseEvent("on_key_down", a);
+        }
+
+        public override void Show()
+        {
+            base.Show();
+            Desktop.ShowWindow(this);
+            InitializeComponent();
+            _parentWindow.Show();
+            WindowBorder_Load(this, EventArgs.Empty);
         }
 
         /// <summary>

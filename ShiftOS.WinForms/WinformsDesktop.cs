@@ -563,15 +563,14 @@ namespace ShiftOS.WinForms
         /// <param name="border">Border.</param>
         public void ShowWindow(IWindowBorder border)
         {
-            var brdr = border as System.Windows.Forms.Form;
+            var brdr = border as WindowBorder;
             focused = border;
-            brdr.GotFocus += (o, a) =>
+            brdr.Clicked += (o, a) =>
             {
                 focused = border;
             };
-            brdr.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            brdr.Show();
-            brdr.TopMost = true;
+            toplevel.AddChild(brdr);
+            brdr.Parent = toplevel;
         }
 
         /// <summary>

@@ -48,6 +48,11 @@ namespace ShiftOS.WinForms
         /// </summary>
         private void InitializeComponent()
         {
+            this.pnlcontents = new Positioner(this);
+
+            pnlcontents.AddChild(_parentWindow);
+            _parentWindow.Parent = this;
+
             this.pnltitle = new ImagePanel(this);
             this.pnlicon = new ImagePanel(this);
             this.pnlminimize = new ImagePanel(this);
@@ -61,7 +66,6 @@ namespace ShiftOS.WinForms
             this.pnlbottoml = new ImagePanel(this);
             this.pnlleft = new ImagePanel(this);
             this.pnlright = new ImagePanel(this);
-            this.pnlcontents = new Positioner(this);
             // 
             // pnltitle
             // 

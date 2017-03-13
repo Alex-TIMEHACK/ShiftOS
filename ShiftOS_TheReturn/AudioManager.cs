@@ -1,3 +1,5 @@
+#define NOSOUND
+
 /*
  * MIT License
  * 
