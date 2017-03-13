@@ -170,7 +170,29 @@ namespace ShiftOS.WinForms
             var sWin = (IShiftOSWindow)ParentWindow;
 
             sWin.OnLoad();
+
+            SkinLoaded += () =>
+            {
+                sWin.OnSkinLoad();
+            };
+
+            Shiftorium.Installed += () =>
+            {
+                sWin.OnUpgrade();
+            };
+
+            sWin.OnUpgrade();
+            sWin.OnSkinLoad();
+
+            SizeChanged += (Size) =>
+            {
+                sWin.OnSkinLoad();
+                Setup();
+            };
+            
         }
+
+        
 
         /// <summary>
         /// Setup this instance.

@@ -15,6 +15,8 @@ namespace Gwen.Control
     /// </summary>
     public class Base : IDisposable
     {
+        public event Action<Size> SizeChanged;
+
         /// <summary>
         /// Delegate used for all control event handlers.
         /// </summary>
@@ -106,6 +108,8 @@ namespace Gwen.Control
 		/// </summary>
 		public virtual event GwenEventHandler<ClickedEventArgs> RightClicked;
 
+        private bool FireSizeChanged = false;
+
         public Size Size
         {
             get
@@ -114,8 +118,11 @@ namespace Gwen.Control
             }
             set
             {
+                FireSizeChanged = false;
                 Width = value.Width;
                 Height = value.Height;
+                SizeChanged?.Invoke(new Size(Width, Height));
+                FireSizeChanged = true;
             }
         }
 
@@ -459,8 +466,8 @@ namespace Gwen.Control
 
         // todo: Bottom/Right includes margin but X/Y not?
 
-        public int Width { get { return m_Bounds.Width; } set { SetSize(value, Height); } }
-        public int Height { get { return m_Bounds.Height; } set { SetSize(Width, value); } }
+        public int Width { get { return m_Bounds.Width; } set { SetSize(value, Height); SizeChanged?.Invoke(Size); } }
+        public int Height { get { return m_Bounds.Height; } set { SetSize(Width, value); SizeChanged?.Invoke(Size); } }
         public int Bottom { get { return m_Bounds.Bottom + m_Margin.Bottom; } }
         public int Right { get { return m_Bounds.Right + m_Margin.Right; } }
 
