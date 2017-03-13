@@ -38,7 +38,10 @@ namespace ShiftOS.WinForms
     {
         public override void Close(IShiftOSWindow win)
         {
-            (win as UserControl).Close();
+            if (win is UserControl)
+                (win as UserControl).Close();
+            else
+                (win as Window).Close();
         }
 
         public override void InvokeAction(Action act)
@@ -79,7 +82,7 @@ namespace ShiftOS.WinForms
 
         public override void SetTitle(IShiftOSWindow win, string title)
         {
-            var wb = (win as UserControl).ParentForm as WindowBorder;
+            var wb = (win as Window).Border;
             wb.SetTitle(title);
         }
 
@@ -91,8 +94,8 @@ namespace ShiftOS.WinForms
                 return;
             }
 
-            var wb = new WindowBorder(form as UserControl);
-            wb.IsDialog = true;
+            var wb = new Window(form);
+            wb.Border.IsDialog = true;
 
 
             wb.Show();
@@ -175,8 +178,8 @@ namespace ShiftOS.WinForms
                 }
             }
 
-            var wb = new WindowBorder(form as UserControl);
-
+            var wb = new Window(form);
+            wb.Show();
             ControlManager.SetupWindows();
         }
     }

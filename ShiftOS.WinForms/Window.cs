@@ -37,32 +37,27 @@ using ShiftOS.Engine.Scripting;
 
 namespace ShiftOS.WinForms
 {
-    public partial class Window : UserControl, IShiftOSWindow
+    public class Window
     {
-        public Window()
+        public Window(IShiftOSWindow win)
         {
-            InitializeComponent();
+            Border = new WinForms.WindowBorder(win);
         }
 
-        public void OnLoad()
+
+
+        public void Show()
         {
-            LuaInterpreter.RaiseEvent("on_window_load", this);
+            Border.Show();
         }
 
-        public void OnSkinLoad()
+        public WindowBorder Border { get; set; }
+
+        public void Close()
         {
-            LuaInterpreter.RaiseEvent("on_window_skin_load", this);
+            Border.Close();
         }
 
-        public bool OnUnload()
-        {
-            LuaInterpreter.RaiseEvent("on_window_unload", this);
-            return true;
-        }
 
-        public void OnUpgrade()
-        {
-            LuaInterpreter.RaiseEvent("on_window_upgrade", this);
-        }
     }
 }

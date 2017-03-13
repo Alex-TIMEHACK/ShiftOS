@@ -44,12 +44,13 @@ using static ShiftOS.Engine.SkinEngine;
 using ShiftOS.Engine;
 using ShiftOS.Objects;
 using ShiftOS.WinForms.Tools;
+using Gwen;
 
 namespace ShiftOS.WinForms.Applications {
     [Launcher("Terminal", false, null, "Utilities")]
     [WinOpen("terminal")]
     [DefaultIcon("iconTerminal")]
-    public partial class Terminal : UserControl, IShiftOSWindow {
+    public partial class Terminal : Gwen.Control.Base, IShiftOSWindow {
         public static Stack<string> ConsoleStack = new Stack<string>();
 
         public static System.Windows.Forms.Timer ti = new System.Windows.Forms.Timer();
@@ -109,28 +110,23 @@ namespace ShiftOS.WinForms.Applications {
         public Terminal() {
 
             InitializeComponent();
-            SaveSystem.GameReady += () => {
-                try {
-                    this.Invoke(new Action(() => {
-                        ResetAllKeywords();
-                        rtbterm.Text = "";
-                        TerminalBackend.PrefixEnabled = true;
-                        TerminalBackend.InStory = false;
-                        TerminalBackend.PrintPrompt();
-                        if (Shiftorium.UpgradeInstalled("wm_free_placement"))
-                        {
-                            this.ParentForm.Width = 640;
-                            this.ParentForm.Height = 480;
-                            this.ParentForm.Left = (Screen.PrimaryScreen.Bounds.Width - 640) / 2;
-                            this.ParentForm.Top = (Screen.PrimaryScreen.Bounds.Height - 480) / 2;
+            SaveSystem.GameReady += () =>
+            {
+                try
+                {
+                    ResetAllKeywords();
+                    rtbterm.Text = "";
+                    TerminalBackend.PrefixEnabled = true;
+                    TerminalBackend.InStory = false;
+                    TerminalBackend.PrintPrompt();
+                    if (Shiftorium.UpgradeInstalled("wm_free_placement"))
+                    {
 
-                        }
-                    }));
-                } catch { }
+                    }
+                }
+                catch { }
             };
 
-
-            this.DoubleBuffered = true;
 
         }
 
@@ -196,42 +192,57 @@ namespace ShiftOS.WinForms.Applications {
 
         public static void MakeWidget(Controls.TerminalBox txt) {
             AppearanceManager.StartConsoleOut();
-            txt.GotFocus += (o, a) => {
+            txt.Clicked += (o, a) => {
                 AppearanceManager.ConsoleOut = txt;
             };
-            txt.KeyDown += (o, a) => {
-                if (a.KeyCode == Keys.Enter) {
-                    try {
-                        a.SuppressKeyPress = true;
+            txt.KeyDown += (key) => {
+                if (key == Key.Return) {
+                    try
+                    {
                         Console.WriteLine("");
                         var text = txt.Lines.ToArray();
                         var text2 = text[text.Length - 2];
                         var text3 = "";
                         var text4 = Regex.Replace(text2, @"\t|\n|\r", "");
 
-                        if (IsInRemoteSystem == true) {
-                            ServerManager.SendMessage("trm_invcmd", JsonConvert.SerializeObject(new {
+                        if (IsInRemoteSystem == true)
+                        {
+                            ServerManager.SendMessage("trm_invcmd", JsonConvert.SerializeObject(new
+                            {
                                 guid = RemoteGuid,
                                 command = text4
                             }));
-                        } else {
-                            if (TerminalBackend.PrefixEnabled) {
+                        }
+                        else
+                        {
+                            if (TerminalBackend.PrefixEnabled)
+                            {
                                 text3 = text4.Remove(0, $"{SaveSystem.CurrentSave.Username}@{SaveSystem.CurrentSave.SystemName}:~$ ".Length);
                             }
                             TerminalBackend.LastCommand = text3;
                             TextSent?.Invoke(text4);
-                            if (TerminalBackend.InStory == false) {
-                                if(text3 == "stop theme") {
+                            if (TerminalBackend.InStory == false)
+                            {
+                                if (text3 == "stop theme")
+                                {
                                     CurrentCommandParser.parser = null;
-                                }else {
-                                    if(CurrentCommandParser.parser == null) {
+                                }
+                                else
+                                {
+                                    if (CurrentCommandParser.parser == null)
+                                    {
                                         TerminalBackend.InvokeCommand(text3);
-                                    } else {
+                                    }
+                                    else
+                                    {
                                         var result = CurrentCommandParser.parser.ParseCommand(text3);
 
-                                        if (result.Equals(default(KeyValuePair<KeyValuePair<string, string>, Dictionary<string, string>>))) {
+                                        if (result.Equals(default(KeyValuePair<KeyValuePair<string, string>, Dictionary<string, string>>)))
+                                        {
                                             Console.WriteLine("Syntax Error: Syntax Error");
-                                        } else {
+                                        }
+                                        else
+                                        {
                                             TerminalBackend.InvokeCommand(result.Key.Key, result.Key.Value, result.Value);
                                         }
                                     }
@@ -242,9 +253,12 @@ namespace ShiftOS.WinForms.Applications {
                                 TerminalBackend.PrintPrompt();
                             }
                         }
-                    } catch {
                     }
-                } else if (a.KeyCode == Keys.Back) {
+                    catch
+                    {
+                    }
+                    return false;
+                } else if (key == Key.Backspace) {
                     try {
                         var tostring3 = txt.Lines[txt.Lines.Length - 1];
                         var tostringlen = tostring3.Length + 1;
@@ -253,12 +267,13 @@ namespace ShiftOS.WinForms.Applications {
                         if (tostringlen != derp) {
                             AppearanceManager.CurrentPosition--;
                         } else {
-                            a.SuppressKeyPress = true;
+                            return false;
                         }
                     } catch {
                         Debug.WriteLine("Drunky alert in terminal.");
                     }
-                } else if (a.KeyCode == Keys.Left) {
+                    return false;
+                } else if (key == Key.Left) {
                     var getstring = txt.Lines[txt.Lines.Length - 1];
                     var stringlen = getstring.Length + 1;
                     var header = $"{SaveSystem.CurrentSave.Username}@{SaveSystem.CurrentSave.SystemName}:~$ ";
@@ -269,31 +284,31 @@ namespace ShiftOS.WinForms.Applications {
 
                     if (finalnum != headerlen) {
                         AppearanceManager.CurrentPosition--;
+                        return true;
                     } else {
-                        a.SuppressKeyPress = true;
+                        return false;
                     }
-                } else if (a.KeyCode == Keys.Up) {
+                } else if (key == Key.Up) {
                     var tostring3 = txt.Lines[txt.Lines.Length - 1];
                     if (tostring3 == $"{SaveSystem.CurrentSave.Username}@{SaveSystem.CurrentSave.SystemName}:~$ ")
                         Console.Write(TerminalBackend.LastCommand);
-                    a.SuppressKeyPress = true;
-
+                    return false;
                 } else {
                     if (TerminalBackend.InStory) {
-                        a.SuppressKeyPress = true;
+                        return false;
                     }
                     AppearanceManager.CurrentPosition++;
                 }
-
+                return true;
             };
 
             AppearanceManager.ConsoleOut = txt;
             
             txt.Focus();
 
-            txt.Font = LoadedSkin.TerminalFont;
-            txt.ForeColor = ControlManager.ConvertColor(LoadedSkin.TerminalForeColorCC);
-            txt.BackColor = ControlManager.ConvertColor(LoadedSkin.TerminalBackColorCC);
+            txt.Font = ControlManager.CreateGwenFont(txt.Skin.Renderer, LoadedSkin.TerminalFont);
+            txt.TextColor = ControlManager.ConvertColor(LoadedSkin.TerminalForeColorCC);
+            txt.BackgroundColor = ControlManager.ConvertColor(LoadedSkin.TerminalBackColorCC);
 
         }
 
@@ -322,7 +337,7 @@ namespace ShiftOS.WinForms.Applications {
             if (SaveSystem.CurrentSave != null) {
                 if (!ShiftoriumFrontend.UpgradeInstalled("window_manager")) {
                     rtbterm.Text = AppearanceManager.LastTerminalText;
-                    rtbterm.Select(rtbterm.TextLength, 0);
+                    rtbterm.SelectBottom();
                 }
                 TerminalBackend.PrintPrompt();
             }
@@ -332,9 +347,9 @@ namespace ShiftOS.WinForms.Applications {
 
         public void OnSkinLoad() {
             try {
-                rtbterm.Font = LoadedSkin.TerminalFont;
-                rtbterm.ForeColor = ControlManager.ConvertColor(LoadedSkin.TerminalForeColorCC);
-                rtbterm.BackColor = ControlManager.ConvertColor(LoadedSkin.TerminalBackColorCC);
+                rtbterm.Font = ControlManager.CreateGwenFont(this.Skin.Renderer, LoadedSkin.TerminalFont);
+                rtbterm.TextColor = ControlManager.ConvertColor(LoadedSkin.TerminalForeColorCC);
+                rtbterm.BackgroundColor = ControlManager.ConvertColor(LoadedSkin.TerminalBackColorCC);
             }
             catch
             {

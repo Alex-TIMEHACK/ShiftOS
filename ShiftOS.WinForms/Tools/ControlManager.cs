@@ -287,10 +287,6 @@ namespace ShiftOS.WinForms.Tools
                 {
                     (ctrl as Button).FlatStyle = FlatStyle.Flat;
                 }
-                else if (ctrl is WindowBorder)
-                {
-                    (ctrl as WindowBorder).Setup();
-                }
             }
 
             MakeDoubleBuffered(ctrl);

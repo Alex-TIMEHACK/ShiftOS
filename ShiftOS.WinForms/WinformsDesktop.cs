@@ -185,7 +185,7 @@ namespace ShiftOS.WinForms
                         {
                             if (form != null)
                             {
-                                if (form.Visible == true)
+                                if (form.IsVisible == true)
                                 {
                                     GwenEventHandler<ClickedEventArgs> onClick = (o, a) =>
                                     {
@@ -442,8 +442,7 @@ namespace ShiftOS.WinForms
             {
                 ShiftMenu alPanel = new ShiftMenu(toplevel);
                 alPanel.BackgroundColor = LoadedSkin.Menu_ToolStripDropDownBackground;
-                desktoppanel.AddChild(alPanel);
-
+                
                 Action c = null;
 
                 foreach (var itm in AppLauncherDaemon.Available())
@@ -505,7 +504,7 @@ namespace ShiftOS.WinForms
                     }
                     alButton.Text = alButton.Text; //update the text so that it refreshes, and puts the text over the image
                     alButton.Width = alButton.TextWidth + 74; //we'll add some padding to go with it.
-                    int dpStart = (LoadedSkin.DesktopPanelPosition == 0) ? desktoppanel.Height : this.Height - desktoppanel.Height;
+                    int dpStart = (LoadedSkin.DesktopPanelPosition == 0) ? desktoppanel.Height : this.Height - desktoppanel.Height - alPanel.Height - alButton.Height;
                     alPanel.AddMenuItem(alButton, dpStart);
 
                     Point pos = new Point(0, dpStart);
@@ -602,14 +601,7 @@ namespace ShiftOS.WinForms
         /// <param name="brdr">Brdr.</param>
         public void MinimizeWindow(IWindowBorder brdr)
         {
-            var loc = (brdr as WindowBorder).Location;
-            var sz = (brdr as WindowBorder).Size;
-            (brdr as WindowBorder).Tag = JsonConvert.SerializeObject(new
-            {
-                Size = sz,
-                Location = loc
-            });
-            (brdr as WindowBorder).Location = new Point(this.GetSize().Width * 2, this.GetSize().Height * 2);
+
         }
 
         /// <summary>
@@ -619,17 +611,6 @@ namespace ShiftOS.WinForms
         /// <param name="brdr">Brdr.</param>
         public void MaximizeWindow(IWindowBorder brdr)
         {
-            int startY = (LoadedSkin.DesktopPanelPosition == 1) ? 0 : LoadedSkin.DesktopPanelHeight;
-            int h = this.GetSize().Height - LoadedSkin.DesktopPanelHeight;
-            var loc = (brdr as WindowBorder).Location;
-            var sz = (brdr as WindowBorder).Size;
-            (brdr as WindowBorder).Tag = JsonConvert.SerializeObject(new
-            {
-                Size = sz,
-                Location = loc
-            });
-            (brdr as WindowBorder).Location = new Point(0, startY);
-            (brdr as WindowBorder).Size = new Size(this.GetSize().Width, h);
 
         }
 
@@ -640,10 +621,6 @@ namespace ShiftOS.WinForms
         /// <param name="brdr">Brdr.</param>
         public void RestoreWindow(IWindowBorder brdr)
         {
-            dynamic tag = JsonConvert.DeserializeObject<dynamic>((brdr as WindowBorder).Tag.ToString());
-            (brdr as WindowBorder).Location = tag.Location;
-            (brdr as WindowBorder).Size = tag.Size;
-
         }
 
         /// <summary>

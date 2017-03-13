@@ -30,43 +30,72 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Gwen;
 using ShiftOS.Engine;
 using ShiftOS.WinForms.Tools;
 
 namespace ShiftOS.WinForms.Controls
 {
-    public class TerminalBox : RichTextBox, ITerminalWidget
+    public class TerminalBox : Gwen.Control.MultilineTextBox, ITerminalWidget
     {
         public void SelectBottom()
         {
-            try
-            {
-                this.Select(this.Text.Length, 0);
-                this.ScrollToCaret();
-            }
-            catch { }
+
         }
 
-        protected override void OnClick(EventArgs e)
+        public int SelectionStart
         {
-            base.OnClick(e);
-            this.Select(this.TextLength, 0);
+            get
+            {
+                return Convert2Dto1D(CursorPosition);
+            }
+        }
+
+        private int Convert2Dto1D(Point pt)
+        {
+            return pt.Y + (pt.X * TotalLines);
+        }
+
+        public string[] Lines
+        {
+            get
+            {
+                return Text.Split(new[] { Environment.NewLine.ToString() }, StringSplitOptions.None);
+            }
+        }
+
+        public event Func<Key, bool> KeyDown;
+
+        protected override bool OnKeyPressed(Key key, bool down = true)
+        {
+            return (bool)KeyDown?.Invoke(key);
+            
+        }
+
+        protected override void OnMouseClickedLeft(int x, int y, bool down)
+        {
+            base.OnMouseClickedLeft(x, y, down);
+            this.SelectBottom();
         }
 
         public void Write(string text)
         {
-            this.Invoke(new Action(() =>
-            {
-                this.Text += Localization.Parse(text);
-            }));
+            this.Text += Localization.Parse(text);
+        }
+
+        public TerminalBox(Gwen.Control.Base parent) : base(parent)
+        {
+
         }
 
         public void WriteLine(string text)
         {
-            this.Invoke(new Action(() =>
-            {
-                this.Text += Localization.Parse(text) + Environment.NewLine;
-            }));
+            this.Text += Localization.Parse(text) + Environment.NewLine;
+        }
+
+        public void Clear()
+        {
+            this.Text = "";
         }
     }
 }

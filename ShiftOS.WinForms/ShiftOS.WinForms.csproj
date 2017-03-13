@@ -218,9 +218,7 @@
     <Compile Include="Applications\TextPad.Designer.cs">
       <DependentUpon>TextPad.cs</DependentUpon>
     </Compile>
-    <Compile Include="Applications\Terminal.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Applications\Terminal.cs" />
     <Compile Include="Applications\Terminal.Designer.cs">
       <DependentUpon>Terminal.cs</DependentUpon>
     </Compile>
@@ -245,9 +243,7 @@
     <Compile Include="Controls\ShiftedProgressBar.Designer.cs">
       <DependentUpon>ShiftedProgressBar.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\TerminalBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Controls\TerminalBox.cs" />
     <Compile Include="DownloadControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -286,15 +282,8 @@
     <Compile Include="Tools\ShiftOSMenuRenderer.cs" />
     <Compile Include="TrailerCommands.cs" />
     <Compile Include="WFLanguageProvider.cs" />
-    <Compile Include="Window.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Window.Designer.cs">
-      <DependentUpon>Window.cs</DependentUpon>
-    </Compile>
-    <Compile Include="WindowBorder.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Window.cs" />
+    <Compile Include="WindowBorder.cs" />
     <Compile Include="WindowBorder.Designer.cs">
       <DependentUpon>WindowBorder.cs</DependentUpon>
     </Compile>

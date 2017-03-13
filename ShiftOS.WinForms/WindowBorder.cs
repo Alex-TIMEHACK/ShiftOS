@@ -31,12 +31,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using static ShiftOS.WinForms.Tools.ControlManager;
 using static ShiftOS.Engine.SkinEngine;
 using System.Runtime.InteropServices;
 using ShiftOS.Engine;
 using ShiftOS.WinForms.Tools;
 using ShiftOS.WinForms.Applications;
+using Gwen;
 
 /// <summary>
 /// Window border.
@@ -46,30 +47,24 @@ namespace ShiftOS.WinForms
 	/// <summary>
 	/// Window border.
 	/// </summary>
-    public partial class WindowBorder : Form, IWindowBorder
+    public partial class WindowBorder : Gwen.Control.Base, IWindowBorder
     {
-		/// <summary>
-		/// Raises the closing event.
-		/// </summary>
-		/// <param name="e">E.</param>
-        protected override void OnClosing(CancelEventArgs e)
+        public string Text
         {
-            if ((ParentWindow as IShiftOSWindow).OnUnload())
+            get
             {
-                if (!SaveSystem.ShuttingDown)
-                {
-                    if(Engine.AppearanceManager.OpenForms.Contains(this))
-                        Engine.AppearanceManager.OpenForms.Remove(this);
-                    Desktop.ResetPanelButtons();
-                }
+                return lbtitletext.Text;
             }
-            base.OnClosing(e);
+            set
+            {
+                lbtitletext.Text = value;
+            }
         }
 
 		/// <summary>
 		/// The parent window.
 		/// </summary>
-        private UserControl _parentWindow = null;
+        private Gwen.Control.Base _parentWindow = null;
 
         /// <summary>
         /// Gets or sets the parent window.
@@ -83,7 +78,7 @@ namespace ShiftOS.WinForms
             }
             set
             {
-                _parentWindow = (UserControl)value;
+                _parentWindow = (Gwen.Control.Base)value;
             }
         }
 
@@ -96,47 +91,16 @@ namespace ShiftOS.WinForms
         /// Initializes a new instance of the <see cref="ShiftOS.WinForms.WindowBorder"/> class.
         /// </summary>
         /// <param name="win">Window.</param>
-        public WindowBorder(UserControl win)
+        public WindowBorder(IShiftOSWindow win)
         {
             InitializeComponent();
-            this._parentWindow = win;
-            Shiftorium.Installed += () =>
-            {
-                try
-                {
-                    this.ParentForm.Invoke(new Action(() =>
-                    {
-                        Setup();
-                    }));
-                }
-                catch { }
-            };
-            SkinEngine.SkinLoaded += () =>
-            {
-                try
-                {
-                    Setup();
-                    (ParentWindow as IShiftOSWindow).OnSkinLoad();
-                    ControlManager.SetupControls(this.pnlcontents);
-                }
-                catch
-                {
-
-                }
-            };
-
-            this.Width = LoadedSkin.LeftBorderWidth + _parentWindow.Width + LoadedSkin.RightBorderWidth;
-            this.Height = LoadedSkin.TitlebarHeight + _parentWindow.Height + LoadedSkin.BottomBorderWidth;
-
-            this.pnlcontents.Controls.Add(this._parentWindow);
-            this._parentWindow.Dock = DockStyle.Fill;
-            this._parentWindow.Show();
-            ControlManager.SetupControls(this._parentWindow);
-
-
+            _parentWindow = win as Gwen.Control.Base;
             Desktop.ShowWindow(this);
-
+            this.pnlcontents.AddChild(_parentWindow);
+            _parentWindow.Show();
         }
+
+        
 
         /// <summary>
         /// Universals the key down.
@@ -171,17 +135,8 @@ namespace ShiftOS.WinForms
         /// <param name="e">E.</param>
         public void WindowBorder_Load(object sender, EventArgs e)
         {
-            this.DoubleBuffered = true;
-
-            this._parentWindow.TextChanged += (o, a) =>
-            {
-                Setup();
-                Desktop.ResetPanelButtons();
-
-            };
-
-            this.Left = (Screen.PrimaryScreen.Bounds.Width - this.Width) / 2;
-            this.Top = (Screen.PrimaryScreen.Bounds.Height - this.Height) / 2;
+            this.X = (Desktop.Size.Width - this.Width) / 2;
+            this.Y = (Desktop.Size.Height - this.Height) / 2;
 
             if (!this.IsDialog)
             {
@@ -194,8 +149,8 @@ namespace ShiftOS.WinForms
                 {
                     AppearanceManager.Invoke(new Action(() =>
                     {
-                        this.Left = (Screen.PrimaryScreen.Bounds.Width - this.Width) / 2;
-                        this.Top = (Screen.PrimaryScreen.Bounds.Height - this.Height) / 2;
+                        this.X = (Desktop.Size.Width - this.Width) / 2;
+                        this.Y = (Desktop.Size.Height - this.Height) / 2;
 
                     }));
                 }
@@ -204,8 +159,6 @@ namespace ShiftOS.WinForms
                     Setup();
                 }));
             };
-
-            ControlManager.SetupControls(this);
 
             Setup();
 
@@ -219,17 +172,7 @@ namespace ShiftOS.WinForms
         /// </summary>
         public void Setup()
         {
-            try
-            {
-                this.Invoke(new Action(() =>
-                {
-                    SetupInternal();
-                }));
-            }
-            catch
-            {
-                SetupInternal();
-            }
+            SetupInternal();
         }
 
         internal void SetupInternal()
@@ -238,18 +181,18 @@ namespace ShiftOS.WinForms
 
             if (SaveSystem.CurrentSave != null)
             {
-                this.pnltitle.Visible = Shiftorium.UpgradeInstalled("wm_titlebar");
-                this.pnlclose.Visible = Shiftorium.UpgradeInstalled("close_button");
-                this.pnlminimize.Visible = (IsDialog == false) && Shiftorium.UpgradeInstalled("minimize_button");
-                this.pnlmaximize.Visible = (IsDialog == false) && Shiftorium.UpgradeInstalled("maximize_button");
+                this.pnltitle.IsVisible = Shiftorium.UpgradeInstalled("wm_titlebar");
+                this.pnlclose.IsVisible = Shiftorium.UpgradeInstalled("close_button");
+                this.pnlminimize.IsVisible = (IsDialog == false) && Shiftorium.UpgradeInstalled("minimize_button");
+                this.pnlmaximize.IsVisible = (IsDialog == false) && Shiftorium.UpgradeInstalled("maximize_button");
                 SetupSkin();
             }
             else
             {
-                this.pnltitle.Visible = false;
-                this.pnlclose.Visible = false;
-                this.pnlminimize.Visible = false;
-                this.pnlmaximize.Visible = false;
+                this.pnltitle.IsVisible = false;
+                this.pnlclose.IsVisible = false;
+                this.pnlminimize.IsVisible = false;
+                this.pnlmaximize.IsVisible = false;
 
             }
 
@@ -261,59 +204,57 @@ namespace ShiftOS.WinForms
         /// <returns>The skin.</returns>
         public void SetupSkin()
         {
-            this.DoubleBuffered = true;
-            this.TransparencyKey = LoadedSkin.SystemKey;
             pnltitle.Height = LoadedSkin.TitlebarHeight;
-            pnltitle.BackColor = LoadedSkin.TitleBackgroundColor;
-            pnltitle.BackgroundImage = GetImage("titlebar");
-            pnltitleleft.Visible = LoadedSkin.ShowTitleCorners;
-            pnltitleright.Visible = LoadedSkin.ShowTitleCorners;
-            pnltitleleft.BackColor = LoadedSkin.TitleLeftCornerBackground;
-            pnltitleright.BackColor = LoadedSkin.TitleRightCornerBackground;
+            pnltitle.BackgroundColor = LoadedSkin.TitleBackgroundColor;
+            pnltitle.BackgroundImage = GetTexture("titlebar");
+            pnltitleleft.IsVisible = LoadedSkin.ShowTitleCorners;
+            pnltitleright.IsVisible = LoadedSkin.ShowTitleCorners;
+            pnltitleleft.BackgroundColor = LoadedSkin.TitleLeftCornerBackground;
+            pnltitleright.BackgroundColor = LoadedSkin.TitleRightCornerBackground;
             pnltitleleft.Width = LoadedSkin.TitleLeftCornerWidth;
             pnltitleright.Width = LoadedSkin.TitleRightCornerWidth;
-            pnltitleleft.BackgroundImage = GetImage("titleleft");
-            pnltitleleft.BackgroundImageLayout = GetImageLayout("titleleft");
-            pnltitleright.BackgroundImage = GetImage("titleright");
-            pnltitleright.BackgroundImageLayout = GetImageLayout("titleright");
-            pnltitle.BackgroundImageLayout = GetImageLayout("titlebar"); //RETARD ALERT. WHY WASN'T THIS THERE WHEN IMAGELAYOUTS WERE FIRST IMPLEMENTED?
+            pnltitleleft.BackgroundImage = GetTexture("titleleft");
+            pnltitleleft.BackgroundImageLayout = (int)GetImageLayout("titleleft");
+            pnltitleright.BackgroundImage = GetTexture("titleright");
+            pnltitleright.BackgroundImageLayout = (int)GetImageLayout("titleright");
+            pnltitle.BackgroundImageLayout = (int)GetImageLayout("titlebar"); //RETARD ALERT. WHY WASN'T THIS THERE WHEN IMAGELAYOUTS WERE FIRST IMPLEMENTED?
 
-            lbtitletext.BackColor = (pnltitle.BackgroundImage != null) ? Color.Transparent : LoadedSkin.TitleBackgroundColor;
-            lbtitletext.ForeColor = LoadedSkin.TitleTextColor;
-            lbtitletext.Font = LoadedSkin.TitleFont;
+            lbtitletext.BackgroundColor = (pnltitle.BackgroundImage != null) ? Color.Transparent : LoadedSkin.TitleBackgroundColor;
+            lbtitletext.TextColor = LoadedSkin.TitleTextColor;
+            lbtitletext.Font = ControlManager.CreateGwenFont(Skin.Renderer, LoadedSkin.TitleFont);
 
-            pnlleft.BackColor = LoadedSkin.BorderLeftBackground;
-            pnlleft.BackgroundImage = GetImage("leftborder");
-            pnlleft.BackgroundImageLayout = GetImageLayout("leftborder");
+            pnlleft.BackgroundColor = LoadedSkin.BorderLeftBackground;
+            pnlleft.BackgroundImage = GetTexture("leftborder");
+            pnlleft.BackgroundImageLayout = (int)GetImageLayout("leftborder");
             pnlleft.Width = LoadedSkin.LeftBorderWidth;
-            pnlright.BackColor = LoadedSkin.BorderRightBackground;
-            pnlright.BackgroundImage = GetImage("rightborder");
-            pnlright.BackgroundImageLayout = GetImageLayout("rightborder");
+            pnlright.BackgroundColor = LoadedSkin.BorderRightBackground;
+            pnlright.BackgroundImage = GetTexture("rightborder");
+            pnlright.BackgroundImageLayout = (int)GetImageLayout("rightborder");
             pnlright.Width = LoadedSkin.RightBorderWidth;
 
-            pnlbottom.BackColor = LoadedSkin.BorderBottomBackground;
-            pnlbottom.BackgroundImage = GetImage("bottomborder");
-            pnlbottom.BackgroundImageLayout = GetImageLayout("bottomborder");
+            pnlbottom.BackgroundColor = LoadedSkin.BorderBottomBackground;
+            pnlbottom.BackgroundImage = GetTexture("bottomborder");
+            pnlbottom.BackgroundImageLayout = (int)GetImageLayout("bottomborder");
             pnlbottom.Height = LoadedSkin.BottomBorderWidth;
 
-            pnlbottomr.BackColor = LoadedSkin.BorderBottomRightBackground;
-            pnlbottomr.BackgroundImage = GetImage("bottomrborder");
-            pnlbottomr.BackgroundImageLayout = GetImageLayout("bottomrborder");
-            pnlbottoml.BackColor = LoadedSkin.BorderBottomLeftBackground;
-            pnlbottoml.BackgroundImage = GetImage("bottomlborder");
-            pnlbottoml.BackgroundImageLayout = GetImageLayout("bottomlborder");
+            pnlbottomr.BackgroundColor = LoadedSkin.BorderBottomRightBackground;
+            pnlbottomr.BackgroundImage = GetTexture("bottomrborder");
+            pnlbottomr.BackgroundImageLayout = (int)GetImageLayout("bottomrborder");
+            pnlbottoml.BackgroundColor = LoadedSkin.BorderBottomLeftBackground;
+            pnlbottoml.BackgroundImage = GetTexture("bottomlborder");
+            pnlbottoml.BackgroundImageLayout = (int)GetImageLayout("bottomlborder");
 
-            lbtitletext.ForeColor = LoadedSkin.TitleTextColor;
-            lbtitletext.Font = LoadedSkin.TitleFont;
-            pnlclose.BackColor = LoadedSkin.CloseButtonColor;
-            pnlclose.BackgroundImage = GetImage("closebutton");
-            pnlclose.BackgroundImageLayout = GetImageLayout("closebutton");
-            pnlminimize.BackColor = LoadedSkin.MinimizeButtonColor;
-            pnlminimize.BackgroundImage = GetImage("minimizebutton");
-            pnlminimize.BackgroundImageLayout = GetImageLayout("minimizebutton");
-            pnlmaximize.BackColor = LoadedSkin.MaximizeButtonColor;
-            pnlmaximize.BackgroundImage = GetImage("maximizebutton");
-            pnlmaximize.BackgroundImageLayout = GetImageLayout("maximizebutton");
+            lbtitletext.TextColor = LoadedSkin.TitleTextColor;
+            lbtitletext.Font = CreateGwenFont(Skin.Renderer, LoadedSkin.TitleFont);
+            pnlclose.BackgroundColor = LoadedSkin.CloseButtonColor;
+            pnlclose.BackgroundImage = GetTexture("closebutton");
+            pnlclose.BackgroundImageLayout = (int)GetImageLayout("closebutton");
+            pnlminimize.BackgroundColor = LoadedSkin.MinimizeButtonColor;
+            pnlminimize.BackgroundImage = GetTexture("minimizebutton");
+            pnlminimize.BackgroundImageLayout = (int)GetImageLayout("minimizebutton");
+            pnlmaximize.BackgroundColor = LoadedSkin.MaximizeButtonColor;
+            pnlmaximize.BackgroundImage = GetTexture("maximizebutton");
+            pnlmaximize.BackgroundImageLayout = (int)GetImageLayout("maximizebutton");
 
             pnlclose.Size = LoadedSkin.CloseButtonSize;
             pnlminimize.Size = LoadedSkin.MinimizeButtonSize;
@@ -321,9 +262,9 @@ namespace ShiftOS.WinForms
             pnlclose.Location = FromRight(LoadedSkin.CloseButtonFromSide);
             pnlminimize.Location = FromRight(LoadedSkin.MinimizeButtonFromSide);
             pnlmaximize.Location = FromRight(LoadedSkin.MaximizeButtonFromSide);
-            pnlclose.Left -= pnlclose.Width;
-            pnlmaximize.Left -= pnlmaximize.Width;
-            pnlminimize.Left -= pnlminimize.Width;
+            pnlclose.X -= pnlclose.Width;
+            pnlmaximize.X -= pnlmaximize.Width;
+            pnlminimize.X -= pnlminimize.Width;
 
             switch (LoadedSkin.TitleTextCentered)
             {
@@ -332,8 +273,8 @@ namespace ShiftOS.WinForms
                             LoadedSkin.TitleTextLeft.Y);
                     break;
                 default:
-                    lbtitletext.Left = (pnltitle.Width - lbtitletext.Width) / 2;
-                    lbtitletext.Top = LoadedSkin.TitleTextLeft.Y;
+                    lbtitletext.X = (pnltitle.Width - lbtitletext.Width) / 2;
+                    lbtitletext.Y = LoadedSkin.TitleTextLeft.Y;
                     break;
             }
 
@@ -341,9 +282,9 @@ namespace ShiftOS.WinForms
             {
                 pnlicon.Show();
                 pnlicon.Size = new Size(16, 16);
-                pnlicon.BackColor = Color.Transparent;
-                pnlicon.BackgroundImage = GetIcon(this.ParentWindow.GetType().Name);
-                pnlicon.BackgroundImageLayout = ImageLayout.Stretch;
+                pnlicon.BackgroundColor = Color.Transparent;
+                pnlicon.BackgroundImage = GetIconTexture(this.ParentWindow.GetType().Name);
+                pnlicon.BackgroundImageLayout = (int)ImageLayout.Stretch;
                 pnlicon.Location = LoadedSkin.TitlebarIconFromSide;
             }
             else
@@ -351,6 +292,29 @@ namespace ShiftOS.WinForms
                 pnlicon.Hide();
             }
         }
+
+        public Texture GetTexture(string id)
+        {
+            var img = GetImage(id);
+            if (img == null)
+                return null;
+
+            var tex = new Texture(this.Skin.Renderer);
+            tex.LoadRaw(img.Width, img.Height, ImageToBinary(img));
+            return tex;
+        }
+
+        public Texture GetIconTexture(string id)
+        {
+            var img = GetIcon(id);
+            if (img == null)
+                return null;
+
+            var tex = new Texture(this.Skin.Renderer);
+            tex.LoadRaw(img.Width, img.Height, ImageToBinary(img));
+            return tex;
+        }
+
 
         /// <summary>
         /// Froms the right.
@@ -476,11 +440,6 @@ namespace ShiftOS.WinForms
 		/// <param name="e">E.</param>
         private void pnltitle_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left && Shiftorium.UpgradeInstalled("draggable_windows"))
-            {
-                ReleaseCapture();
-                SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
-            }
         }
 
 		/// <summary>
@@ -501,6 +460,22 @@ namespace ShiftOS.WinForms
 		/// <param name="e">E.</param>
         private void lbtitletext_MouseMove(object sender, MouseEventArgs e) {
             pnltitle_MouseMove(sender, e);
+        }
+
+        public void Close()
+        {
+            if ((ParentWindow as IShiftOSWindow).OnUnload())
+            {
+                if (!SaveSystem.ShuttingDown)
+                {
+                    if (Engine.AppearanceManager.OpenForms.Contains(this))
+                        Engine.AppearanceManager.OpenForms.Remove(this);
+                    Desktop.ResetPanelButtons();
+                    this._parentWindow.Dispose();
+                    this.Dispose();
+                }
+            }
+
         }
     }
 }

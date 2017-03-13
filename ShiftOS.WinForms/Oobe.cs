@@ -433,7 +433,7 @@ namespace ShiftOS.WinForms
                 this.Invoke(new Action(() =>
                 {
                     term = new Applications.Terminal();
-                    this.Controls.Add(term);
+                    //this.Controls.Add(term);
                     term.Location = new Point(
                             (this.Width - term.Width) / 2,
                             (this.Height - term.Height) / 2

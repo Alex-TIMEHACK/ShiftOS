@@ -24,6 +24,10 @@
 
 using ShiftOS.Engine;
 using ShiftOS.WinForms.Tools;
+using Gwen.Control;
+using Gwen.Control.Layout;
+using Gwen;
+using static ShiftOS.WinForms.Tools.ControlManager;
 
 namespace ShiftOS.WinForms
 {
@@ -34,18 +38,7 @@ namespace ShiftOS.WinForms
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        
 
         #region Component Designer generated code
 
@@ -55,203 +48,150 @@ namespace ShiftOS.WinForms
         /// </summary>
         private void InitializeComponent()
         {
-            this.pnltitle = new System.Windows.Forms.Panel();
-            this.pnlicon = new System.Windows.Forms.Panel();
-            this.pnlminimize = new System.Windows.Forms.Panel();
-            this.pnlmaximize = new System.Windows.Forms.Panel();
-            this.pnlclose = new System.Windows.Forms.Panel();
-            this.pnltitleleft = new System.Windows.Forms.Panel();
-            this.pnltitleright = new System.Windows.Forms.Panel();
-            this.lbtitletext = new System.Windows.Forms.Label();
-            this.pnlbottom = new System.Windows.Forms.Panel();
-            this.pnlbottomr = new System.Windows.Forms.Panel();
-            this.pnlbottoml = new System.Windows.Forms.Panel();
-            this.pnlleft = new System.Windows.Forms.Panel();
-            this.pnlright = new System.Windows.Forms.Panel();
-            this.pnlcontents = new System.Windows.Forms.Panel();
-            this.pnltitle.SuspendLayout();
-            this.pnlbottom.SuspendLayout();
-            this.SuspendLayout();
+            this.pnltitle = new ImagePanel(this);
+            this.pnlicon = new ImagePanel(this);
+            this.pnlminimize = new ImagePanel(this);
+            this.pnlmaximize = new ImagePanel(this);
+            this.pnlclose = new ImagePanel(this);
+            this.pnltitleleft = new ImagePanel(this);
+            this.pnltitleright = new ImagePanel(this);
+            this.lbtitletext = new Label(this);
+            this.pnlbottom = new ImagePanel(this);
+            this.pnlbottomr = new ImagePanel(this);
+            this.pnlbottoml = new ImagePanel(this);
+            this.pnlleft = new ImagePanel(this);
+            this.pnlright = new ImagePanel(this);
+            this.pnlcontents = new Positioner(this);
             // 
             // pnltitle
             // 
-            this.pnltitle.BackColor = System.Drawing.Color.Black;
-            this.pnltitle.Controls.Add(this.pnlicon);
-            this.pnltitle.Controls.Add(this.pnlminimize);
-            this.pnltitle.Controls.Add(this.pnlmaximize);
-            this.pnltitle.Controls.Add(this.pnlclose);
-            this.pnltitle.Controls.Add(this.pnltitleleft);
-            this.pnltitle.Controls.Add(this.pnltitleright);
-            this.pnltitle.Controls.Add(this.lbtitletext);
-            this.pnltitle.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnltitle.BackgroundColor = System.Drawing.Color.Black;
+            this.pnltitle.Dock = Pos.Top;
             this.pnltitle.Location = new System.Drawing.Point(0, 0);
             this.pnltitle.Name = "pnltitle";
             this.pnltitle.Size = new System.Drawing.Size(730, 30);
-            this.pnltitle.TabIndex = 0;
-            this.pnltitle.Paint += new System.Windows.Forms.PaintEventHandler(this.pnltitle_Paint);
-            this.pnltitle.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pnltitle_MouseMove);
             // 
             // pnlicon
             // 
             this.pnlicon.Location = new System.Drawing.Point(9, -76);
             this.pnlicon.Name = "pnlicon";
             this.pnlicon.Size = new System.Drawing.Size(200, 100);
-            this.pnlicon.TabIndex = 6;
             // 
             // pnlminimize
             // 
-            this.pnlminimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlminimize.BackColor = System.Drawing.Color.Green;
+            this.pnlminimize.BackgroundColor = System.Drawing.Color.Green;
             this.pnlminimize.Location = new System.Drawing.Point(649, 3);
             this.pnlminimize.Name = "pnlminimize";
             this.pnlminimize.Size = new System.Drawing.Size(24, 24);
-            this.pnlminimize.TabIndex = 3;
-            this.pnlminimize.Click += new System.EventHandler(this.pnlminimize_Click);
+            this.pnlminimize.Clicked += this.pnlminimize_Click;
             // 
             // pnlmaximize
             // 
-            this.pnlmaximize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlmaximize.BackColor = System.Drawing.Color.Yellow;
+            this.pnlmaximize.BackgroundColor = System.Drawing.Color.Yellow;
             this.pnlmaximize.Location = new System.Drawing.Point(676, 3);
             this.pnlmaximize.Name = "pnlmaximize";
             this.pnlmaximize.Size = new System.Drawing.Size(24, 24);
-            this.pnlmaximize.TabIndex = 2;
-            this.pnlmaximize.Click += new System.EventHandler(this.pnlmaximize_Click);
+            this.pnlmaximize.Clicked += this.pnlmaximize_Click;
             // 
             // pnlclose
             // 
-            this.pnlclose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlclose.BackColor = System.Drawing.Color.Red;
+           this.pnlclose.BackgroundColor = System.Drawing.Color.Red;
             this.pnlclose.Location = new System.Drawing.Point(703, 3);
             this.pnlclose.Name = "pnlclose";
             this.pnlclose.Size = new System.Drawing.Size(24, 24);
-            this.pnlclose.TabIndex = 1;
-            this.pnlclose.Click += new System.EventHandler(this.pnlclose_Click);
+            this.pnlclose.Clicked += this.pnlclose_Click;
             // 
             // pnltitleleft
             // 
-            this.pnltitleleft.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pnltitleleft.Dock = Pos.Left;
             this.pnltitleleft.Location = new System.Drawing.Point(0, 0);
             this.pnltitleleft.Name = "pnltitleleft";
             this.pnltitleleft.Size = new System.Drawing.Size(2, 30);
-            this.pnltitleleft.TabIndex = 4;
             // 
             // pnltitleright
             // 
-            this.pnltitleright.Dock = System.Windows.Forms.DockStyle.Right;
+            this.pnltitleright.Dock = Pos.Right;
             this.pnltitleright.Location = new System.Drawing.Point(728, 0);
             this.pnltitleright.Name = "pnltitleright";
             this.pnltitleright.Size = new System.Drawing.Size(2, 30);
-            this.pnltitleright.TabIndex = 5;
+            
             // 
             // lbtitletext
             // 
-            this.lbtitletext.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbtitletext.AutoSize = true;
-            this.lbtitletext.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.lbtitletext.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold);
-            this.lbtitletext.ForeColor = System.Drawing.Color.White;
+            this.lbtitletext.AutoSizeToContents = true;
+            this.lbtitletext.Font = CreateGwenFont(Skin.Renderer, new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold));
+            this.lbtitletext.TextColor = System.Drawing.Color.White;
             this.lbtitletext.Location = new System.Drawing.Point(75, 9);
             this.lbtitletext.Name = "lbtitletext";
             this.lbtitletext.Size = new System.Drawing.Size(77, 14);
-            this.lbtitletext.TabIndex = 0;
             this.lbtitletext.Text = "Title text";
-            this.lbtitletext.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lbtitletext.UseMnemonic = false;
-            this.lbtitletext.Click += new System.EventHandler(this.lbtitletext_Click);
-            this.lbtitletext.MouseMove += new System.Windows.Forms.MouseEventHandler(this.lbtitletext_MouseMove);
+            this.lbtitletext.Clicked += this.lbtitletext_Click;
             // 
             // pnlbottom
             // 
-            this.pnlbottom.BackColor = System.Drawing.Color.Black;
-            this.pnlbottom.Controls.Add(this.pnlbottomr);
-            this.pnlbottom.Controls.Add(this.pnlbottoml);
-            this.pnlbottom.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pnlbottom.BackgroundColor = System.Drawing.Color.Black;
+            this.pnlbottom.Dock = Pos.Bottom;
             this.pnlbottom.Location = new System.Drawing.Point(0, 491);
             this.pnlbottom.Name = "pnlbottom";
             this.pnlbottom.Size = new System.Drawing.Size(730, 2);
-            this.pnlbottom.TabIndex = 1;
+            
             // 
             // pnlbottomr
             // 
-            this.pnlbottomr.Dock = System.Windows.Forms.DockStyle.Right;
             this.pnlbottomr.Location = new System.Drawing.Point(728, 0);
             this.pnlbottomr.Name = "pnlbottomr";
             this.pnlbottomr.Size = new System.Drawing.Size(2, 2);
-            this.pnlbottomr.TabIndex = 3;
             // 
             // pnlbottoml
             // 
-            this.pnlbottoml.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlbottoml.Location = new System.Drawing.Point(0, 0);
             this.pnlbottoml.Name = "pnlbottoml";
             this.pnlbottoml.Size = new System.Drawing.Size(2, 2);
-            this.pnlbottoml.TabIndex = 2;
             // 
             // pnlleft
             // 
-            this.pnlleft.BackColor = System.Drawing.Color.Black;
-            this.pnlleft.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pnlleft.BackgroundColor = System.Drawing.Color.Black;
+            this.pnlleft.Dock = Pos.Left;
             this.pnlleft.Location = new System.Drawing.Point(0, 30);
             this.pnlleft.Name = "pnlleft";
             this.pnlleft.Size = new System.Drawing.Size(2, 461);
-            this.pnlleft.TabIndex = 2;
             // 
             // pnlright
             // 
-            this.pnlright.BackColor = System.Drawing.Color.Black;
-            this.pnlright.Dock = System.Windows.Forms.DockStyle.Right;
+            this.pnlright.BackgroundColor = System.Drawing.Color.Black;
+            this.pnlright.Dock = Pos.Right;
             this.pnlright.Location = new System.Drawing.Point(728, 30);
             this.pnlright.Name = "pnlright";
             this.pnlright.Size = new System.Drawing.Size(2, 461);
-            this.pnlright.TabIndex = 3;
             // 
             // pnlcontents
             // 
-            this.pnlcontents.BackColor = System.Drawing.Color.Black;
-            this.pnlcontents.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlcontents.ForeColor = System.Drawing.Color.White;
+            this.pnlcontents.BackgroundColor = System.Drawing.Color.Black;
+            this.pnlcontents.Dock = Pos.Fill;
             this.pnlcontents.Location = new System.Drawing.Point(2, 30);
             this.pnlcontents.Name = "pnlcontents";
             this.pnlcontents.Size = new System.Drawing.Size(726, 461);
-            this.pnlcontents.TabIndex = 4;
             // 
             // WindowBorder
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(730, 493);
-            this.Controls.Add(this.pnlcontents);
-            this.Controls.Add(this.pnlright);
-            this.Controls.Add(this.pnlleft);
-            this.Controls.Add(this.pnlbottom);
-            this.Controls.Add(this.pnltitle);
             this.Name = "WindowBorder";
-            this.Load += new System.EventHandler(this.WindowBorder_Load);
-            this.pnltitle.ResumeLayout(false);
-            this.pnltitle.PerformLayout();
-            this.pnlbottom.ResumeLayout(false);
-            this.ResumeLayout(false);
-
         }
 
         #endregion
 
-        private System.Windows.Forms.Panel pnltitle;
-        private System.Windows.Forms.Label lbtitletext;
-        private System.Windows.Forms.Panel pnlminimize;
-        private System.Windows.Forms.Panel pnlmaximize;
-        private System.Windows.Forms.Panel pnlclose;
-        private System.Windows.Forms.Panel pnlbottom;
-        private System.Windows.Forms.Panel pnlbottomr;
-        private System.Windows.Forms.Panel pnlbottoml;
-        private System.Windows.Forms.Panel pnlleft;
-        private System.Windows.Forms.Panel pnlright;
-        private System.Windows.Forms.Panel pnlcontents;
-        private System.Windows.Forms.Panel pnltitleright;
-        private System.Windows.Forms.Panel pnltitleleft;
-        private System.Windows.Forms.Panel pnlicon;
+        private ImagePanel pnltitle;
+        private Label lbtitletext;
+        private ImagePanel pnlminimize;
+        private ImagePanel pnlmaximize;
+        private ImagePanel pnlclose;
+        private ImagePanel pnlbottom;
+        private ImagePanel pnlbottomr;
+        private ImagePanel pnlbottoml;
+        private ImagePanel pnlleft;
+        private ImagePanel pnlright;
+        private Positioner pnlcontents;
+        private ImagePanel pnltitleright;
+        private ImagePanel pnltitleleft;
+        private ImagePanel pnlicon;
     }
 }
