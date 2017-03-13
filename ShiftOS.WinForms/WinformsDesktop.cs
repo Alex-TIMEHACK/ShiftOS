@@ -431,13 +431,8 @@ namespace ShiftOS.WinForms
 
             ShiftMenu alPanel = new ShiftMenu(toplevel);
             alPanel.BackgroundColor = LoadedSkin.Menu_ToolStripDropDownBackground;
-
-            int dpStart = (LoadedSkin.DesktopPanelPosition == 0) ? desktoppanel.Height : this.Height - desktoppanel.Height;
-
-            Point pos = new Point(0, dpStart);
-            alPanel.SetPosition(pos.X, pos.Y);
-
-            //desktoppanel.AddChild(alPanel);
+            int maxX = 0;
+            desktoppanel.AddChild(alPanel);
 
             Action c = null;
 
@@ -490,6 +485,7 @@ namespace ShiftOS.WinForms
                 {
                     c = () =>
                     {
+                        alPanel.Hide();
                         alPanel.Dispose();
                         
                         buttonClicked -= c;
@@ -497,6 +493,13 @@ namespace ShiftOS.WinForms
                     buttonClicked += c;
                 }
                 alButton.Text = alButton.Text; //update the text so that it refreshes, and puts the text over the image
+                alButton.Width = alButton.TextWidth + 24;
+                maxX = System.Math.Max(maxX, alButton.Width);
+                alPanel.Width = maxX;
+                int dpStart = (LoadedSkin.DesktopPanelPosition == 0) ? appButton.Height : this.Height - desktoppanel.Height;
+
+                Point pos = new Point(0, dpStart);
+                alPanel.SetPosition(pos.X, pos.Y);
             }
         }
 
