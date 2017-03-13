@@ -277,6 +277,7 @@ namespace ShiftOS.WinForms
             {
                 btnnotifications.X = lbtime.X - btnnotifications.Width - 2;
                 btnnotifications.Y = (desktoppanel.X) + ((desktoppanel.Height - btnnotifications.Height) / 2);
+                btnnotifications.TextColor = LoadedSkin.ControlTextColor;
             }
             catch { }
             GL.Viewport(ClientRectangle);
@@ -349,17 +350,6 @@ namespace ShiftOS.WinForms
 
                     menuStrip1.IsVisible = Shiftorium.UpgradeInstalled("app_launcher");
 
-                    desktopbg.BackgroundColor = LoadedSkin.DesktopColor;
-
-                    DitheringEngine.DitherImage(SkinEngine.GetImage("desktopbackground"), new Action<Image>((img) =>
-                    {
-                        if (img != null)
-                        {
-                            var tex = new Texture(renderer);
-                            tex.LoadRaw(img.Width, img.Height, ImageToBinary(img));
-                            desktopbg.Image = tex;
-                        }
-                    }));
                     desktoppanel.BackgroundColor = LoadedSkin.DesktopPanelColor;
 
                     var pnlimg = GetImage("desktoppanel");

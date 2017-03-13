@@ -113,12 +113,6 @@ namespace Gwen.Control
             render.RenderOffset = Point.Empty;
             render.Scale = Scale;
 
-            render.DrawColor = m_BackgroundColor;
-            render.DrawFilledRect(RenderBounds);
-
-            if (this.BackgroundImage != null)
-                render.DrawTexturedRect(this.BackgroundImage, RenderBounds);
-
             DoRender(Skin);
 
             DragAndDrop.RenderOverlay(this, Skin);
@@ -137,7 +131,6 @@ namespace Gwen.Control
         protected override void Render(Skin.Base skin)
         {
             //skin.Renderer.rnd = new Random(1);
-            base.Render(skin);
             m_NeedsRedraw = false;
         }
 

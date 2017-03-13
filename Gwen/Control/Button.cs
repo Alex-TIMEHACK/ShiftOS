@@ -112,6 +112,42 @@ namespace Gwen.Control
             ToggleState = !ToggleState;
         }
 
+        public override string Text
+        {
+            get
+            {
+                return base.Text;
+            }
+
+            set
+            {
+                base.Text = value;
+                SetupText();
+            }
+        }
+
+        private Label textLabel = null;
+
+        public void SetupText()
+        {
+            if (string.IsNullOrWhiteSpace(Text))
+            {
+                if(textLabel != null)
+                {
+                    textLabel.Dispose();
+                }
+                textLabel = null;
+                return;
+            }
+
+            textLabel = new Label(this);
+            textLabel.Text = Text;
+            textLabel.AutoSizeToContents = true;
+            textLabel.TextColor = this.TextColor;
+            textLabel.Show();
+
+        }
+
         /// <summary>
         /// "Clicks" the button.
         /// </summary>
