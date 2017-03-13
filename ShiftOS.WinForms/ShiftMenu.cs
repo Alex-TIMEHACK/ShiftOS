@@ -25,8 +25,7 @@ namespace ShiftOS.WinForms
 
             AddChild(item);
             menuItems.Add(item);
-            (item as Button).TextColor = Color.White;
-
+            
             SetSize(100, currentY);
         }
     }

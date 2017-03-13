@@ -42,7 +42,7 @@ namespace Gwen.Control
         /// <summary>
         /// Text color.
         /// </summary>
-        public Color TextColor { get { return m_Text.TextColor; } set { m_Text.TextColor = value; } }
+        public virtual Color TextColor { get { return m_Text.TextColor; } set { m_Text.TextColor = value; } }
 
         /// <summary>
         /// Override text color (used by tooltips).

@@ -450,23 +450,7 @@ namespace ShiftOS.WinForms
 
                 alButton.RenderHint = RenderHintConstants.AL_ITEM;
 
-                if (itm is LuaLauncherItem)
-                {
-                    alButton.Text = itm.DisplayData.Name;
-                }
-                else
-                {
-                    alButton.Text = NameChangerBackend.GetNameRaw(itm.LaunchType);
-
-                    var icn = GetIcon(itm.LaunchType.Name);
-                    if(icn != null)
-                    {
-                        var tex = new Texture(renderer);
-                        tex.LoadRaw(icn.Width, icn.Height, ImageToBinary(icn));
-                        alButton.SetImage(tex);
-                    }
-                }
-
+                
                 alButton.Clicked += (obj, a) =>
                 {
                     if (itm is LuaLauncherItem)
@@ -482,11 +466,27 @@ namespace ShiftOS.WinForms
                     buttonClicked?.Invoke();
                 };
 
-                alButton.TextColor = Color.White;
+                alButton.TextColor = LoadedSkin.Menu_SelectedTextColor;
                 alPanel.AddMenuItem(alButton);
                 alButton.Redraw();
+                if (itm is LuaLauncherItem)
+                {
+                    alButton.Text = itm.DisplayData.Name;
+                }
+                else
+                {
+                    alButton.Text = NameChangerBackend.GetNameRaw(itm.LaunchType);
 
-                if(c == null)
+                    var icn = GetIcon(itm.LaunchType.Name);
+                    if (icn != null)
+                    {
+                        var tex = new Texture(renderer);
+                        tex.LoadRaw(icn.Width, icn.Height, ImageToBinary(icn));
+                        alButton.SetImage(tex);
+                    }
+                }
+
+                if (c == null)
                 {
                     c = () =>
                     {

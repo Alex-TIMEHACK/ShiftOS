@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using Gwen.Input;
 
 namespace Gwen.Control
@@ -13,6 +14,22 @@ namespace Gwen.Control
         private bool m_ToggleStatus;
         private bool m_CenterImage;
         private ImagePanel m_Image;
+
+        public override Color TextColor
+        {
+            get
+            {
+                return base.TextColor;
+            }
+
+            set
+            {
+                base.TextColor = value;
+                if (textLabel != null)
+                    textLabel.TextColor = value;
+                
+            }
+        }
 
         /// <summary>
         /// Invoked when the button is pressed.
@@ -140,13 +157,26 @@ namespace Gwen.Control
                 return;
             }
 
+            var loc = Point.Empty;
+            
             textLabel = new Label(this);
             textLabel.Text = Text;
             textLabel.AutoSizeToContents = true;
             textLabel.TextColor = this.TextColor;
+            if (this.m_Image != null)
+            {
+                loc = new Point(m_Image.X + m_Image.Width + 3, (this.Height - textLabel.Height) / 2);
+            }
+            else
+            {
+                loc = new Point((this.Width - textLabel.Width) / 2, (this.Height - textLabel.Height) / 2);
+            }
+            textLabel.Location = loc;
             textLabel.Show();
 
         }
+
+        
 
         /// <summary>
         /// "Clicks" the button.
