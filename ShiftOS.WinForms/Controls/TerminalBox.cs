@@ -61,6 +61,11 @@ namespace ShiftOS.WinForms.Controls
             return pt.Y + (pt.X * TotalLines);
         }
 
+        protected override void Render(Gwen.Skin.Base skin) {
+            this.DeleteAllChildren();
+            base.Render(skin);
+        }
+
         public string[] Lines
         {
             get
