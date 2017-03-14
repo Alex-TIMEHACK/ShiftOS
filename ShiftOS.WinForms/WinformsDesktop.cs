@@ -291,8 +291,6 @@ namespace ShiftOS.WinForms
 
         protected override void OnKeyDown(KeyboardKeyEventArgs e)
         {
-            base.OnKeyDown(e);
-
             if (e.Key == OpenTK.Input.Key.Escape)
                 Exit();
 

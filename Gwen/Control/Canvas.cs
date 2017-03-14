@@ -256,7 +256,6 @@ namespace Gwen.Control
         public bool Input_Key(Key key, bool down)
         {
             if (IsHidden) return false;
-            if (key <= Key.Invalid) return false;
             if (key >= Key.Count) return false;
 
             return InputHandler.OnKeyEvent(this, key, down);

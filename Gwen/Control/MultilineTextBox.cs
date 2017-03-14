@@ -965,7 +965,8 @@ namespace Gwen.Control
 			if (m_TextLines.Count == 0) {
 				return new Point(0, 0);
 			}
-			string CurrLine = m_TextLines[CursorPosition.Y].Substring(0, Math.Min(CursorPosition.X, m_TextLines[CursorPosition.Y].Length));
+
+            string CurrLine = m_TextLines[CursorPosition.Y].Substring(0, Math.Min(CursorPosition.X, m_TextLines[CursorPosition.Y].Length));
 
 			string sub = "";
 			for (int i = 0; i < CursorPosition.Y; i++) {

@@ -45,7 +45,17 @@ namespace ShiftOS.WinForms.Controls
 
         public void SelectBottom()
         {
+            int y = TotalLines;
+            int x = Lines[y-1].Length;
+            CursorPosition = new Point(x, y);
+        }
 
+        protected override bool OnKeyPressed(Key key, bool down)
+        {
+            var res =  (bool)KeyDown?.Invoke(key);
+            if(res == false)
+                res = base.OnKeyPressed(key, down);
+            return res;
         }
 
         public int SelectionStart
@@ -76,12 +86,6 @@ namespace ShiftOS.WinForms.Controls
 
         public event Func<Key, bool> KeyDown;
 
-        protected override bool OnKeyPressed(Key key, bool down = true)
-        {
-            return (bool)KeyDown?.Invoke(key);
-            
-        }
-
         protected override void OnMouseClickedLeft(int x, int y, bool down)
         {
             base.OnMouseClickedLeft(x, y, down);
@@ -91,6 +95,7 @@ namespace ShiftOS.WinForms.Controls
         public void Write(string text)
         {
             this.Text += Localization.Parse(text);
+            SelectBottom();
         }
 
         
@@ -98,6 +103,7 @@ namespace ShiftOS.WinForms.Controls
         public void WriteLine(string text)
         {
             this.Text += Localization.Parse(text) + Environment.NewLine;
+            SelectBottom();
         }
 
         public void Clear()
