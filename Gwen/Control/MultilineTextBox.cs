@@ -337,7 +337,7 @@ namespace Gwen.Control
 
                 if ((time % 1.0f) <= 0.5f)
                 {
-                    skin.Renderer.DrawColor = Color.Black;
+                    skin.Renderer.DrawColor = TextColor;
                     skin.Renderer.DrawFilledRect(m_CaretBounds);
                 }
             }

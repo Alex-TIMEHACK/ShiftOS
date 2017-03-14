@@ -273,7 +273,7 @@ namespace ShiftOS.WinForms.Applications {
                     catch
                     {
                     }
-                    return false;
+                    return true;
                 }
                 else if (key == Key.Backspace)
                 {
@@ -289,14 +289,14 @@ namespace ShiftOS.WinForms.Applications {
                         }
                         else
                         {
-                            return false;
+                            return true;
                         }
                     }
                     catch
                     {
                         Debug.WriteLine("Drunky alert in terminal.");
                     }
-                    return false;
+                    return true;
                 }
                 else if (key == Key.Left)
                 {
@@ -311,11 +311,11 @@ namespace ShiftOS.WinForms.Applications {
                     if (finalnum != headerlen)
                     {
                         AppearanceManager.CurrentPosition--;
-                        return true;
+                        return false;
                     }
                     else
                     {
-                        return false;
+                        return true;
                     }
                 }
                 else if (key == Key.Up)
@@ -323,7 +323,7 @@ namespace ShiftOS.WinForms.Applications {
                     var tostring3 = txt.Lines[txt.Lines.Length - 1];
                     if (tostring3 == $"{SaveSystem.CurrentSave.Username}@{SaveSystem.CurrentSave.SystemName}:~$ ")
                         Console.Write(TerminalBackend.LastCommand);
-                    return false;
+                    return true;
                 }
                 else
                 {

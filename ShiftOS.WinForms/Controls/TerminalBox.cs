@@ -45,14 +45,7 @@ namespace ShiftOS.WinForms.Controls
 
         public void SelectBottom()
         {
-            try
-            {
-                int y = TotalLines;
-                int x = Lines[y - 1].Length;
-                CursorEnd = new Point(x - 1, y - 1);
-                this.CursorPosition = CursorEnd;
-            }
-            catch { }
+            
         }
 
         protected override bool OnKeyPressed(Key key, bool down)
