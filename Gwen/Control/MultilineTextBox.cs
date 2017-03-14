@@ -257,84 +257,99 @@ namespace Gwen.Control
 		/// </summary>
 		/// <param name="skin">Skin to use.</param>
 		protected override void Render(Skin.Base skin) {
-			base.Render(skin);
-
+			
 			if (ShouldDrawBackground)
 				skin.DrawTextBox(this);
 
-			if (!HasFocus) return;
+            skin.Renderer.Begin();
 
-			int VerticalOffset = 2 - m_ScrollControl.VerticalScroll;
-			int VerticalSize = Font.Size + 6;
+            if (HasFocus)
+            {
 
-			// Draw selection.. if selected..
-			if (m_CursorPos != m_CursorEnd) {
-				if (StartPoint.Y == EndPoint.Y) {
-					Point pA = GetCharacterPosition(StartPoint);
-					Point pB = GetCharacterPosition(EndPoint);
+                int VerticalOffset = 2 - m_ScrollControl.VerticalScroll;
+                int VerticalSize = Font.Size + 6;
 
-					Rectangle SelectionBounds = new Rectangle();
-					SelectionBounds.X = Math.Min(pA.X, pB.X);
-					SelectionBounds.Y = pA.Y - VerticalOffset;
-					SelectionBounds.Width = Math.Max(pA.X, pB.X) - SelectionBounds.X;
-					SelectionBounds.Height = VerticalSize;
+                // Draw selection.. if selected..
+                if (m_CursorPos != m_CursorEnd)
+                {
+                    if (StartPoint.Y == EndPoint.Y)
+                    {
+                        Point pA = GetCharacterPosition(StartPoint);
+                        Point pB = GetCharacterPosition(EndPoint);
 
-					skin.Renderer.DrawColor = Color.FromArgb(200, 50, 170, 255);
-					skin.Renderer.DrawFilledRect(SelectionBounds);
-				} else {
-					/* Start */
-					Point pA = GetCharacterPosition(StartPoint);
-					Point pB = GetCharacterPosition(new Point(m_TextLines[StartPoint.Y].Length, StartPoint.Y));
+                        Rectangle SelectionBounds = new Rectangle();
+                        SelectionBounds.X = Math.Min(pA.X, pB.X);
+                        SelectionBounds.Y = pA.Y - VerticalOffset;
+                        SelectionBounds.Width = Math.Max(pA.X, pB.X) - SelectionBounds.X;
+                        SelectionBounds.Height = VerticalSize;
 
-					Rectangle SelectionBounds = new Rectangle();
-					SelectionBounds.X = Math.Min(pA.X, pB.X);
-					SelectionBounds.Y = pA.Y - VerticalOffset;
-					SelectionBounds.Width = Math.Max(pA.X, pB.X) - SelectionBounds.X;
-					SelectionBounds.Height = VerticalSize;
+                        skin.Renderer.DrawColor = Color.FromArgb(200, 50, 170, 255);
+                        skin.Renderer.DrawFilledRect(SelectionBounds);
+                    }
+                    else
+                    {
+                        /* Start */
+                        Point pA = GetCharacterPosition(StartPoint);
+                        Point pB = GetCharacterPosition(new Point(m_TextLines[StartPoint.Y].Length, StartPoint.Y));
 
-					skin.Renderer.DrawColor = Color.FromArgb(200, 50, 170, 255);
-					skin.Renderer.DrawFilledRect(SelectionBounds);
+                        Rectangle SelectionBounds = new Rectangle();
+                        SelectionBounds.X = Math.Min(pA.X, pB.X);
+                        SelectionBounds.Y = pA.Y - VerticalOffset;
+                        SelectionBounds.Width = Math.Max(pA.X, pB.X) - SelectionBounds.X;
+                        SelectionBounds.Height = VerticalSize;
 
-					/* Middle */
-					for (int i = 1; i < EndPoint.Y - StartPoint.Y; i++) {
-						pA = GetCharacterPosition(new Point(0, StartPoint.Y + i));
-						pB = GetCharacterPosition(new Point(m_TextLines[StartPoint.Y + i].Length, StartPoint.Y + i));
+                        skin.Renderer.DrawColor = Color.FromArgb(200, 50, 170, 255);
+                        skin.Renderer.DrawFilledRect(SelectionBounds);
 
-						SelectionBounds = new Rectangle();
-						SelectionBounds.X = Math.Min(pA.X, pB.X);
-						SelectionBounds.Y = pA.Y - VerticalOffset;
-						SelectionBounds.Width = Math.Max(pA.X, pB.X) - SelectionBounds.X;
-						SelectionBounds.Height = VerticalSize;
+                        /* Middle */
+                        for (int i = 1; i < EndPoint.Y - StartPoint.Y; i++)
+                        {
+                            pA = GetCharacterPosition(new Point(0, StartPoint.Y + i));
+                            pB = GetCharacterPosition(new Point(m_TextLines[StartPoint.Y + i].Length, StartPoint.Y + i));
 
-						skin.Renderer.DrawColor = Color.FromArgb(200, 50, 170, 255);
-						skin.Renderer.DrawFilledRect(SelectionBounds);
-					}
+                            SelectionBounds = new Rectangle();
+                            SelectionBounds.X = Math.Min(pA.X, pB.X);
+                            SelectionBounds.Y = pA.Y - VerticalOffset;
+                            SelectionBounds.Width = Math.Max(pA.X, pB.X) - SelectionBounds.X;
+                            SelectionBounds.Height = VerticalSize;
 
-					/* End */
-					pA = GetCharacterPosition(new Point(0, EndPoint.Y));
-					pB = GetCharacterPosition(EndPoint);
+                            skin.Renderer.DrawColor = Color.FromArgb(200, 50, 170, 255);
+                            skin.Renderer.DrawFilledRect(SelectionBounds);
+                        }
 
-					SelectionBounds = new Rectangle();
-					SelectionBounds.X = Math.Min(pA.X, pB.X);
-					SelectionBounds.Y = pA.Y - VerticalOffset;
-					SelectionBounds.Width = Math.Max(pA.X, pB.X) - SelectionBounds.X;
-					SelectionBounds.Height = VerticalSize;
+                        /* End */
+                        pA = GetCharacterPosition(new Point(0, EndPoint.Y));
+                        pB = GetCharacterPosition(EndPoint);
 
-					skin.Renderer.DrawColor = Color.FromArgb(200, 50, 170, 255);
-					skin.Renderer.DrawFilledRect(SelectionBounds);
-				}
-			}
+                        SelectionBounds = new Rectangle();
+                        SelectionBounds.X = Math.Min(pA.X, pB.X);
+                        SelectionBounds.Y = pA.Y - VerticalOffset;
+                        SelectionBounds.Width = Math.Max(pA.X, pB.X) - SelectionBounds.X;
+                        SelectionBounds.Height = VerticalSize;
 
-			// Draw caret
-			float time = Platform.Neutral.GetTimeInSeconds() - m_LastInputTime;
+                        skin.Renderer.DrawColor = Color.FromArgb(200, 50, 170, 255);
+                        skin.Renderer.DrawFilledRect(SelectionBounds);
+                    }
+                }
 
-			if ((time % 1.0f) <= 0.5f) {
-				skin.Renderer.DrawColor = Color.Black;
-				skin.Renderer.DrawFilledRect(m_CaretBounds);
-			}
-		}
+                // Draw caret
+                float time = Platform.Neutral.GetTimeInSeconds() - m_LastInputTime;
 
-		protected void RefreshCursorBounds() {
+                if ((time % 1.0f) <= 0.5f)
+                {
+                    skin.Renderer.DrawColor = Color.Black;
+                    skin.Renderer.DrawFilledRect(m_CaretBounds);
+                }
+            }
+
+            skin.Renderer.End();
+
+            //WHY THE FUCK WAS THIS ABOVE THE BACKGROUND DRAW?
+            base.Render(skin);
+            skin.Renderer.End();
+        }
+
+        protected void RefreshCursorBounds() {
 			m_LastInputTime = Platform.Neutral.GetTimeInSeconds();
 
 			MakeCaretVisible();

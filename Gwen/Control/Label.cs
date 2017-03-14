@@ -252,6 +252,7 @@ namespace Gwen.Control
         {
             var r = skin.Renderer;
             r.Begin();
+            r.DrawColor = this.TextColor;
             r.RenderText(this.Font, new Point(this.RenderBounds.X, this.RenderBounds.Y), this.Text);
         }
 
