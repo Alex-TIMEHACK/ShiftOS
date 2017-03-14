@@ -62,7 +62,7 @@ namespace ShiftOS.WinForms.Controls
         }
 
         protected override void Render(Gwen.Skin.Base skin) {
-            this.DeleteAllChildren();
+            this.DeleteAllChildren(); // they need to die ok? don't question it
             base.Render(skin);
         }
 
