@@ -321,8 +321,7 @@ namespace ShiftOS.WinForms.Tools
         internal static Gwen.Font CreateGwenFont(Gwen.Renderer.Base ren, System.Drawing.Font fnt)
         {
             var gFont = new Gwen.Font(ren);
-            gFont.FaceName = fnt.SystemFontName;
-            gFont.Size = (int)fnt.Size;
+            gFont.RendererData = fnt;
             return gFont;
             
         }

@@ -36,7 +36,7 @@ using ShiftOS.WinForms.Tools;
 
 namespace ShiftOS.WinForms.Controls
 {
-    public class TerminalBox : Gwen.Control.MultilineTextBox, ITerminalWidget
+    public class TerminalBox : Gwen.Control.TextBox, ITerminalWidget
     {
         public TerminalBox(Gwen.Control.Base parent) : base(parent)
         {
@@ -45,7 +45,8 @@ namespace ShiftOS.WinForms.Controls
 
         public void SelectBottom()
         {
-            
+            this.CursorPos = this.TextLength;
+            this.CursorEnd = this.TextLength;
         }
 
         protected override bool OnKeyPressed(Key key, bool down)
@@ -56,17 +57,20 @@ namespace ShiftOS.WinForms.Controls
             return res;
         }
 
+        /// <summary>
+        /// WinForms compat.
+        /// </summary>
         public int SelectionStart
         {
             get
             {
-                return Convert2Dto1D(CursorPosition);
+                return CursorPos;
             }
         }
 
         private int Convert2Dto1D(Point pt)
         {
-            return pt.Y + (pt.X * TotalLines);
+            return 0;
         }
 
         protected override void Render(Gwen.Skin.Base skin) {

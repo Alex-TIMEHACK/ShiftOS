@@ -185,28 +185,33 @@ namespace Gwen.Control
         /// <param name="skin">Skin to use.</param>
         protected override void Render(Skin.Base skin)
         {
-            base.Render(skin);
-
+            
             if (ShouldDrawBackground)
                 skin.DrawTextBox(this);
 
-            if (!HasFocus) return;
-
-            // Draw selection.. if selected..
-            if (m_CursorPos != m_CursorEnd)
+            skin.Renderer.Begin();
+            if (HasFocus)
             {
-                skin.Renderer.DrawColor = Color.FromArgb(200, 50, 170, 255);
-                skin.Renderer.DrawFilledRect(m_SelectionBounds);
-            }
+                // Draw selection.. if selected..
+                if (m_CursorPos != m_CursorEnd)
+                {
+                    skin.Renderer.DrawColor = Color.FromArgb(200, 50, 170, 255);
+                    skin.Renderer.DrawFilledRect(m_SelectionBounds);
+                }
 
-            // Draw caret
-            float time = Platform.Neutral.GetTimeInSeconds() - m_LastInputTime;
+                // Draw caret
+                float time = Platform.Neutral.GetTimeInSeconds() - m_LastInputTime;
 
-            if ((time % 1.0f) <= 0.5f)
-            {
-                skin.Renderer.DrawColor = Color.Black;
-                skin.Renderer.DrawFilledRect(m_CaretBounds);
+                if ((time % 1.0f) <= 0.5f)
+                {
+                    skin.Renderer.DrawColor = this.TextColor;
+                    skin.Renderer.DrawFilledRect(m_CaretBounds);
+                }
             }
+            skin.Renderer.End();
+
+            base.Render(skin);
+            skin.Renderer.End();
         }
 
         protected virtual void RefreshCursorBounds()
