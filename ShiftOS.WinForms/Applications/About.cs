@@ -39,7 +39,7 @@ namespace ShiftOS.WinForms.Applications
     [WinOpen("about")]
     [Launcher("About", false, null, "Accessories")]
     [DefaultTitle("About ShiftOS")]
-    public partial class About : UserControl, IShiftOSWindow
+    public partial class About : Gwen.Control.Base, IShiftOSWindow
     {
         public About()
         {

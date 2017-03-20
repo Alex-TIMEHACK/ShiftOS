@@ -22,27 +22,12 @@
  * SOFTWARE.
  */
 
+using Gwen.Control;
+
 namespace ShiftOS.WinForms.Applications
 {
     partial class About
     {
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
-
-        /// <summary> 
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
 
         #region Component Designer generated code
 
@@ -52,12 +37,11 @@ namespace ShiftOS.WinForms.Applications
         /// </summary>
         private void InitializeComponent()
         {
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.lbshiftit = new System.Windows.Forms.Label();
-            this.lbaboutdesc = new System.Windows.Forms.Label();
+            this.pictureBox1 = new ImagePanel(this);
+            this.label1 = new Label(this);
+            this.lbshiftit = new Label(this);
+            this.lbaboutdesc = new Label(this);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.SuspendLayout();
             // 
             // pictureBox1
             // 
@@ -66,27 +50,21 @@ namespace ShiftOS.WinForms.Applications
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(105, 105);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
+            // this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(137, 40);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(43, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Tag = "header1";
             this.label1.Text = "ShiftOS";
             // 
             // lbshiftit
             // 
-            this.lbshiftit.AutoSize = true;
+            // this.lbshiftit.AutoSize = true;
             this.lbshiftit.Location = new System.Drawing.Point(140, 73);
             this.lbshiftit.Name = "lbshiftit";
             this.lbshiftit.Size = new System.Drawing.Size(84, 13);
-            this.lbshiftit.TabIndex = 2;
-            this.lbshiftit.Tag = "header2";
             this.lbshiftit.Text = "Shift it your way.";
             // 
             // lbaboutdesc
@@ -97,30 +75,27 @@ namespace ShiftOS.WinForms.Applications
             this.lbaboutdesc.Location = new System.Drawing.Point(14, 126);
             this.lbaboutdesc.Name = "lbaboutdesc";
             this.lbaboutdesc.Size = new System.Drawing.Size(498, 328);
-            this.lbaboutdesc.TabIndex = 3;
             this.lbaboutdesc.Text = "label2";
             // 
             // About
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.lbaboutdesc);
-            this.Controls.Add(this.lbshiftit);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.pictureBox1);
+            this.AddChild(this.lbaboutdesc);
+            this.AddChild(this.lbshiftit);
+            this.AddChild(this.label1);
+            this.AddChild(this.pictureBox1);
             this.Name = "About";
             this.Size = new System.Drawing.Size(532, 474);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label lbshiftit;
-        private System.Windows.Forms.Label lbaboutdesc;
+        private ImagePanel pictureBox1;
+        private Label label1;
+        private Label lbshiftit;
+        private Label lbaboutdesc;
     }
 }

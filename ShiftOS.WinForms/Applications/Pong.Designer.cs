@@ -490,7 +490,7 @@ namespace ShiftOS.WinForms.Applications
             this.lblbeatai.Size = new System.Drawing.Size(600, 30);
             this.lblbeatai.Text = "You got 2 codepoints for beating the Computer!";
             this.lblbeatai.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblbeatai.Visible = false;
+            this.lblbeatai.IsVisible = false;
             // 
             // lblcountdown
             // 
@@ -499,8 +499,8 @@ namespace ShiftOS.WinForms.Applications
             this.lblcountdown.Name = "lblcountdown";
             this.lblcountdown.Size = new System.Drawing.Size(315, 49);
             this.lblcountdown.Text = "3";
-            this.lblcountdown.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblcountdown.Visible = false;
+            this.lblcountdown.Alignment = (Gwen.Pos)System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblcountdown.IsVisible = false;
             // 
             // ball
             // 
@@ -536,7 +536,7 @@ namespace ShiftOS.WinForms.Applications
             this.lbllevelandtime.Name = "lbllevelandtime";
             this.lbllevelandtime.Size = new System.Drawing.Size(700, 22);
             this.lbllevelandtime.Text = "Level: 1 - 58 Seconds Left";
-            this.lbllevelandtime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbllevelandtime.Alignment = (Gwen.Pos)System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblstatscodepoints
             // 
@@ -547,7 +547,7 @@ namespace ShiftOS.WinForms.Applications
             this.lblstatscodepoints.Name = "lblstatscodepoints";
             this.lblstatscodepoints.Size = new System.Drawing.Size(219, 35);
             this.lblstatscodepoints.Text = "Codepoints: ";
-            this.lblstatscodepoints.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblstatscodepoints.Alignment = (Gwen.Pos)System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblstatsY
             // 
@@ -557,7 +557,7 @@ namespace ShiftOS.WinForms.Applications
             this.lblstatsY.Name = "lblstatsY";
             this.lblstatsY.Size = new System.Drawing.Size(144, 35);
             this.lblstatsY.Text = "Yspeed:";
-            this.lblstatsY.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblstatsY.Alignment = (Gwen.Pos)System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblstatsX
             // 
@@ -567,7 +567,7 @@ namespace ShiftOS.WinForms.Applications
             this.lblstatsX.Name = "lblstatsX";
             this.lblstatsX.Size = new System.Drawing.Size(144, 35);
             this.lblstatsX.Text = "Xspeed: ";
-            this.lblstatsX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblstatsX.Alignment = (Gwen.Pos)System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // flowLayoutPanel1
             // 
@@ -589,7 +589,7 @@ namespace ShiftOS.WinForms.Applications
             this.button2.Size = new System.Drawing.Size(60, 23);
             this.button2.Text = "{CLOSE}";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Clicked += new GwenEventHandler<ClickedEventArgs>(this.button2_Click);
             // 
             // Pong
             // 
@@ -602,20 +602,7 @@ namespace ShiftOS.WinForms.Applications
             this.Text = "{PONG_NAME}";
             this.Size = new System.Drawing.Size(820, 500);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pongMain_MouseMove);
-            this.pgcontents.ResumeLayout(false);
-            this.pnlgamestats.ResumeLayout(false);
-            this.pnlgamestats.PerformLayout();
-            this.pnlhighscore.ResumeLayout(false);
-            this.pnlhighscore.PerformLayout();
-            this.pnlfinalstats.ResumeLayout(false);
-            this.pnlfinalstats.PerformLayout();
-            this.pnllose.ResumeLayout(false);
-            this.pnlintro.ResumeLayout(false);
-            this.pnlintro.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.paddleHuman)).EndInit();
-            this.flowLayoutPanel1.ResumeLayout(false);
-            this.flowLayoutPanel1.PerformLayout();
-            this.ResumeLayout(false);
 
         }
         internal System.Windows.Forms.Panel paddleComputer;
