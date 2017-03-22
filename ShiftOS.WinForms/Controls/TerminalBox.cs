@@ -47,6 +47,10 @@ namespace ShiftOS.WinForms.Controls
         {
             this.CursorPos = this.TextLength;
             this.CursorEnd = this.TextLength;
+            if(this.TextHeight - this.Height < 0)
+            {
+                this.SetTextPosition(0, this.TextHeight - this.Height);
+            }
         }
 
         protected override bool OnKeyPressed(Key key, bool down)

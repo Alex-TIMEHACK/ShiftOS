@@ -215,9 +215,8 @@ namespace ShiftOS.WinForms.Applications {
                 {
                     try
                     {
-                        Console.WriteLine("");
                         var text = txt.Lines.ToArray();
-                        var text2 = text[text.Length - 2];
+                        var text2 = text[text.Length - 1];
                         var text3 = "";
                         var text4 = Regex.Replace(text2, @"\t|\n|\r", "");
 
@@ -273,7 +272,7 @@ namespace ShiftOS.WinForms.Applications {
                     catch
                     {
                     }
-                    return true;
+                    return false;
                 }
                 else if (key == Key.Backspace)
                 {
@@ -296,7 +295,7 @@ namespace ShiftOS.WinForms.Applications {
                     {
                         Debug.WriteLine("Drunky alert in terminal.");
                     }
-                    return true;
+                    return false;
                 }
                 else if (key == Key.Left)
                 {
