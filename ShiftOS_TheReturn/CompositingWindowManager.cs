@@ -13,7 +13,7 @@ namespace ShiftOS.Engine
 
         public override void Close(IShiftOSWindow win)
         {
-            throw new NotImplementedException();
+            
         }
 
         public override void InvokeAction(Action act)
@@ -73,7 +73,7 @@ namespace ShiftOS.Engine
         /// </summary>
         /// <param name="color">The color of the polygon.</param>
         /// <param name="points">The vertices of the polygon.</param>
-        public abstract void DrawPolygon(System.Drawing.Color color, params Vector3D[] points);
+        public abstract void DrawPolygon(System.Drawing.Color color, Vector3D topright, Vector3D topleft, Vector3D bottomright, Vector3D bottomleft);
 
         /// <summary>
         /// Draws a polygon onto the 3D world using the specified 32-bit ARGB bitmap data and 3D points.
@@ -82,7 +82,7 @@ namespace ShiftOS.Engine
         /// <param name="w">The width, in pixels, of the texture.</param>
         /// <param name="h">The height, in pixels, of the texture.</param>
         /// <param name="points">The vertices of the polygon.</param>
-        public abstract void DrawPolygon(byte[] textureRaw, int w, int h, params Vector3D[] points);
+        public abstract void DrawPolygon(byte[] textureRaw, int w, int h, Vector3D topright, Vector3D topleft, Vector3D bottomright, Vector3D bottomleft);
 
 
         /// <summary>
@@ -93,12 +93,12 @@ namespace ShiftOS.Engine
         ///<remarks>
         ///     <para>This method doesn't need to be overidden as it will simply use the <see cref="ShiftOS.Engine.SkinEngine"/> ImageToBinary method to extract the binary data of the image and use the DrawPolygon(byte[]) overload. However, if your graphics API supports direct drawing of <see cref="System.Drawing.Image"/> textures, use its method instead, as it may be faster!</para>
         /// </remarks>
-        public virtual void DrawPolygon(System.Drawing.Image texture, params Vector3D[] points)
+        public virtual void DrawPolygon(System.Drawing.Image texture, Vector3D topright, Vector3D topleft, Vector3D bottomright, Vector3D bottomleft)
         {
             var width = texture.Width;
             var height = texture.Height;
             var binary = SkinEngine.ImageToBinary(texture);
-            DrawPolygon(binary, width, height, points);
+            DrawPolygon(binary, width, height, topright, topleft, bottomright, bottomleft);
         }
 
         public int Width

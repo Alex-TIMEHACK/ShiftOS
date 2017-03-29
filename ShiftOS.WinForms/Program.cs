@@ -46,15 +46,6 @@ namespace ShiftOS.WinForms
         [STAThread]
         public static void Main()
         {
-#if DRIVER_DX11
-            using (var driver = new DirectXGraphicsAPI(2560, 1440))
-            {
-                
-            }
-#else
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            //if ANYONE puts code before those two winforms config lines they will be declared a drunky. - Michael
             CrashHandler.SetGameMetadata(Assembly.GetExecutingAssembly());
             SkinEngine.SetIconProber(new ShiftOSIconProvider());
             ShiftOS.Engine.AudioManager.Init(new ShiftOSAudioProvider());
@@ -71,10 +62,24 @@ namespace ShiftOS.WinForms
             {
                 AppearanceManager.SetupWindow(new Applications.Terminal());
             };
-            AppearanceManager.Initiate(new WinformsWindowManager());
+            AppearanceManager.Initiate(new ShiftOS.Engine.BranchWindowManager(new Dictionary<Type, WindowManager>
+            {
+                { typeof(UserControl), new WinformsWindowManager() }
+            },
+            new Dictionary<Type, WindowManager>
+            {
+                { typeof(WindowBorder), new WinformsWindowManager() }
+            }));
             OutOfBoxExperience.Init(new Oobe());
             Infobox.Init(new Dialog());
             FileSkimmerBackend.Init(new WinformsFSFrontend());
+
+
+#if DRIVER_DX11
+#else
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            //if ANYONE puts code before those two winforms config lines they will be declared a drunky. - Michael
             var desk = new WinformsDesktop();
             Desktop.Init(desk);
             Application.Run(desk);
