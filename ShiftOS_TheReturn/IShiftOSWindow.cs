@@ -37,5 +37,8 @@ namespace ShiftOS.Engine
         void OnSkinLoad();
         bool OnUnload();
         void OnUpgrade();
+
+        System.Drawing.Point Location { get; set; }
+        System.Drawing.Size Size { get; set; }
     }
 }

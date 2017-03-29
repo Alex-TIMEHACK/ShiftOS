@@ -1,9 +1,28 @@
-﻿Imports ShiftOS.Engine
+﻿Imports System.Drawing
+Imports ShiftOS.Engine
 
 <Launcher("Legacy Skin Converter", True, "al_skin_loader", "Customization")>
 <RequiresUpgrade("skinning")>
 Public Class SkinConverter
     Implements IShiftOSWindow
+
+    Private Property IShiftOSWindow_Location As Point Implements IShiftOSWindow.Location
+        Get
+            Return Me.Size
+        End Get
+        Set(value As Point)
+            Me.Size = value
+        End Set
+    End Property
+
+    Private Property IShiftOSWindow_Size As Size Implements IShiftOSWindow.Size
+        Get
+            Return Me.Size
+        End Get
+        Set(value As Size)
+            Me.Size = value
+        End Set
+    End Property
 
     Private Sub btnin_Click(sender As Object, e As EventArgs) Handles btnin.Click
         FileSkimmerBackend.GetFile(New String() {".skn"}, FileOpenerStyle.Open, New Action(Of String)(Sub(path As String)

@@ -117,6 +117,15 @@ namespace ShiftOS.Engine {
             }
         }
 
+        internal static byte[] ImageToBinary(Image texture)
+        {
+            using(var ms = new MemoryStream())
+            {
+                texture.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                return ms.ToArray();
+            }
+        }
+
         public static void Init() {
             Application.ApplicationExit += (o, a) => {
                 SaveSkin();
