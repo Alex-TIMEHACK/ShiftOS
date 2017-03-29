@@ -21,6 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+ #define DRIVER_DX11
 
 using System;
 using System.Collections.Generic;
@@ -45,6 +46,12 @@ namespace ShiftOS.WinForms
         [STAThread]
         public static void Main()
         {
+#if DRIVER_DX11
+            using (var driver = new DirectXGraphicsAPI(2560, 1440))
+            {
+                
+            }
+#else
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //if ANYONE puts code before those two winforms config lines they will be declared a drunky. - Michael
@@ -71,6 +78,7 @@ namespace ShiftOS.WinForms
             var desk = new WinformsDesktop();
             Desktop.Init(desk);
             Application.Run(desk);
+#endif
         }
     }
 
