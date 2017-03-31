@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
- #define DRIVER_DX11
+#define DRIVER_DX11
 
 using System;
 using System.Collections.Generic;
@@ -35,6 +35,7 @@ using static ShiftOS.Objects.ShiftFS.Utils;
 using ShiftOS.WinForms.Applications;
 using ShiftOS.WinForms.Tools;
 using System.Reflection;
+using ShiftOS.Engine.Composition;
 
 namespace ShiftOS.WinForms
 {
@@ -62,19 +63,28 @@ namespace ShiftOS.WinForms
             {
                 AppearanceManager.SetupWindow(new Applications.Terminal());
             };
+
+            var api = new OpenTKGraphicsAPI(2560, 1440);
+            var screen = new Engine.Composition.Screen(api);
+            var cWinMgr = new CompositingWindowManager(screen);
+
             AppearanceManager.Initiate(new ShiftOS.Engine.BranchWindowManager(new Dictionary<Type, WindowManager>
             {
-                { typeof(UserControl), new WinformsWindowManager() }
+                { typeof(UserControl), new WinformsWindowManager() },
+                {typeof(ShiftOS.Engine.Composition.UI.Window),  cWinMgr }
             },
             new Dictionary<Type, WindowManager>
             {
-                { typeof(WindowBorder), new WinformsWindowManager() }
+                { typeof(WindowBorder), new WinformsWindowManager() },
+                {typeof(ShiftOS.Engine.Composition.CompositedBorder),  cWinMgr }
             }));
             OutOfBoxExperience.Init(new Oobe());
             Infobox.Init(new Dialog());
             FileSkimmerBackend.Init(new WinformsFSFrontend());
 
-
+            var compositingDesktop = new CompositingDesktop(screen);
+            Desktop.Init(compositingDesktop);
+            AppearanceManager.SetupWindow(compositingDesktop);
 #if DRIVER_DX11
 #else
             Application.EnableVisualStyles();

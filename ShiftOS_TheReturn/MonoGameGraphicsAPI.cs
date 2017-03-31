@@ -10,7 +10,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace ShiftOS.Engine.Composition
 {
-    class OpenTKGraphicsAPI : GraphicsAPI
+    public class OpenTKGraphicsAPI : GraphicsAPI
     {
         public OpenTKGraphicsAPI(int width, int height) : base(width, height)
         {

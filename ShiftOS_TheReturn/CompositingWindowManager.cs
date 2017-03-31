@@ -479,7 +479,13 @@ namespace ShiftOS.Engine.Composition
             if (api == null)
                 throw new ArgumentNullException("The specified graphics backend is null.");
             _api = api;
+            api.FrameRenderStarted += () =>
+            {
+                FrameRendering?.Invoke();
+            };
         }
+
+        public event Action FrameRendering;
 
         /// <summary>
         /// Gets the width of the screen.
@@ -514,6 +520,14 @@ namespace ShiftOS.Engine.Composition
             }
         }
 
+        public GraphicsAPI API
+        {
+            get
+            {
+                return _api;
+            }
+        }
+
         /// <summary>
         /// Converts a specified coordinate set from the universal ShiftOS coordinate system to the driver coordinate system and returns the value.
         /// </summary>
@@ -539,17 +553,19 @@ namespace ShiftOS.Engine.Composition
 
     public class CompositingWindowManager : WindowManager
     {
-
+        private List<CompositedBorder> Windows = new List<CompositedBorder>();
 
 
         public override void Close(IShiftOSWindow win)
         {
-            
+            var wb = Windows.FirstOrDefault(x => x.ParentWindow == win);
+            if (wb != null)
+                Windows.Remove(wb);
         }
 
         public override void InvokeAction(Action act)
         {
-            throw new NotImplementedException();
+            act?.Invoke();
         }
 
         public override void Maximize(IWindowBorder border)
@@ -564,17 +580,48 @@ namespace ShiftOS.Engine.Composition
 
         public override void SetTitle(IShiftOSWindow win, string title)
         {
-            throw new NotImplementedException();
+            Windows.FirstOrDefault(x => x.ParentWindow == win).Text = title;
+        }
+
+        private Screen _backend = null;
+
+        public CompositingWindowManager(Screen backend)
+        {
+            _backend = backend;
+            _backend.FrameRendering += () =>
+            {
+                //Render each window.
+                foreach(var win in Windows)
+                {
+                    var topleft = new PointF(win.Location.X, win.Location.Y);
+                    var topright = new PointF(topleft.X + win.Size.Width, topleft.Y);
+                    var bottomright = new PointF(topright.X, topright.Y + win.Size.Height);
+                    var bottomleft = new PointF(topleft.X, bottomright.Y);
+
+                    topleft = backend.ConvertCoordinatesTo(topleft);
+                    topright = backend.ConvertCoordinatesTo(topright);
+                    bottomleft = backend.ConvertCoordinatesTo(bottomleft);
+                    bottomright = backend.ConvertCoordinatesTo(bottomright);
+
+                    backend.API.DrawPolygon(win.GetBuffer(), new Vector3D(topright.X, 1, topright.Y), new Vector3D(topleft.X, 1, topleft.Y), new Vector3D(bottomright.X, 1, bottomright.Y), new Vector3D(bottomleft.X, 1, bottomleft.Y));
+                }
+            };
         }
 
         public override void SetupDialog(IShiftOSWindow win, bool decorated)
         {
-            throw new NotImplementedException();
+            var wb = new CompositedBorder(_backend, win.Size);
+            wb.Decorated = decorated;
+            wb.ParentWindow = win;
+            Windows.Add(wb);
         }
 
         public override void SetupWindow(IShiftOSWindow win, bool decorated)
         {
-            throw new NotImplementedException();
+            var wb = new CompositedBorder(_backend, win.Size);
+            wb.Decorated = decorated;
+            wb.ParentWindow = win;
+            Windows.Add(wb);
         }
     }
 
@@ -663,8 +710,10 @@ namespace ShiftOS.Engine.Composition
         /// </summary>
         public virtual void OnRenderFrame()
         {
-
+            FrameRenderStarted?.Invoke();
         }
+
+        public event Action FrameRenderStarted;
     }
 
     public struct Vector3D

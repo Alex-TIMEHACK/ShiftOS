@@ -228,6 +228,7 @@
     </Compile>
     <Compile Include="AudioManager.cs" />
     <Compile Include="Commands.cs" />
+    <Compile Include="CompositingDesktop.cs" />
     <Compile Include="Controls\ColorControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
