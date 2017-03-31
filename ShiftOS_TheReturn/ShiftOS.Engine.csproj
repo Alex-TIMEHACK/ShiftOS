@@ -168,6 +168,7 @@
     <Compile Include="Commands.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="CompositingWindowManager.cs" />
+    <Compile Include="Composition.UI\Window.cs" />
     <Compile Include="ConsoleEx.cs" />
     <Compile Include="CrashHandler.cs" />
     <Compile Include="CrashHandler.Designer.cs">

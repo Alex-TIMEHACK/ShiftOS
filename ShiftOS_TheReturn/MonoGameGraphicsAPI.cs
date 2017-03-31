@@ -8,12 +8,28 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 
-namespace ShiftOS.Engine
+namespace ShiftOS.Engine.Composition
 {
     class OpenTKGraphicsAPI : GraphicsAPI
     {
         public OpenTKGraphicsAPI(int width, int height) : base(width, height)
         {
+        }
+
+        public override PointF ConvertCoordsToDriver(PointF point)
+        {
+            return new PointF(
+                    (float)linear(point.X, 0, this.Width, -1, 1),
+                    (float)linear(point.Y, 0, this.Height, -1, 1)
+                );
+        }
+
+        public override PointF ConvertCoordsToEngine(PointF point)
+        {
+            return new PointF(
+                    (float)linear(point.X, -1, 1, 0, this.Width),
+                    (float)linear(point.Y, -1, 1, 0, this.Height)
+                );
         }
 
         protected override void Init()

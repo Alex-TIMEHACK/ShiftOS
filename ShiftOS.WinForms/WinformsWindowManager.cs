@@ -83,7 +83,7 @@ namespace ShiftOS.WinForms
             wb.SetTitle(title);
         }
 
-        public override void SetupDialog(IShiftOSWindow form)
+        public override void SetupDialog(IShiftOSWindow form, bool decorated)
         {
             if (!Shiftorium.UpgradeAttributesUnlocked(form.GetType()))
             {
@@ -93,12 +93,12 @@ namespace ShiftOS.WinForms
 
             var wb = new WindowBorder(form as UserControl);
             wb.IsDialog = true;
-
+            wb.Decorated = decorated;
 
             wb.Show();
         }
 
-        public override void SetupWindow(IShiftOSWindow form)
+        public override void SetupWindow(IShiftOSWindow form, bool decorated)
         {
             if (!AppearanceManager.CanOpenWindow(form))
             {
@@ -117,7 +117,7 @@ namespace ShiftOS.WinForms
                             if(answer == true)
                             {
                                 KernelWatchdog.MudConnected = true;
-                                SetupWindow(form);
+                                SetupWindow(form, decorated);
                             }
                         }));
                         return;
@@ -176,6 +176,7 @@ namespace ShiftOS.WinForms
             }
 
             var wb = new WindowBorder(form as UserControl);
+            wb.Decorated = decorated;
 
             ControlManager.SetupWindows();
         }

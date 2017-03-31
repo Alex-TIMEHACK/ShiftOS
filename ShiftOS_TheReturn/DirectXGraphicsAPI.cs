@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define DIRECTXDRIVER
+
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -13,6 +15,7 @@ using D3D11 = SharpDX.Direct3D11;
 
 namespace ShiftOS.Engine
 {
+#if DIRECTXDRIVER
     [Obsolete("If one can fix this, go ahead.")]
     public class DirectXGraphicsAPI : GraphicsAPI, IDisposable
     {
@@ -119,4 +122,5 @@ namespace ShiftOS.Engine
             }
         }
     }
+#endif
 }

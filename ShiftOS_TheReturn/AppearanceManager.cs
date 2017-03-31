@@ -205,6 +205,15 @@ namespace ShiftOS.Engine
         }
 
         public static ITerminalWidget ConsoleOut { get; set; }
+        public static DecoratorConfig DecoratorConfig
+        {
+            get
+            {
+                if (winmgr == null)
+                    return new DefaultDecoratorConfig();
+                return winmgr.Config;
+            }
+        }
 
         public static void StartConsoleOut()
         {
@@ -225,15 +234,144 @@ namespace ShiftOS.Engine
         void SelectBottom();
     }
 
+    public abstract class DecoratorConfig
+    {
+        public abstract bool ShowLeftTitleCorner { get; }
+        public abstract bool ShowRightTitleCorner { get; }
+        public abstract bool ShowTitleBar { get; }
+        public abstract bool ShowLeftBottomCorner { get; }
+        public abstract bool ShowRightBottomCorner { get; }
+        public abstract bool ShowLeftBorder { get; }
+        public abstract bool ShowRightBorder { get; }
+        public abstract bool ShowBottomBorder { get; }
+        public abstract bool ShowTitleText { get; }
+        public abstract bool ShowClose { get; }
+        public abstract bool ShowMinimize { get; }
+        public abstract bool ShowMaximize { get; }
+        public abstract bool UseRollupInstead { get; }
+    }
+
+    /// <summary>
+    /// This decorator configuration is an example configuration and can be used to develop your game's window decorator according to the ShiftOS engine's standard, without having to configure the decorator yourself. Useful when implementing functionality without worrying about upgrades.
+    /// </summary>
+    public class DefaultDecoratorConfig : DecoratorConfig
+    {
+        public override bool ShowBottomBorder
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override bool ShowClose
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override bool ShowLeftBorder
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override bool ShowLeftBottomCorner
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override bool ShowLeftTitleCorner
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override bool ShowMaximize
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override bool ShowMinimize
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override bool ShowRightBorder
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override bool ShowRightBottomCorner
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override bool ShowRightTitleCorner
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override bool ShowTitleBar
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override bool ShowTitleText
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override bool UseRollupInstead
+        {
+            get
+            {
+                return false;
+            }
+        }
+    }
+
     public abstract class WindowManager
     {
+        public DecoratorConfig Config = new DefaultDecoratorConfig();
+
         public abstract void Minimize(IWindowBorder border);
         public abstract void Maximize(IWindowBorder border);
 
         public abstract void Close(IShiftOSWindow win);
 
-        public abstract void SetupWindow(IShiftOSWindow win);
-        public abstract void SetupDialog(IShiftOSWindow win);
+        public abstract void SetupWindow(IShiftOSWindow win, bool decorated = true);
+        public abstract void SetupDialog(IShiftOSWindow win, bool decorated = true);
 
         public abstract void InvokeAction(Action act);
 
@@ -245,6 +383,11 @@ namespace ShiftOS.Engine
         void Close();
         string Text { get; set; }
         IShiftOSWindow ParentWindow { get; set; }
+
+        /// <summary>
+        /// Determines whether this window should be decorated.
+        /// </summary>
+        bool Decorated { get; set; }
     }
     
     public class DefaultTitleAttribute : Attribute

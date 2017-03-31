@@ -52,14 +52,14 @@ namespace ShiftOS.Engine
             SelectManager(win).SetTitle(win, title);
         }
 
-        public override void SetupDialog(IShiftOSWindow win)
+        public override void SetupDialog(IShiftOSWindow win, bool decorated)
         {
-            SelectManager(win).SetupDialog(win);
+            SelectManager(win).SetupDialog(win, decorated);
         }
 
-        public override void SetupWindow(IShiftOSWindow win)
+        public override void SetupWindow(IShiftOSWindow win, bool decorated)
         {
-            SelectManager(win).SetupWindow(win);
+            SelectManager(win).SetupWindow(win, decorated);
 
         }
 

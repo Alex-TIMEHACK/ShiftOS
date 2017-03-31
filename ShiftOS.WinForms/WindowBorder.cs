@@ -48,6 +48,21 @@ namespace ShiftOS.WinForms
 	/// </summary>
     public partial class WindowBorder : Form, IWindowBorder
     {
+        private bool _decorated = true;
+
+        public bool Decorated
+        {
+            get
+            {
+                return _decorated;
+            }
+            set
+            {
+                _decorated = value;
+                Setup();
+            }
+        }
+
 		/// <summary>
 		/// Raises the closing event.
 		/// </summary>
