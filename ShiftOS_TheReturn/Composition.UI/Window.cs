@@ -50,7 +50,7 @@ namespace ShiftOS.Engine.Composition.UI
     /// </summary>
     public abstract class Window : IShiftOSWindow, IPaintable, IDrawable
     {
-        public void Draw()
+        public virtual void Draw()
         {
             SetBuffer(ClientSize.Width, ClientSize.Height);
             Clear(SkinEngine.LoadedSkin.ControlColor);
@@ -74,6 +74,8 @@ namespace ShiftOS.Engine.Composition.UI
         {
             get
             {
+                if (_parent == null)
+                    return Size.Empty;
                 return _parent.GetClientSize();
             }
             set
@@ -218,6 +220,19 @@ namespace ShiftOS.Engine.Composition.UI
             _gfx.Clear(color);
         }
 
+        public CompositedBorder Parent
+        {
+            get
+            {
+                return _parent;
+            }
+            set
+            {
+                _parent = value;
+                _parent.Draw();
+            }
+        }
+
         private Graphics _gfx = null;
 
         public void SetBuffer(int width, int height)
@@ -232,6 +247,10 @@ namespace ShiftOS.Engine.Composition.UI
                 _gfx.Dispose();
                 _gfx = null;
             }
+            if (width == 0)
+                width = 1;
+            if (height == 0)
+                height = 1;
             _backBuffer = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             _gfx = Graphics.FromImage(_backBuffer);
         }

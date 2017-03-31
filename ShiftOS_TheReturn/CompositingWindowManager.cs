@@ -77,6 +77,15 @@ namespace ShiftOS.Engine.Composition
 
         public Image GetBuffer()
         {
+            try
+            {
+                if (_backBuffer != null)
+                    _backBuffer.Save("DebugBitmap.bmp");
+            }
+            catch
+            {
+
+            }
             return _backBuffer;
         }
 
@@ -606,15 +615,11 @@ namespace ShiftOS.Engine.Composition
                 //Render each window.
                 foreach(var win in Windows)
                 {
+                    win.Draw();
                     var topleft = new PointF(win.Location.X, win.Location.Y);
                     var topright = new PointF(topleft.X + win.Size.Width, topleft.Y);
                     var bottomright = new PointF(topright.X, topright.Y + win.Size.Height);
                     var bottomleft = new PointF(topleft.X, bottomright.Y);
-
-                    topleft = backend.ConvertCoordinatesTo(topleft);
-                    topright = backend.ConvertCoordinatesTo(topright);
-                    bottomleft = backend.ConvertCoordinatesTo(bottomleft);
-                    bottomright = backend.ConvertCoordinatesTo(bottomright);
 
                     backend.API.DrawPolygon(win.GetBuffer(), new Vector3D(topright.X, 1, topright.Y), new Vector3D(topleft.X, 1, topleft.Y), new Vector3D(bottomright.X, 1, bottomright.Y), new Vector3D(bottomleft.X, 1, bottomleft.Y));
                 }
@@ -626,6 +631,7 @@ namespace ShiftOS.Engine.Composition
             var wb = new CompositedBorder(_backend, win.Size);
             wb.Decorated = decorated;
             wb.ParentWindow = win;
+            (win as Window).Parent = wb;
             bool fInit = false;
 
             if (Windows.Count == 0)
@@ -640,7 +646,7 @@ namespace ShiftOS.Engine.Composition
             var wb = new CompositedBorder(_backend, win.Size);
             wb.Decorated = decorated;
             wb.ParentWindow = win;
-            bool fInit = false;
+            (win as Window).Parent = wb; bool fInit = false;
             if (Windows.Count == 0)
                 fInit = true;
             Windows.Add(wb);

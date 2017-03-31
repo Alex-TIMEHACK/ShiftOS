@@ -13,6 +13,11 @@ namespace ShiftOS.WinForms
 {
     public class CompositingDesktop : Engine.Composition.UI.Window, IDesktop
     {
+        public override void Draw()
+        {
+            SetupDesktop();
+        }
+
         private Screen screen;
 
         public void Show()
@@ -27,7 +32,10 @@ namespace ShiftOS.WinForms
         public CompositingDesktop(Screen scn) : base(scn.Width, scn.Height)
         {
             screen = scn;
+            this.Location = new Point(0, 0);
         }
+
+        
 
         public string DesktopName
         {
