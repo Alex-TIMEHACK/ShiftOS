@@ -21,7 +21,7 @@ namespace ShiftOS.WinForms
             {
                 SetupDesktop();
             };
-            SaveSystem.Begin();
+            SaveSystem.Begin(false);
         }
 
         public CompositingDesktop(Screen scn) : base(scn.Width, scn.Height)
@@ -84,7 +84,7 @@ namespace ShiftOS.WinForms
         public void SetupDesktop()
         {
             //First, we draw the desktop background.
-            Clear(LoadedSkin.DesktopColor);
+            Clear(Color.White);
             
         }
 

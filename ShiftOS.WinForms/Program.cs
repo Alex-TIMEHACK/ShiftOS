@@ -84,7 +84,7 @@ namespace ShiftOS.WinForms
             FileSkimmerBackend.Init(new WinformsFSFrontend());
 
             var compositingDesktop = new CompositingDesktop(screen);
-            Desktop.Init(compositingDesktop);
+            Desktop.Init(compositingDesktop, true);
             AppearanceManager.SetupWindow(compositingDesktop);
 #if DRIVER_DX11
 #else

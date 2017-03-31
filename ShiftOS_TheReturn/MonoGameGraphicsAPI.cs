@@ -232,16 +232,16 @@ namespace ShiftOS.Engine.Composition
             GL.TexCoord2(1.0f, 0.0f);
             GL.Vertex3(x, y, z);
 
-            x = (float)linear(bottomleft.X, 0, this.Width, -1, 1);
-            z = (float)linear(bottomleft.Z, 0, this.Height, -1, 1);
-            y = (float)bottomleft.Y;
-            GL.TexCoord2(0f, 1f);
-            GL.Vertex3(x, y, z);
-
             x = (float)linear(bottomright.X, 0, this.Width, -1, 1);
             z = (float)linear(bottomright.Z, 0, this.Height, -1, 1);
-            y = (float)bottomright.Y;
+            y = (float)bottomleft.Y;
             GL.TexCoord2(1f, 1f);
+            GL.Vertex3(x, y, z);
+
+            x = (float)linear(bottomleft.X, 0, this.Width, -1, 1);
+            z = (float)linear(bottomleft.Z, 0, this.Height, -1, 1);
+            y = (float)bottomright.Y;
+            GL.TexCoord2(0f, 1f);
             GL.Vertex3(x, y, z);
 
             GL.End();

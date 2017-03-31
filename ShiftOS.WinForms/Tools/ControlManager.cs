@@ -69,68 +69,79 @@ namespace ShiftOS.WinForms.Tools
 
         public static void SetupWindows()
         {
-            if (SaveSystem.CurrentSave != null)
+            try
             {
-                int screen_height_start = 0;
-                if (Shiftorium.UpgradeInstalled("wm_free_placement"))
+                if (SaveSystem.CurrentSave != null)
                 {
-                }
-                else if (Shiftorium.UpgradeInstalled("wm_4_windows"))
-                {
-                    int screen_width_half = Screen.PrimaryScreen.Bounds.Width / 2;
-                    int screen_height_half = (Screen.PrimaryScreen.Bounds.Height - screen_height_start) / 2;
-
-                    for (int i = 0; i < OpenForms.Count; i++)
+                    int screen_height_start = 0;
+                    if (Shiftorium.UpgradeInstalled("wm_free_placement"))
                     {
-                        var frm = OpenForms[i] as WindowBorder;
+                    }
+                    else if (Shiftorium.UpgradeInstalled("wm_4_windows"))
+                    {
+                        int screen_width_half = Screen.PrimaryScreen.Bounds.Width / 2;
+                        int screen_height_half = (Screen.PrimaryScreen.Bounds.Height - screen_height_start) / 2;
 
-                        switch (i)
+                        for (int i = 0; i < OpenForms.Count; i++)
                         {
-                            case 0:
-                                frm.Location = new System.Drawing.Point(0, screen_height_start);
-                                frm.Size = new System.Drawing.Size((OpenForms.Count > 1) ? screen_width_half : screen_width_half * 2, (OpenForms.Count > 2) ? screen_height_half : screen_height_half * 2);
+                            var frm = OpenForms[i] as WindowBorder;
 
-                                break;
-                            case 1:
-                                frm.Location = new System.Drawing.Point(screen_width_half, screen_height_start);
-                                frm.Size = new System.Drawing.Size(screen_width_half, (OpenForms.Count > 2) ? screen_height_half : screen_height_half * 2);
-                                break;
-                            case 2:
-                                frm.Location = new System.Drawing.Point(0, screen_height_half + screen_height_start);
-                                frm.Size = new System.Drawing.Size((OpenForms.Count > 3) ? screen_width_half : screen_width_half * 2, screen_height_half);
-                                break;
-                            case 3:
-                                frm.Location = new System.Drawing.Point(screen_width_half, screen_height_half + screen_height_start);
-                                frm.Size = new System.Drawing.Size(screen_width_half, (OpenForms.Count > 2) ? screen_height_half : screen_height_half * 2);
-                                break;
+                            switch (i)
+                            {
+                                case 0:
+                                    frm.Location = new System.Drawing.Point(0, screen_height_start);
+                                    frm.Size = new System.Drawing.Size((OpenForms.Count > 1) ? screen_width_half : screen_width_half * 2, (OpenForms.Count > 2) ? screen_height_half : screen_height_half * 2);
+
+                                    break;
+                                case 1:
+                                    frm.Location = new System.Drawing.Point(screen_width_half, screen_height_start);
+                                    frm.Size = new System.Drawing.Size(screen_width_half, (OpenForms.Count > 2) ? screen_height_half : screen_height_half * 2);
+                                    break;
+                                case 2:
+                                    frm.Location = new System.Drawing.Point(0, screen_height_half + screen_height_start);
+                                    frm.Size = new System.Drawing.Size((OpenForms.Count > 3) ? screen_width_half : screen_width_half * 2, screen_height_half);
+                                    break;
+                                case 3:
+                                    frm.Location = new System.Drawing.Point(screen_width_half, screen_height_half + screen_height_start);
+                                    frm.Size = new System.Drawing.Size(screen_width_half, (OpenForms.Count > 2) ? screen_height_half : screen_height_half * 2);
+                                    break;
+                            }
+                        }
+
+                    }
+                    else if (Shiftorium.UpgradeInstalled("window_manager"))
+                    {
+                        int screen_width_half = Screen.PrimaryScreen.Bounds.Width / 2;
+                        int screen_height = (Screen.PrimaryScreen.Bounds.Height) - screen_height_start;
+
+
+
+                        for (int i = 0; i < OpenForms.Count; i++)
+                        {
+
+
+                            var frm = OpenForms[i] as WindowBorder;
+                            switch (i)
+                            {
+                                case 0:
+                                    frm.Location = new System.Drawing.Point(0, screen_height_start);
+                                    frm.Size = new System.Drawing.Size((OpenForms.Count > 1) ? screen_width_half : screen_width_half * 2, screen_height);
+                                    break;
+                                case 1:
+                                    frm.Location = new System.Drawing.Point(screen_width_half, screen_height_start);
+                                    frm.Size = new System.Drawing.Size(screen_width_half, screen_height);
+                                    break;
+                            }
+                            OpenForms[i] = frm;
                         }
                     }
-
-                }
-                else if (Shiftorium.UpgradeInstalled("window_manager"))
-                {
-                    int screen_width_half = Screen.PrimaryScreen.Bounds.Width / 2;
-                    int screen_height = (Screen.PrimaryScreen.Bounds.Height) - screen_height_start;
-
-
-
-                    for (int i = 0; i < OpenForms.Count; i++)
+                    else
                     {
+                        var frm = OpenForms[0] as WindowBorder;
+                        frm.Location = new Point(0, 0);
+                        frm.Size = Desktop.Size;
+                        OpenForms[0] = frm;
 
-
-                        var frm = OpenForms[i] as WindowBorder;
-                        switch (i)
-                        {
-                            case 0:
-                                frm.Location = new System.Drawing.Point(0, screen_height_start);
-                                frm.Size = new System.Drawing.Size((OpenForms.Count > 1) ? screen_width_half : screen_width_half * 2, screen_height);
-                                break;
-                            case 1:
-                                frm.Location = new System.Drawing.Point(screen_width_half, screen_height_start);
-                                frm.Size = new System.Drawing.Size(screen_width_half, screen_height);
-                                break;
-                        }
-                        OpenForms[i] = frm;
                     }
                 }
                 else
@@ -142,14 +153,7 @@ namespace ShiftOS.WinForms.Tools
 
                 }
             }
-            else
-            {
-                var frm = OpenForms[0] as WindowBorder;
-                frm.Location = new Point(0, 0);
-                frm.Size = Desktop.Size;
-                OpenForms[0] = frm;
-
-            }
+            catch { }
         }
 
         internal static Color ConvertColor(ConsoleColor cCol)
