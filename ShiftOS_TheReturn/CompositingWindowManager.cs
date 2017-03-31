@@ -330,13 +330,23 @@ namespace ShiftOS.Engine.Composition
                             FillRectangle(new Point(right_x, right_y), new Size(right_width, right_height), SkinEngine.LoadedSkin.BorderRightBackground);
                     }
                 }
-
-                //Now we can draw the client area!
+                                //Now we can draw the client area!
                 _child.Draw(); //That'll get the client to draw onto its buffer.
                 //Once that's done, which it is by the time we do this, we can draw the window buffer onto OUR buffer as a texture rectangle.
 
                 TextureRectangle(new Point(left_width, title_height), _child.ClientSize, _child.GetBuffer());
                 //That's all we need to do. The rest is up to the window manager!
+
+            }
+            else
+            {
+                            //Now we can draw the client area!
+                _child.Draw(); //That'll get the client to draw onto its buffer.
+                //Once that's done, which it is by the time we do this, we can draw the window buffer onto OUR buffer as a texture rectangle.
+
+                TextureRectangle(new Point(0, 0), _child.ClientSize, _child.GetBuffer());
+                //That's all we need to do. The rest is up to the window manager!
+
             }
         }
 
