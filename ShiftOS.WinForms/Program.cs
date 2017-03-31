@@ -68,6 +68,7 @@ namespace ShiftOS.WinForms
             var screen = new Engine.Composition.Screen(api);
             var cWinMgr = new CompositingWindowManager(screen);
 
+
             AppearanceManager.Initiate(new ShiftOS.Engine.BranchWindowManager(new Dictionary<Type, WindowManager>
             {
                 { typeof(UserControl), new WinformsWindowManager() },

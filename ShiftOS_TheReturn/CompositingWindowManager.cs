@@ -132,8 +132,11 @@ namespace ShiftOS.Engine.Composition
 
             set
             {
-                if (value is Window)
+                if (value is Window || value.GetType().BaseType == typeof(Window))
+                {
                     _child = (Window)value;
+                    return;
+                }
                 throw new InvalidOperationException("You cannot set the window of this composited IWIndowBorder to a window of type " + value.GetType().FullName + ". This window border only supports " + typeof(Window).FullName + ".");
             }
         }
@@ -613,7 +616,13 @@ namespace ShiftOS.Engine.Composition
             var wb = new CompositedBorder(_backend, win.Size);
             wb.Decorated = decorated;
             wb.ParentWindow = win;
-            Windows.Add(wb);
+            bool fInit = false;
+
+            if (Windows.Count == 0)
+                fInit = true;
+                Windows.Add(wb);
+            if(fInit == true)
+                this._backend.API.ForceInit();
         }
 
         public override void SetupWindow(IShiftOSWindow win, bool decorated)
@@ -621,7 +630,12 @@ namespace ShiftOS.Engine.Composition
             var wb = new CompositedBorder(_backend, win.Size);
             wb.Decorated = decorated;
             wb.ParentWindow = win;
+            bool fInit = false;
+            if (Windows.Count == 0)
+                fInit = true;
             Windows.Add(wb);
+            if (fInit == true)
+                this._backend.API.ForceInit();
         }
     }
 
@@ -644,9 +658,13 @@ namespace ShiftOS.Engine.Composition
         {
             _width = width;
             _height = height;
-            Init(); //Set up the low-level API.
+            
         }
 
+        public void ForceInit()
+        {
+            Init();
+        }
 
         /// <summary>
         /// When overidden, this method sets up the low-level 3D graphics API for compositing window managers to use. This should do things like set up graphics contexts, register devices, etc, set the screen to the desired resolution, and clear it to black.

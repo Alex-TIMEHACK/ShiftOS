@@ -68,7 +68,7 @@ namespace ShiftOS.Engine
             var type = win.GetType();
             if (WindowManagerList.ContainsKey(type))
                 return WindowManagerList[type];
-            if (BorderManagerList.ContainsKey(type.BaseType))
+            if (WindowManagerList.ContainsKey(type.BaseType))
                 return WindowManagerList[type.BaseType];
             throw new NotSupportedException("This branch manager could not find a supported window manager for IShiftOSWindow derivative \"" + type.Name + "\".");
         }

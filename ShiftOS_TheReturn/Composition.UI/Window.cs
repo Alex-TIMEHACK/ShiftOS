@@ -78,7 +78,10 @@ namespace ShiftOS.Engine.Composition.UI
             }
             set
             {
-                _parent.SetClientSize(value);
+                if (_parent != null)
+                {
+                    _parent.SetClientSize(value);
+                }
                 SetBuffer(value.Width, value.Height);
             }
         }
@@ -87,12 +90,15 @@ namespace ShiftOS.Engine.Composition.UI
         {
             get
             {
+                if (_parent == null)
+                    return Point.Empty;
                 return _parent.Location;
             }
 
             set
             {
-                _parent.Location = value;
+                if(_parent != null)
+                    _parent.Location = value;
             }
         }
 
@@ -100,14 +106,18 @@ namespace ShiftOS.Engine.Composition.UI
         {
             get
             {
+                if (_parent == null)
+                    return Size.Empty;
                 return _parent.Size;
             }
 
             set
             {
-                _parent.Size = value;
-                SetBuffer(ClientSize.Width, ClientSize.Height);
-
+                if (_parent != null)
+                {
+                    _parent.Size = value;
+                    SetBuffer(ClientSize.Width, ClientSize.Height);
+                }
             }
         }
 
